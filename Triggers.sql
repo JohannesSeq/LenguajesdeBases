@@ -1,0 +1,54 @@
+-- Triggers
+-- Evita la eliminaci�n de empleados con salario mayor a 5000
+CREATE OR REPLACE TRIGGER TRG_PREVENIR_ELIMINACION_EMPLEADO
+BEFORE DELETE ON EMPLEADOS
+FOR EACH ROW
+WHEN (OLD.SALARIO > 5000)
+BEGIN
+    RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar empleados con salario mayor a 5000.');
+END;
+ 
+-- Registra en la tabla de auditor�a cuando se inserta un nuevo cliente
+CREATE OR REPLACE TRIGGER TRG_AUDITORIA_INSERT_CLIENTE
+AFTER INSERT ON CLIENTES
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDITORIA (TABLA, OPERACION, USUARIO, FECHA)
+    VALUES ('CLIENTES', 'INSERT', USER, SYSDATE);
+END;
+ 
+-- Registra los cambios en los salarios de los empleados en la tabla de auditor�a
+CREATE OR REPLACE TRIGGER TRG_AUDITORIA_UPDATE_SALARIO
+AFTER UPDATE OF SALARIO ON EMPLEADOS
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDITORIA (TABLA, OPERACION, USUARIO, FECHA, DETALLE)
+    VALUES ('EMPLEADOS', 'UPDATE', USER, SYSDATE, 'Salario cambiado de ' || OLD.SALARIO || ' a ' || NEW.SALARIO);
+END;
+ 
+-- Previene que se inserten o actualicen empleados con salario negativo
+CREATE OR REPLACE TRIGGER TRG_PREVENIR_SALARIO_NEGATIVO
+BEFORE INSERT OR UPDATE ON EMPLEADOS
+FOR EACH ROW
+BEGIN
+    IF :NEW.SALARIO < 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'El salario no puede ser negativo.');
+    END IF;
+END;
+ 
+-- Registra en la tabla de auditor�a cuando se actualiza el n�mero de tel�fono de un cliente
+CREATE OR REPLACE TRIGGER TRG_ACTUALIZAR_NUM_TELEFONO
+BEFORE UPDATE OF NUMERO_DE_TELEFONO ON CLIENTES
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDITORIA (TABLA, OPERACION, USUARIO, FECHA, DETALLE)
+    VALUES ('CLIENTES', 'UPDATE', USER, SYSDATE, 'N�mero cambiado de ' || OLD.NUMERO_DE_TELEFONO || ' a ' || NEW.NUMERO_DE_TELEFONO);
+END;
+ 
+-- Evita la eliminaci�n de usuarios del sistema
+CREATE OR REPLACE TRIGGER TRG_BLOQUEAR_ELIMINACION_USUARIO
+BEFORE DELETE ON USUARIOS
+FOR EACH ROW
+BEGIN
+    RAISE_APPLICATION_ERROR(-20003, 'No se permite eliminar usuarios del sistema.');
+END;
