@@ -1,4 +1,4 @@
-function write_cookie(email,rol_id){
+function write_cookie(email,rol_id,nombre){
     document.cookie = "email= ; path=/";
     document.cookie = "rol_id= ; path=/";
     document.cookie = "nombre=  ; path=/";

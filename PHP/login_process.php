@@ -43,6 +43,7 @@ if($UsuarioCorreoQuery != null){
     setcookie('email', '', time() + 3600, '/');
     setcookie('rol_id', '', time() + 3600, '/');
     setcookie('nombre', '', time() + 3600, '/');
+    
     $usuarioOutput = 'Failure';
 }
 
