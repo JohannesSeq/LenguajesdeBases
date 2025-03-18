@@ -1,16 +1,16 @@
-function write_cookie(email,ROL_ID){
+function write_cookie(email,rol_id){
     document.cookie = "email= ; path=/";
-    document.cookie = "ROL_ID= ; path=/";
+    document.cookie = "rol_id= ; path=/";
     document.cookie = "nombre=  ; path=/";
 
     document.cookie = "email" + "=" + email + ";" + "path=/" + ";";
-    document.cookie = "ROL_ID" + "=" + ROL_ID + ";" + "path=/" + ";";
+    document.cookie = "rol_id" + "=" + rol_id + ";" + "path=/" + ";";
     document.cookie = "nombre" + "=" + nombre + ";" + "path=/" + ";";
 }
 
 function clear_cookie(){
     document.cookie = "email= ; path=/";
-    document.cookie = "ROL_ID= ; path=/";
+    document.cookie = "rol_id= ; path=/";
     document.cookie = "nombre=  ; path=/";
 }
 

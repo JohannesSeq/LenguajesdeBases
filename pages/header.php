@@ -34,7 +34,7 @@
                     <?php                 
                     if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
                         
-                        if ($_COOKIE["rol"] == "Gerente" || $_COOKIE["rol"] == "Vendedor"){
+                        if ($_COOKIE["rol_id"] == "3" || $_COOKIE["rol_id"] == "2"){
 
                             echo 
                             '<li class="nav-item dropdown">'.
@@ -89,7 +89,7 @@
                     }
 
 
-                        if ($_COOKIE["rol"] == "Gerente"){
+                        if ($_COOKIE["rol_id"] == "3"){
 
                             echo
                                 '<li class="nav-item dropdown">'.
