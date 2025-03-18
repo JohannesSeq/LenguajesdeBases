@@ -56,6 +56,15 @@
                             '</div>'.
                         '</li>'.
                         '<li class="nav-item dropdown">'.
+                        '<a class="nav-link dropdown-toggle" href="#" id="ComprasDropdown" role="button"'.
+                            'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
+                            'Manejar Compras'.
+                        '</a>'.
+                        '<div class="dropdown-menu" aria-labelledby="ComprasDropdown">'.
+                            '<a class="dropdown-item" href="agregarMenu.php">Agregar compra</a>'.
+                        '</div>'.
+                    '</li>'. 
+                        '<li class="nav-item dropdown">'.
                         '<a class="nav-link dropdown-toggle" href="#" id="ReservacionesDropdown" role="button"'.
                             'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
                             'Administrar reservaciones'.
@@ -119,6 +128,19 @@
                             '</li>'.
 
                             '<li class="nav-item dropdown">'.
+                            '<a class="nav-link dropdown-toggle" href="#" id="ComprasDropdown" role="button"'.
+                                'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
+                                'Manejar Compras'.
+                            '</a>'.
+                            '<div class="dropdown-menu" aria-labelledby="ComprasDropdown">'.
+                                '<a class="dropdown-item" href="agregarMenu.php">Agregar compra</a>'.
+                                '<a class="dropdown-item" href="modificarMenu.php">Modificar compra</a>'.
+                                '<a class="dropdown-item" href="mostrarMenu.php">Mostrar compras</a>'.
+                                '<a class="dropdown-item" href="eliminarMenu.php">Eliminar una compra</a>'.
+                            '</div>'.
+                        '</li>'.                            
+
+                            '<li class="nav-item dropdown">'.
                                 '<a class="nav-link dropdown-toggle" href="#" id="ClientesDropdown" role="button"'.
                                     'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
                                     'Administrar clientes'.
@@ -153,13 +175,20 @@
                                 '<li class="nav-item dropdown">'.
                                 '<a class="nav-link dropdown-toggle" href="#" id="PersonalDropdown" role="button"'.
                                     'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                    'Administrar cuentas'.
+                                    'Opciones gerenciales'.
                                 '</a>'.
                                 '<div class="dropdown-menu" aria-labelledby="PersonalDropdown">'.
                                     '<a class="dropdown-item" href="agregarUsuario.php">Agregar Usuario</a>'.
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar Usuarios</a>'.                              
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar Usuarios</a>'. 
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Agregar empleado</a>'.  
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar empleados</a>'.  
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Agregar puesto</a>'.  
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar puestos</a>'.  
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Agregar departamento</a>'.  
+                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar departamentos</a>'.  
                                 '</div>'.
-                            '</li>';
+                            '</li>'
+                            ;
                         }
                     } 
                     }                 
