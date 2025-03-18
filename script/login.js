@@ -5,7 +5,7 @@ $(document).ready(function(){
 
         //Variables obtenidas del formulario de login.
         let correo = $('#email_field').val();
-        let user_pass = $('#password_field').val();
+        let password = $('#password_field').val();
 
         $.ajax({
             
@@ -13,7 +13,7 @@ $(document).ready(function(){
             method: 'GET',
             data: {
                 correo: correo,
-                user_pass: user_pass
+                password: password
             },
 
             success: function(response){
@@ -42,18 +42,18 @@ function escribir_error(){
     paragraph.textContent = 'Usuario o contraseña incorrectos';
 }
 
-function write_cookie(email,rol,nombre){
+function write_cookie(email,ROL_ID,nombre){
     document.cookie = "email=  ; path=/";
-    document.cookie = "rol=  ; path=/";
+    document.cookie = "ROL_ID=  ; path=/";
     document.cookie = "nombre=  ; path=/";
 
     document.cookie = "email" + "=" + email + ";" + "path=/" + ";";
-    document.cookie = "rol" + "=" + rol + ";" + "path=/" + ";";
+    document.cookie = "ROL_ID" + "=" + ROL_ID + ";" + "path=/" + ";";
     document.cookie = "nombre" + "=" + nombre + ";" + "path=/" + ";";
 }
 
 function clear_cookie(){
     document.cookie = "email= ; path=/";
-    document.cookie = "rol= ; path=/";
+    document.cookie = "ROL_ID= ; path=/";
     document.cookie = "nombre=  ; path=/";
 }

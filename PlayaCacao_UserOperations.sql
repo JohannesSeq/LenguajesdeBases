@@ -70,8 +70,7 @@ CREATE TABLE Factura (
 CREATE TABLE Reserva (
     ID_MESA NUMBER CONSTRAINT ID_MESA_PK PRIMARY KEY,
     DISPONIBILIDAD CHAR(1) DEFAULT 'S', -- Usamos 'S' para disponible y 'N' para no disponible
-    HORA TIMESTAMP,
-    
+    HORA TIMESTAMP
 );
 
 --Creacion de la tabla de MENU
