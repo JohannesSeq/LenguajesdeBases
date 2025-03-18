@@ -58,6 +58,32 @@ CREATE TABLE USUARIOS(
     PASSWORD VARCHAR(100),
     ROL_ID NUMBER
 )
+--Creacion de la tabla de Facturas
+CREATE TABLE Factura (
+    ID_FACTURA NUMBER CONSTRAINT ID_FACTURA_PK PRIMARY KEY,
+    NOMBRE_PLATILLO VARCHAR2(100),
+    PRECIO DECIMAL(10, 2),
+    VUELTO NUMBER
+);
+
+--Creacion de la tabla de RESERVAS
+CREATE TABLE Reserva (
+    ID_MESA NUMBER CONSTRAINT ID_MESA_PK PRIMARY KEY,
+    DISPONIBILIDAD CHAR(1) DEFAULT 'S', -- Usamos 'S' para disponible y 'N' para no disponible
+    HORA TIMESTAMP,
+    
+);
+
+--Creacion de la tabla de MENU
+CREATE TABLE Menu (
+    ID_MENU NUMBER CONSTRAINT ID_MENU_PK PRIMARY KEY,
+    NOMBRE_PLATILLO VARCHAR2(100),
+    DESCRIPCION VARCHAR2(255), 
+    PRECIO DECIMAL(10, 2),
+    CATEGORIA VARCHAR2(50),
+    DISPONIBLE CHAR(1) DEFAULT 'S' -- Usamos 'S' para disponible y 'N' para no disponible
+)
+
 
 ALTER TABLE USUARIOS MOVE TABLESPACE PLAYA_CACAO_TBS;
 
@@ -73,6 +99,58 @@ ADD CONSTRAINT USUARIO_EMPLEADO_CORREO_FK
     
     
 SET ROLE ACCESO_PLAYA_CACAO_DB;
+
+--Inserciones de la tabla menu 
+INSERT INTO Menu (ID_MENU, NOMBRE_PLATILLO, DESCRIPCION, PRECIO, CATEGORIA, DISPONIBLE)
+VALUES (1, 'Ensalada César', 'Ensalada fresca con pollo a la parrilla o Frito y aderezo César', 8.50, 'Entrada', 'S');
+COMMIT;
+
+INSERT INTO Menu (ID_MENU, NOMBRE_PLATILLO, DESCRIPCION, PRECIO, CATEGORIA, DISPONIBLE)
+VALUES (2, 'Sopa de Mariscos', 'Sopa cremosa de Mariscos con leche de coco y mariscos frescos', 15.50, 'Plato fuerte', 'S');
+COMMIT;
+
+INSERT INTO Menu (ID_MENU, NOMBRE_PLATILLO, DESCRIPCION, PRECIO, CATEGORIA, DISPONIBLE)
+VALUES (3, 'Lomito de Res 3 pimientas', 'Lomito de res a la parrilla con papas y verduras al vapor', 20.00, 'Plato fuerte', 'S');
+COMMIT;
+
+INSERT INTO Menu (ID_MENU, NOMBRE_PLATILLO, DESCRIPCION, PRECIO, CATEGORIA, DISPONIBLE)
+VALUES (4, 'Pescado entero', 'Pescado entero acompañado de arroz y ensalada', 12.50, 'Plato fuerte', 'N');
+COMMIT;
+
+--Inserciones para la tabla Reserva
+INSERT INTO Reserva (ID_MESA, DISPONIBILIDAD, HORA)
+VALUES (1, 'S', TO_TIMESTAMP('2025-03-17 12:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+COMMIT;
+
+INSERT INTO Reserva (ID_MESA, DISPONIBILIDAD, HORA)
+VALUES (2, 'N', TO_TIMESTAMP('2025-03-17 13:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+COMMIT;
+
+INSERT INTO Reserva (ID_MESA, DISPONIBILIDAD, HORA)
+VALUES (3, 'S', TO_TIMESTAMP('2025-03-17 14:30:00', 'YYYY-MM-DD HH24:MI:SS'));
+COMMIT;
+
+INSERT INTO Reserva (ID_MESA, DISPONIBILIDAD, HORA)
+VALUES (4, 'S', TO_TIMESTAMP('2025-03-17 15:45:00', 'YYYY-MM-DD HH24:MI:SS'));
+COMMIT;
+
+--Inserciones en la tabla Factura 
+
+INSERT INTO Factura (ID_FACTURA, NOMBRE_PLATILLO, PRECIO, VUELTO)
+VALUES (1, 'Ensalada César', 8.50, 2.50);
+
+
+INSERT INTO Factura (ID_FACTURA, NOMBRE_PLATILLO, PRECIO, VUELTO)
+VALUES (2, 'Sopa de Mariscos', 15.50, 1.00);
+
+
+INSERT INTO Factura (ID_FACTURA, NOMBRE_PLATILLO, PRECIO, VUELTO)
+VALUES (3, 'Lomito de Res 3 pimientas', 20.00, 0.50);
+
+
+INSERT INTO Factura (ID_FACTURA, NOMBRE_PLATILLO, PRECIO, VUELTO)
+VALUES (4, 'Pescado entero', 12.50, 1.00);
+
 
 --Insercion de datos en la tabla de Clientes
 INSERT INTO CLIENTES(CEDULA,NOMBRE,APELLIDO,NUMERO_DE_TELEFONO)
