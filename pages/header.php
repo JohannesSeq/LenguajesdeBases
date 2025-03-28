@@ -1,9 +1,7 @@
-
 <body>
+    <!-- Menu del header para el sistema de restaurante -->
     <header>
-
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
             <a class="navbar-brand" href="index.php">Restaurante Playa Cacao</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,186 +16,110 @@
                             Usuario
                         </a>
                         <div class="dropdown-menu" aria-labelledby="usuarioDropdown">
-
                             <?php
                                 if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
-                                        echo '<a class="dropdown-item" href="index.php" id="logout">Cerrar Sesión</a>';
-                                } else
-                                    { 
-                                        echo '<a class="dropdown-item" href="login.php" id="login">Iniciar Sesión</a>';
-                                    }
+                                    echo '<a class="dropdown-item" href="logout.php" id="logout">Cerrar Sesión</a>';
+                                } else {
+                                    echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Iniciar Sesión</a>';
+                                    echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#signupModal">Registrarse</a>';
+                                }
                             ?>
-
                         </div>
-
                     </li>
+
                     <?php                 
                     if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
-
                         if($_COOKIE["rol_id"] == "1") {
-
-                            echo
-                            '<li class="nav-item dropdown">'.
-                            '<a class="nav-link dropdown-toggle" href="#" id="MenuDropDown" role="button"'.
-                                'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                'Menu'.
-                            '</a>'.
-                            '<div class="dropdown-menu" aria-labelledby="MenuDropDown">'.
-                                '<a class="dropdown-item" href="mostrarMenu.php">Mostrar Menus</a>'.
-                            '</div>'.
-                        '</li>'.
-                            '<li class="nav-item dropdown">'.
-                            '<a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button"'.
-                                'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                'Pedidos'.
-                            '</a>'.
-                            '<div class="dropdown-menu" aria-labelledby="pedidosDropdown">'.
-                                '<a class="dropdown-item" href="agregarPedido.php">Hacer Pedido</a>'.
-                            '</div>'.
-                        '</li>'.
-                        '<li class="nav-item dropdown">'.
-                        '<a class="nav-link dropdown-toggle" href="#" id="ComprasDropdown" role="button"'.
-                            'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                            'Manejar Compras'.
-                        '</a>'.
-                        '<div class="dropdown-menu" aria-labelledby="ComprasDropdown">'.
-                            '<a class="dropdown-item" href="agregarMenu.php">Agregar compra</a>'.
-                        '</div>'.
-                    '</li>'. 
-                        '<li class="nav-item dropdown">'.
-                        '<a class="nav-link dropdown-toggle" href="#" id="ReservacionesDropdown" role="button"'.
-                            'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                            'Administrar reservaciones'.
-                        '</a>'.
-                        '<div class="dropdown-menu" aria-labelledby="ReservacionesDropdown">'.
-                            '<a class="dropdown-item" href="agregarProducto.php">Agregar Reservacion</a>'.
-                        '</div>'.
-                    '</li>'
-                            ;
-                        } else if ($_COOKIE["rol_id"] == "2" || $_COOKIE["rol_id"] == "3"){
-
-
-
-                            echo 
-                            '<li class="nav-item dropdown">'.
-                                '<a class="nav-link dropdown-toggle" href="#" id="facturasDropdown" role="button"'.
-                                    'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                    'Facturas'.
-                                '</a>'.
-                                '<div class="dropdown-menu" aria-labelledby="facturasDropdown">'.
-                                    '<a class="dropdown-item" href="agregarFactura.php">Generar Factura</a>'.
-                                    '<a class="dropdown-item" href="listadoFacturas.php">Historial de Facturas</a>'.
-                                '</div>'.
-                                '</li>'.
-
-                                '<li class="nav-item dropdown">'.
-                                '<a class="nav-link dropdown-toggle" href="#" id="inventarioDropdown" role="button"'.
-                                    'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                    'Inventario'.
-                                '</a>'.
-                                '<div class="dropdown-menu" aria-labelledby="inventarioDropdown">'.
-                                    '<a class="dropdown-item" href="agregarProducto.php">Agregar platillo al inventario</a>'.
-                                    '<a class="dropdown-item" href="modificarProducto.php">Modificar platillo del inventario</a>'.
-                                    '<a class="dropdown-item" href="mostrarInventario.php">Mostrar productos disponibles</a>'.
-                                    '<a class="dropdown-item" href="eliminarProducto.php">Eliminar un platillo del inventario</a>'.
-                                '</div>'.
-                            '</li>'.
-
-                            '<li class="nav-item dropdown">'.
-                            '<a class="nav-link dropdown-toggle" href="#" id="MenuDropDown" role="button"'.
-                                'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                'Menu'.
-                            '</a>'.
-                            '<div class="dropdown-menu" aria-labelledby="MenuDropDown">'.
-                                '<a class="dropdown-item" href="agregarMenu.php">Agregar Menu</a>'.
-                                '<a class="dropdown-item" href="modificarMenu.php">Modificar Menu</a>'.
-                                '<a class="dropdown-item" href="mostrarMenu.php">Mostrar Menus</a>'.
-                                '<a class="dropdown-item" href="eliminarMenu.php">Eliminar un menu</a>'.
-                            '</div>'.
-                        '</li>'.
-                            
-                            '<li class="nav-item dropdown">'.
-                            '<a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button"'.
-                                'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                'Pedidos'.
-                            '</a>'.
-                            '<div class="dropdown-menu" aria-labelledby="pedidosDropdown">'.
-                                '<a class="dropdown-item" href="agregarPedido.php">Hacer Pedido</a>'.
-                                '<a class="dropdown-item" href="modificarPedido.php">Gestionar Pedidos</a>'.
-                            '</div>'.
-                            '</li>'.
-
-                            '<li class="nav-item dropdown">'.
-                            '<a class="nav-link dropdown-toggle" href="#" id="ComprasDropdown" role="button"'.
-                                'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                'Manejar Compras'.
-                            '</a>'.
-                            '<div class="dropdown-menu" aria-labelledby="ComprasDropdown">'.
-                                '<a class="dropdown-item" href="agregarMenu.php">Agregar compra</a>'.
-                                '<a class="dropdown-item" href="modificarMenu.php">Modificar compra</a>'.
-                                '<a class="dropdown-item" href="mostrarMenu.php">Mostrar compras</a>'.
-                                '<a class="dropdown-item" href="eliminarMenu.php">Eliminar una compra</a>'.
-                            '</div>'.
-                        '</li>'.                            
-
-                            '<li class="nav-item dropdown">'.
-                                '<a class="nav-link dropdown-toggle" href="#" id="ClientesDropdown" role="button"'.
-                                    'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                    'Administrar clientes'.
-                                '</a>'.
-                                '<div class="dropdown-menu" aria-labelledby="ClientesDropdown">'.
-                                    '<a class="dropdown-item" href="agregarProducto.php">Agregar Cliente</a>'.
-                                    '<a class="dropdown-item" href="modificarProducto.php">Modificar cliente</a>'.
-                                    '<a class="dropdown-item" href="mostrarInventario.php">Mostrar clientes</a>'.
-                                    '<a class="dropdown-item" href="eliminarProducto.php">Eliminar un cliente</a>'.
-                                '</div>'.
-                            '</li>'.
-
-                            '<li class="nav-item dropdown">'.
-                                '<a class="nav-link dropdown-toggle" href="#" id="ReservacionesDropdown" role="button"'.
-                                    'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                    'Administrar reservaciones'.
-                                '</a>'.
-                                '<div class="dropdown-menu" aria-labelledby="ReservacionesDropdown">'.
-                                    '<a class="dropdown-item" href="agregarProducto.php">Agregar Reservacion</a>'.
-                                    '<a class="dropdown-item" href="modificarProducto.php">Modificar reservacion</a>'.
-                                    '<a class="dropdown-item" href="mostrarInventario.php">Mostrar reservaciones</a>'.
-                                    '<a class="dropdown-item" href="eliminarProducto.php">Eliminar una reservacion</a>'.
-                                '</div>'.
-                            '</li>'.
-
-                        '</li>'
-                        ;
-
-                        if ($_COOKIE["rol_id"] == "3"){
-
-                            echo
-                                '<li class="nav-item dropdown">'.
-                                '<a class="nav-link dropdown-toggle" href="#" id="PersonalDropdown" role="button"'.
-                                    'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
-                                    'Opciones gerenciales'.
-                                '</a>'.
-                                '<div class="dropdown-menu" aria-labelledby="PersonalDropdown">'.
-                                    '<a class="dropdown-item" href="agregarUsuario.php">Agregar Usuario</a>'.
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar Usuarios</a>'. 
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Agregar empleado</a>'.  
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar empleados</a>'.  
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Agregar puesto</a>'.  
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar puestos</a>'.  
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Agregar departamento</a>'.  
-                                    '<a class="dropdown-item" href="modificarUsuario.php">Gestionar departamentos</a>'.  
-                                '</div>'.
-                            '</li>'
-                            ;
+                            echo '
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="MenuDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Menu
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="MenuDropDown">
+                                    <a class="dropdown-item" href="mostrarMenu.php">Mostrar Menus</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pedidos
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="pedidosDropdown">
+                                    <a class="dropdown-item" href="agregarPedido.php">Hacer Pedido</a>
+                                </div>
+                            </li>';
+                        } 
+                        elseif ($_COOKIE["rol_id"] == "2" || $_COOKIE["rol_id"] == "3") {
+                            echo '
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="facturasDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Facturas
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="facturasDropdown">
+                                    <a class="dropdown-item" href="agregarFactura.php">Generar Factura</a>
+                                    <a class="dropdown-item" href="listadoFacturas.php">Historial de Facturas</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="inventarioDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Inventario
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="inventarioDropdown">
+                                    <a class="dropdown-item" href="agregarProducto.php">Agregar platillo</a>
+                                    <a class="dropdown-item" href="modificarProducto.php">Modificar platillo</a>
+                                    <a class="dropdown-item" href="mostrarInventario.php">Mostrar productos</a>
+                                    <a class="dropdown-item" href="eliminarProducto.php">Eliminar platillo</a>
+                                </div>
+                            </li>';
                         }
-                    } 
-                    }                 
+
+                        if ($_COOKIE["rol_id"] == "3") {
+                            echo '
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="PersonalDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Opciones Gerenciales
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="PersonalDropdown">
+                                    <a class="dropdown-item" href="agregarUsuario.php">Agregar Usuario</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Gestionar Usuarios</a>
+                                    <a class="dropdown-item" href="agregarEmpleado.php">Agregar Empleado</a>
+                                    <a class="dropdown-item" href="gestionarEmpleados.php">Gestionar Empleados</a>
+                                </div>
+                            </li>';
+                        }
+                    }
                     ?>
-                    
                 </ul>
             </div>
         </nav>
     </header>
-</body>
 
-</html>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formulario_login">
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email_field" placeholder="Ingresa tu correo electrónico">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <input type="password" class="form-control" id="password_field" placeholder="Ingresa tu contraseña">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        <p id="error_text" class="Error_Message"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Registro Modal -->
+
+</body>
