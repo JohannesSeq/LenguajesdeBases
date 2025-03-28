@@ -7,25 +7,7 @@
     <title>Restaurante Playa Cacao</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style/style.css">
-    <style>
 
-        footer {
-            background-color: #343a40;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        footer a {
-            color: #ffc107;
-            text-decoration: none;
-            all
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 
 <body>
