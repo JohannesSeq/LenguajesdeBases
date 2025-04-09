@@ -1,3 +1,196 @@
+/*
+Seccion de pruebas
+SELECT * FROM ESTADOS;
+SELECT * FROM CANTON;
+SELECT * FROM PROVINCIA;
+
+EXEC CREAR_DISTRITO('Desamparados', 'Prueba01');
+EXEC CREAR_Canton('San Ramon', 'Prueba01');
+EXEC CREAR_PROVINCIA('San Jose', 'Prueba01');
+*/
+
+---------------------- Correr en session de Playa Cacao---------------------
+-- Procedimientos almacenados
+
+--------------------Procedimiento almacenado para insertar un nuevo Distrito--------------------
+
+CREATE OR REPLACE PROCEDURE CREAR_DISTRITO(
+    P_NOMBRE_DISTRITO VARCHAR,
+    P_COMENTARIO VARCHAR 
+)
+AS
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+    V_ID_DISTRITO NUMBER; --Variable para almacenar la id del distrito
+BEGIN
+    
+    --Insercion del distrito
+    INSERT INTO DISTRITO(NOMBRE_DISTRITO) VALUES (P_NOMBRE_DISTRITO);
+    
+    --Obtenemos el id del distrito por medio del nombre
+    SELECT ID_DISTRITO
+        INTO V_ID_DISTRITO
+        FROM DISTRITO
+        WHERE NOMBRE_DISTRITO = P_NOMBRE_DISTRITO;
+    
+    V_ESTADO_ID := 'ST_' || TO_CHAR(V_ID_DISTRITO) || '_distrito';
+    
+    --Creacion del estado que lleva el control de la entrada
+    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
+    VALUES (V_ESTADO_ID, 'Distrito',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    
+    --Actualizamos el id del estado
+    UPDATE DISTRITO
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_DISTRITO = V_ID_DISTRITO;
+    
+    COMMIT;
+
+END;
+
+--------------------Procedimiento almacenado para insertar un nuevo Canton----------------------
+CREATE OR REPLACE PROCEDURE CREAR_CANTON(
+    P_NOMBRE_CANTON VARCHAR,
+    P_COMENTARIO VARCHAR 
+)
+AS
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+    V_ID_CANTON NUMBER; --Variable para almacenar la id del distrito
+BEGIN
+    
+    --Insercion del distrito
+    INSERT INTO CANTON(NOMBRE_CANTON) VALUES (P_NOMBRE_CANTON);
+    
+    --Obtenemos el id del distrito por medio del nombre
+    SELECT ID_CANTON
+        INTO V_ID_CANTON
+        FROM CANTON
+        WHERE NOMBRE_CANTON = P_NOMBRE_CANTON;
+    
+    V_ESTADO_ID := 'ST_' || TO_CHAR(V_ID_CANTON) || '_canton';
+    
+    --Creacion del estado que lleva el control de la entrada
+    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
+    VALUES (V_ESTADO_ID, 'Canton',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    
+    --Actualizamos el id del estado
+    UPDATE CANTON
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_CANTON = V_ID_CANTON;
+    
+    COMMIT;
+
+END;
+
+------------------Procedimiento almacenado para insertar una nueva provincia--------------------
+CREATE OR REPLACE PROCEDURE CREAR_PROVINCIA(
+    P_NOMBRE_PROVINCIA VARCHAR,
+    P_COMENTARIO VARCHAR 
+)
+AS
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+    V_ID_PROVINCIA NUMBER; --Variable para almacenar la id del distrito
+BEGIN
+    
+    --Insercion del distrito
+    INSERT INTO PROVINCIA(NOMBRE_PROVINCIA) VALUES (P_NOMBRE_PROVINCIA);
+    
+    --Obtenemos el id del distrito por medio del nombre
+    SELECT ID_PROVINCIA
+        INTO V_ID_PROVINCIA
+        FROM PROVINCIA
+        WHERE NOMBRE_PROVINCIA = P_NOMBRE_PROVINCIA;
+    
+    V_ESTADO_ID := 'ST_' || TO_CHAR(V_ID_PROVINCIA) || '_provincia';
+    
+    --Creacion del estado que lleva el control de la entrada
+    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
+    VALUES (V_ESTADO_ID, 'Provincia',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    
+    --Actualizamos el id del estado
+    UPDATE PROVINCIA
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_PROVINCIA = V_ID_PROVINCIA;
+    
+    COMMIT;
+
+END;
+
+
+------Procedimiento almacenado para insertar una nueva direccion para una persona----------
+
+CREATE OR REPLACE PROCEDURE CREAR_PERSONA(
+    P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR,
+    P_APELLIDO VARCHAR, P_PROVINCIA VARCHAR, P_CANTON VARCHAR, 
+    P_DISTRITO VARCHAR, P_CORREO VARCHAR, P_CORREO_RESPALDO VARCHAR, 
+    P_PASSWORD VARCHAR, P_ID_ROL VARCHAR,P_ID_CANTON NUMBER, 
+    P_ID_DISTRITO NUMBER, P_ID_PROVINCIA NUMBER, P_COMENTARIO VARCHAR
+)
+AS
+    V_ESTADO_PERSONA_ID VARCHAR(250);
+    V_ESTADO_DIRECCION_PERSONA_ID VARCHAR(250);
+    V_ESTADO_PASSWORD_ENCRIPCION_ID VARCHAR(250);
+    
+    V_ID_DIRECCION_PERSONA VARCHAR(100);
+    V_ID_PASSWORD_ID VARCHAR(100);
+    
+    V_LLAVE RAW(32);
+    V_PASSWORD_RAW RAW(2000);
+    
+    V_PASSWORD_ID VARCHAR(100) := 'Pwd_' || TO_CHAR(P_CEDULA);
+    
+BEGIN
+
+    ------------------------------------------------------------
+    --- Bloque direccion                                    ----
+    ------------------------------------------------------------
+    
+    --Insertamos la direccion de la persona en la tabla personas
+    INSERT INTO DIRECCIONES_PERSONAS(ID_DIRECCION, ID_DISTRITO, ID_CANTON, ID_PROVINCIA) VALUES ('Dir_' || TO_CHAR(P_CEDULA), P_ID_DISTRITO, P_ID_CANTON, P_ID_PROVINCIA);
+    
+    --Insertamos el estado de la direccion
+    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
+    VALUES ('ST_' || V_ID_DIRECCION_PERSONA || '_Direccion_Personas' , 'Direccion_Personas',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    
+    --Actualizamos el id del estado en la direccion
+    UPDATE DIRECCIONES_PERSONAS
+    SET ID_ESTADO = 'ST_' || V_ID_DIRECCION_PERSONA || '_Direccion_Personas' 
+    WHERE ID_PROVINCIA = V_ID_DIRECCION_PERSONA;
+   
+    ------------------------------------------------------------
+    --- Bloque Password                                     ----
+    ------------------------------------------------------------
+    
+    --Creacion de la contraseña encriptada
+    V_LLAVE := DBMS_CRYPTO.RANDOMBYTES(32);
+    
+    V_PASSWORD_RAW := DBMS_CRYPTO.ENCRYPT(
+                            src => UTL_RAW.CAST_TO_RAW(P_PASSWORD),
+                            typ => DBMS_CRYPTO.ENCRYPT_AES256 + DBMS_CRYPTO.CHAIN_CBC + DBMS_CRYPTO.PAD_PKCS5,
+                            key => V_LLAVE);
+
+    --Insertamos la contraseña encriptada
+    V_ID_PASSWORD_ID := 'Pwd_' || TO_CHAR(P_CEDULA);
+    INSERT INTO ENCRIPCION_PASSWORDS (PASSWORD_ID, PASSWORD_VAL, LLAVE) VALUES (V_ID_PASSWORD_ID, V_PASSWORD_RAW, V_LLAVE);   
+    
+    --Creacion del estado de la contrasena
+    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
+    VALUES ('ST_' || V_ID_PASSWORD_ID || '_ENCRIPCION_PASSWORDS' , 'ENCRIPCION_PASSWORDS',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    
+    UPDATE ENCRIPCION_PASSWORDS
+    SET ID_ESTADO = 'ST_' || V_ID_PASSWORD_ID || '_ENCRIPCION_PASSWORDS' 
+    WHERE PASSWORD_ID = V_ID_PASSWORD_ID;
+
+    ------------------------------------------------------------
+    --- Bloque PERSONAS                                     ----
+    ------------------------------------------------------------
+    
+    --COMMIT;
+END;   
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 -- Procedimientos almacenados
 -- Inserta un nuevo cliente
 CREATE OR REPLACE PROCEDURE INSERTAR_CLIENTE(
