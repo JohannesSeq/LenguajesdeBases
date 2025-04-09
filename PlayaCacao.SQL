@@ -42,3 +42,4 @@ GRANT CREATE VIEW TO ACCESO_PLAYA_CACAO_DB;
 -- Asignacion del rol al usuario de playa cacao
 GRANT ACCESO_PLAYA_CACAO_DB TO PlayaCacaoDB;
 
+GRANT EXECUTE ON DBMS_CRYPTO TO PlayaCacaoDB;
