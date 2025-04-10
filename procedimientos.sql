@@ -8,15 +8,9 @@ SELECT * FROM ROL_PERSONA;
 SELECT * FROM PERSONAS;
 SELECT * FROM DIRECCIONES_PERSONAS;
 SELECT * FROM ENCRIPCION_PASSWORDS;
-
-EXEC CREAR_DISTRITO('San Antonio', 'Prueba03');
-EXEC CREAR_Canton('Pérez Zeledón', 'Prueba05');
-EXEC CREAR_PROVINCIA('Puntarenas', 'Prueba08');
-
-EXEC CREAR_ROL('Cliente', 'Clientes', 'Clientes del restaurante', 'Prueba01');
-
-EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 21, 23, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');
+SELECT * FROM CORREOS;
 */
+
 
 ---------------------- Correr en session de Playa Cacao---------------------
 -- Procedimientos almacenados
@@ -161,7 +155,6 @@ BEGIN
 END;
 
 ------Procedimiento almacenado para insertar una nueva direccion para una persona----------
-
 CREATE OR REPLACE PROCEDURE CREAR_PERSONA(
     P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR, P_ID_ROL VARCHAR, --Parametros de la persona
     P_ID_PROVINCIA NUMBER, P_ID_CANTON NUMBER, P_ID_DISTRITO NUMBER, --Parametros de la direcion
