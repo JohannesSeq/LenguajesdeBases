@@ -1,16 +1,39 @@
 /*
 Seccion de pruebas
 SELECT * FROM ESTADOS;
+SELECT * FROM DISTRITO;
 SELECT * FROM CANTON;
 SELECT * FROM PROVINCIA;
+SELECT * FROM ROL_PERSONA;
 
-EXEC CREAR_DISTRITO('Desamparados', 'Prueba01');
-EXEC CREAR_Canton('San Ramon', 'Prueba01');
-EXEC CREAR_PROVINCIA('San Jose', 'Prueba01');
+EXEC CREAR_DISTRITO('San Antonio', 'Prueba03');
+EXEC CREAR_Canton('Pérez Zeledón', 'Prueba05');
+EXEC CREAR_PROVINCIA('Puntarenas', 'Prueba08');
+
+EXEC CREAR_ROL('Cliente', 'Clientes', 'Clientes del restaurante', 'Prueba01');
 */
 
 ---------------------- Correr en session de Playa Cacao---------------------
 -- Procedimientos almacenados
+
+------------------- Funcion para crear estados -------------------------------------------------
+
+CREATE OR REPLACE FUNCTION CREAR_ENTRADA_ESTADO(P_ID_ENTRADA VARCHAR, P_TABLA VARCHAR, P_COMENTARIO VARCHAR) RETURN VARCHAR
+AS
+
+    V_ESTADO_ID VARCHAR(250);
+
+BEGIN
+
+    --Creacion del valor para el ID de la entrada
+    V_ESTADO_ID := 'ST_' || TO_CHAR(P_ID_ENTRADA) || '_' || P_TABLA;
+    
+    --Creacion del estado que lleva el control de la entrada
+    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
+    VALUES (V_ESTADO_ID, P_TABLA, P_COMENTARIO, CURRENT_DATE, 'Activo');
+    COMMIT;
+    RETURN V_ESTADO_ID;
+END;
 
 --------------------Procedimiento almacenado para insertar un nuevo Distrito--------------------
 
@@ -32,11 +55,8 @@ BEGIN
         FROM DISTRITO
         WHERE NOMBRE_DISTRITO = P_NOMBRE_DISTRITO;
     
-    V_ESTADO_ID := 'ST_' || TO_CHAR(V_ID_DISTRITO) || '_distrito';
-    
-    --Creacion del estado que lleva el control de la entrada
-    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
-    VALUES (V_ESTADO_ID, 'Distrito',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    --Creamos el estado del rol llamando a la funcion delegada
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_DISTRITO),'DISTRITO', P_COMENTARIO);
     
     --Actualizamos el id del estado
     UPDATE DISTRITO
@@ -66,11 +86,8 @@ BEGIN
         FROM CANTON
         WHERE NOMBRE_CANTON = P_NOMBRE_CANTON;
     
-    V_ESTADO_ID := 'ST_' || TO_CHAR(V_ID_CANTON) || '_canton';
-    
-    --Creacion del estado que lleva el control de la entrada
-    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
-    VALUES (V_ESTADO_ID, 'Canton',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    --Creamos el estado del rol llamando a la funcion delegada
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_CANTON),'CANTON', P_COMENTARIO);
     
     --Actualizamos el id del estado
     UPDATE CANTON
@@ -100,12 +117,9 @@ BEGIN
         FROM PROVINCIA
         WHERE NOMBRE_PROVINCIA = P_NOMBRE_PROVINCIA;
     
-    V_ESTADO_ID := 'ST_' || TO_CHAR(V_ID_PROVINCIA) || '_provincia';
-    
-    --Creacion del estado que lleva el control de la entrada
-    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
-    VALUES (V_ESTADO_ID, 'Provincia',P_COMENTARIO, CURRENT_DATE, 'Activo');
-    
+    --Creamos el estado del rol llamando a la funcion delegada
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_PROVINCIA),'PROVINCIA', P_COMENTARIO);
+
     --Actualizamos el id del estado
     UPDATE PROVINCIA
     SET ID_ESTADO = V_ESTADO_ID
@@ -115,6 +129,31 @@ BEGIN
 
 END;
 
+------Procedimiento almacenado para insertar un nuevo rol en la aplicacion-----------------
+
+CREATE OR REPLACE PROCEDURE CREAR_ROL(
+    P_ID_ROL VARCHAR,
+    P_NOMBRE_LARGO_TIPO VARCHAR,
+    P_DESCRIPCION VARCHAR,
+    P_COMENTARIO VARCHAR
+)
+
+AS
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del rol
+BEGIN
+    --Insertamos el rol en tabla de roles
+    INSERT INTO ROL_PERSONA(ID_ROL_PERSONA, NOMBRE_LARGO_TIPO, DESCRIPCION) VALUES
+    (P_ID_ROL, P_NOMBRE_LARGO_TIPO, P_DESCRIPCION);
+
+    --Creamos el estado del rol llamando a la funcion delegada
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(P_ID_ROL,'ROL_PERSONA', P_COMENTARIO);
+
+    UPDATE ROL_PERSONA
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_ROL_PERSONA = P_ID_ROL;
+
+    COMMIT;
+END;
 
 ------Procedimiento almacenado para insertar una nueva direccion para una persona----------
 
@@ -157,6 +196,11 @@ BEGIN
     WHERE ID_PROVINCIA = V_ID_DIRECCION_PERSONA;
    
     ------------------------------------------------------------
+    --- Bloque Correos                                      ----
+    ------------------------------------------------------------
+
+
+    ------------------------------------------------------------
     --- Bloque Password                                     ----
     ------------------------------------------------------------
     
@@ -184,6 +228,9 @@ BEGIN
     --- Bloque PERSONAS                                     ----
     ------------------------------------------------------------
     
+    INSERT INTO PERSONAS(CEDULA,NOMBRE, APELLIDO, NUMERO_DE_TELEFONO, ID_ROL_PERSONA, DIRECCION_DE_CORREO, PASSWORD_ID, ID_DIRECCION) 
+    VALUES (P_CEDULA, P_NOMBRE, P_APELLIDO, P_NUMERO_DE_TELEFONO, P_ID_ROL, P_CORREO, V_ID_PASSWORD_ID, V_ID_DIRECCION_PERSONA);
+
     --COMMIT;
 END;   
 
