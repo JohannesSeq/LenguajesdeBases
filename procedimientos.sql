@@ -5,12 +5,17 @@ SELECT * FROM DISTRITO;
 SELECT * FROM CANTON;
 SELECT * FROM PROVINCIA;
 SELECT * FROM ROL_PERSONA;
+SELECT * FROM PERSONAS;
+SELECT * FROM DIRECCIONES_PERSONAS;
+SELECT * FROM ENCRIPCION_PASSWORDS;
 
 EXEC CREAR_DISTRITO('San Antonio', 'Prueba03');
 EXEC CREAR_Canton('Pérez Zeledón', 'Prueba05');
 EXEC CREAR_PROVINCIA('Puntarenas', 'Prueba08');
 
 EXEC CREAR_ROL('Cliente', 'Clientes', 'Clientes del restaurante', 'Prueba01');
+
+EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 21, 23, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');
 */
 
 ---------------------- Correr en session de Playa Cacao---------------------
@@ -21,7 +26,7 @@ EXEC CREAR_ROL('Cliente', 'Clientes', 'Clientes del restaurante', 'Prueba01');
 CREATE OR REPLACE FUNCTION CREAR_ENTRADA_ESTADO(P_ID_ENTRADA VARCHAR, P_TABLA VARCHAR, P_COMENTARIO VARCHAR) RETURN VARCHAR
 AS
 
-    V_ESTADO_ID VARCHAR(250);
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar el ID Del estado
 
 BEGIN
 
@@ -158,24 +163,29 @@ END;
 ------Procedimiento almacenado para insertar una nueva direccion para una persona----------
 
 CREATE OR REPLACE PROCEDURE CREAR_PERSONA(
-    P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR,
-    P_APELLIDO VARCHAR, P_PROVINCIA VARCHAR, P_CANTON VARCHAR, 
-    P_DISTRITO VARCHAR, P_CORREO VARCHAR, P_CORREO_RESPALDO VARCHAR, 
-    P_PASSWORD VARCHAR, P_ID_ROL VARCHAR,P_ID_CANTON NUMBER, 
-    P_ID_DISTRITO NUMBER, P_ID_PROVINCIA NUMBER, P_COMENTARIO VARCHAR
+    P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR, P_ID_ROL VARCHAR, --Parametros de la persona
+    P_ID_PROVINCIA NUMBER, P_ID_CANTON NUMBER, P_ID_DISTRITO NUMBER, --Parametros de la direcion
+    P_CORREO VARCHAR, P_CORREO_RESPALDO VARCHAR, --Parametros del correo
+    P_PASSWORD VARCHAR, --Parametros de la contraseña
+    P_COMENTARIO VARCHAR
 )
 AS
-    V_ESTADO_PERSONA_ID VARCHAR(250);
-    V_ESTADO_DIRECCION_PERSONA_ID VARCHAR(250);
-    V_ESTADO_PASSWORD_ENCRIPCION_ID VARCHAR(250);
+
+    ---- Variables para estados ----
+    V_ESTADO_PERSONA_ID VARCHAR(250); --Variable para almacenar el estado de la persona
+    V_ESTADO_DIRECCION_PERSONA_ID VARCHAR(250); --Variable para almacenar el estado de la direccion de la persona
+    V_ESTADO_CORREOS_ID VARCHAR(250); --Variable para almacenar el estado del correo de la persona
+    V_ESTADO_PASSWORD_ENCRIPCION_ID VARCHAR(250); --Variable para almacenar el estado de la contraseña de la persona
     
-    V_ID_DIRECCION_PERSONA VARCHAR(100);
-    V_ID_PASSWORD_ID VARCHAR(100);
+
+    --- Variables de IDs ---
+    V_ID_DIRECCION_PERSONA VARCHAR(100); -- Variable para almacenar el id de de la direccion
+    V_ID_PASSWORD_ID VARCHAR(100); --Variable para almacenar el id de la contraeña
     
-    V_LLAVE RAW(32);
-    V_PASSWORD_RAW RAW(2000);
-    
-    V_PASSWORD_ID VARCHAR(100) := 'Pwd_' || TO_CHAR(P_CEDULA);
+    --- Variables para la contraseña
+    V_LLAVE RAW(32); --Variable para almacenar la llave de encriptacion
+    V_PASSWORD_RAW RAW(2000); --Variable para almaacenar la contraseña encriptada
+    V_PASSWORD_ID VARCHAR(100); -- Variable para almacenar el ID del password
     
 BEGIN
 
@@ -184,26 +194,38 @@ BEGIN
     ------------------------------------------------------------
     
     --Insertamos la direccion de la persona en la tabla personas
-    INSERT INTO DIRECCIONES_PERSONAS(ID_DIRECCION, ID_DISTRITO, ID_CANTON, ID_PROVINCIA) VALUES ('Dir_' || TO_CHAR(P_CEDULA), P_ID_DISTRITO, P_ID_CANTON, P_ID_PROVINCIA);
+    V_ID_DIRECCION_PERSONA := 'Dir_' || TO_CHAR(P_CEDULA); --Asignacion del valor del id de la direccion
+    INSERT INTO DIRECCIONES_PERSONAS(ID_DIRECCION, ID_DISTRITO, ID_CANTON, ID_PROVINCIA) 
+    VALUES (V_ID_DIRECCION_PERSONA, P_ID_DISTRITO, P_ID_CANTON, P_ID_PROVINCIA);
     
-    --Insertamos el estado de la direccion
-    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
-    VALUES ('ST_' || V_ID_DIRECCION_PERSONA || '_Direccion_Personas' , 'Direccion_Personas',P_COMENTARIO, CURRENT_DATE, 'Activo');
-    
+    --Creamos el estado de la direccion llamando a la funcion delegada
+    V_ESTADO_DIRECCION_PERSONA_ID := CREAR_ENTRADA_ESTADO(V_ID_DIRECCION_PERSONA,'DIRECCIONES_PERSONAS', P_COMENTARIO);
+
     --Actualizamos el id del estado en la direccion
     UPDATE DIRECCIONES_PERSONAS
-    SET ID_ESTADO = 'ST_' || V_ID_DIRECCION_PERSONA || '_Direccion_Personas' 
-    WHERE ID_PROVINCIA = V_ID_DIRECCION_PERSONA;
+    SET ID_ESTADO = V_ESTADO_DIRECCION_PERSONA_ID
+    WHERE ID_DIRECCION = V_ID_DIRECCION_PERSONA;
    
     ------------------------------------------------------------
     --- Bloque Correos                                      ----
     ------------------------------------------------------------
 
+    INSERT INTO CORREOS(DIRECCION_DE_CORREO, CORREO_DE_RESPALDO)
+    VALUES (P_CORREO, P_CORREO_RESPALDO);
+
+    V_ESTADO_CORREOS_ID := CREAR_ENTRADA_ESTADO(P_CORREO,'CORREOS', P_COMENTARIO);
+
+    --Actualizamos el id del estado en el correo
+    UPDATE CORREOS
+    SET ID_ESTADO = V_ESTADO_CORREOS_ID
+    WHERE DIRECCION_DE_CORREO = P_CORREO;
 
     ------------------------------------------------------------
     --- Bloque Password                                     ----
     ------------------------------------------------------------
     
+    V_PASSWORD_ID := 'Pwd_' || TO_CHAR(P_CEDULA);
+
     --Creacion de la contraseña encriptada
     V_LLAVE := DBMS_CRYPTO.RANDOMBYTES(32);
     
@@ -217,11 +239,10 @@ BEGIN
     INSERT INTO ENCRIPCION_PASSWORDS (PASSWORD_ID, PASSWORD_VAL, LLAVE) VALUES (V_ID_PASSWORD_ID, V_PASSWORD_RAW, V_LLAVE);   
     
     --Creacion del estado de la contrasena
-    INSERT INTO ESTADOS(ID_ESTADO, TABLA_ENTRADA, COMENTARIO, FECHA_CAMBIO, ESTADO) 
-    VALUES ('ST_' || V_ID_PASSWORD_ID || '_ENCRIPCION_PASSWORDS' , 'ENCRIPCION_PASSWORDS',P_COMENTARIO, CURRENT_DATE, 'Activo');
+    V_ESTADO_PASSWORD_ENCRIPCION_ID := CREAR_ENTRADA_ESTADO(V_ID_PASSWORD_ID,'ENCRIPCION_PASSWORDS', P_COMENTARIO);
     
     UPDATE ENCRIPCION_PASSWORDS
-    SET ID_ESTADO = 'ST_' || V_ID_PASSWORD_ID || '_ENCRIPCION_PASSWORDS' 
+    SET ID_ESTADO = V_ESTADO_PASSWORD_ENCRIPCION_ID
     WHERE PASSWORD_ID = V_ID_PASSWORD_ID;
 
     ------------------------------------------------------------
@@ -231,8 +252,17 @@ BEGIN
     INSERT INTO PERSONAS(CEDULA,NOMBRE, APELLIDO, NUMERO_DE_TELEFONO, ID_ROL_PERSONA, DIRECCION_DE_CORREO, PASSWORD_ID, ID_DIRECCION) 
     VALUES (P_CEDULA, P_NOMBRE, P_APELLIDO, P_NUMERO_DE_TELEFONO, P_ID_ROL, P_CORREO, V_ID_PASSWORD_ID, V_ID_DIRECCION_PERSONA);
 
-    --COMMIT;
+    --Creacion de la persona
+    V_ESTADO_PERSONA_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(P_CEDULA),'PERSONAS', P_COMENTARIO);
+
+    --Asignamos el estado de la persona
+    UPDATE PERSONAS
+    SET ID_ESTADO = V_ESTADO_PERSONA_ID
+    WHERE CEDULA = P_CEDULA;
+
+    COMMIT;
 END;   
+
 
 
 
