@@ -9,6 +9,8 @@ SELECT * FROM PERSONAS;
 SELECT * FROM DIRECCIONES_PERSONAS;
 SELECT * FROM ENCRIPCION_PASSWORDS;
 SELECT * FROM CORREOS;
+SELECT * FROM PUESTOS;
+SELECT * FROM DEPARTAMENTOS;
 
 SELECT AUTENTICACION('nidiaces@gmail.com','Password1234') FROM DUAL;
 
@@ -315,31 +317,81 @@ BEGIN
     COMMIT;
 END;   
 
+------Procedimiento almacenado para insertar un nuevo puesto para un empleado----------
+
+CREATE OR REPLACE PROCEDURE CREAR_PUESTO(
+    P_NOMBRE_PUESTO VARCHAR,
+    P_SALARIO_BASE NUMBER,
+    P_DESCRIPCION VARCHAR,
+    P_COMENTARIO VARCHAR
+)
+AS
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+    V_ID_PUESTO NUMBER; --Variable para almacenar la id del distrito
+
+BEGIN
+    --Insercion del distrito
+    INSERT INTO PUESTOS(NOMBRE_PUESTO, SALARIO_BASE, DESCRIPCION)
+     VALUES (P_NOMBRE_PUESTO, P_SALARIO_BASE, P_DESCRIPCION);
+    
+    --Obtenemos el id del distrito por medio del nombre
+    SELECT ID_PUESTO
+        INTO V_ID_PUESTO
+        FROM PUESTOS
+        WHERE NOMBRE_PUESTO = P_NOMBRE_PUESTO;
+    
+    --Creamos el estado del rol llamando a la funcion delegada
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_PUESTO),'PUESTOS', P_COMENTARIO);
+    
+    --Actualizamos el id del estado
+    UPDATE PUESTOS
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_PUESTO = V_ID_PUESTO;
+    
+    COMMIT;
+
+END;
+
+
+------Procedimiento almacenado para insertar un nuevo departamento para un empleado----------
+
+
+
+CREATE OR REPLACE PROCEDURE CREAR_DEPARTAMENTO(
+    P_NOMBRE_DEPARTAMENTO VARCHAR,
+    P_DESCRIPCION VARCHAR,
+    P_COMENTARIO VARCHAR
+)
+AS
+    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+    V_ID_DEPARTAMENTO NUMBER; --Variable para almacenar la id del distrito
+
+BEGIN
+    --Insercion del distrito
+    INSERT INTO DEPARTAMENTOS(NOMBRE_DEPARTAMENTO, DESCRIPCION)
+     VALUES (P_NOMBRE_DEPARTAMENTO, P_DESCRIPCION);
+    
+    --Obtenemos el id del distrito por medio del nombre
+    SELECT ID_DEPARTAMENTO
+        INTO V_ID_DEPARTAMENTO
+        FROM DEPARTAMENTOS
+        WHERE NOMBRE_DEPARTAMENTO = P_NOMBRE_DEPARTAMENTO;
+    
+    --Creamos el estado del rol llamando a la funcion delegada
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_DEPARTAMENTO),'DEPARTAMENTOS', P_COMENTARIO);
+    
+    --Actualizamos el id del estado
+    UPDATE DEPARTAMENTOS
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_DEPARTAMENTO = V_ID_DEPARTAMENTO;
+    
+    COMMIT;
+
+END;
+
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
--- Procedimientos almacenados
--- Inserta un nuevo cliente
-CREATE OR REPLACE PROCEDURE INSERTAR_CLIENTE(
-    P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_NUMERO_TELEFONO VARCHAR
-) AS
-BEGIN
-    INSERT INTO CLIENTES (CEDULA, NOMBRE, APELLIDO, NUMERO_DE_TELEFONO)
-    VALUES (P_CEDULA, P_NOMBRE, P_APELLIDO, P_NUMERO_TELEFONO);
-    COMMIT;
-END;
- 
--- Inserta un nuevo empleado
-CREATE OR REPLACE PROCEDURE INSERTAR_EMPLEADO(
-    P_ID_EMPLEADO NUMBER, P_ID_DEPARTAMENTO NUMBER, P_ID_PUESTO NUMBER,
-    P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_SALARIO NUMBER, P_CEDULA NUMBER
-) AS
-BEGIN
-    INSERT INTO EMPLEADOS (ID_EMPLEADO, ID_DEPARTAMENTO, ID_PUESTO, NOMBRE, APELLIDO, SALARIO, CEDULA)
-    VALUES (P_ID_EMPLEADO, P_ID_DEPARTAMENTO, P_ID_PUESTO, P_NOMBRE, P_APELLIDO, P_SALARIO, P_CEDULA);
-    COMMIT;
-END;
- 
 -- Elimina un cliente por su c�dula
 CREATE OR REPLACE PROCEDURE ELIMINAR_CLIENTE(P_CEDULA NUMBER) AS
 BEGIN
@@ -364,21 +416,6 @@ BEGIN
     CLOSE CUR_CLIENTE;
 END;
  
--- Inserta un usuario
-CREATE OR REPLACE PROCEDURE INSERTAR_USUARIO(P_ID_USUARIO NUMBER, P_CORREO VARCHAR, P_PASSWORD VARCHAR, P_ROL_ID NUMBER) AS
-BEGIN
-    INSERT INTO USUARIOS (ID_USUARIO, CORREO, PASSWORD, ROL_ID)
-    VALUES (P_ID_USUARIO, P_CORREO, P_PASSWORD, P_ROL_ID);
-    COMMIT;
-END;
- 
--- Elimina un usuario
-CREATE OR REPLACE PROCEDURE ELIMINAR_USUARIO(P_ID_USUARIO NUMBER) AS
-BEGIN
-    DELETE FROM USUARIOS WHERE ID_USUARIO = P_ID_USUARIO;
-    COMMIT;
-END;
-
 -- Inserta una nueva direcci�n de correo para un cliente
 CREATE OR REPLACE PROCEDURE INSERTAR_CORREO_CLIENTE(
     P_CORREO VARCHAR, P_CORREO_RESPALDO VARCHAR, P_CEDULA_CLIENTE NUMBER
