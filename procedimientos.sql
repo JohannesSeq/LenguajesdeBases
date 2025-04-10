@@ -9,6 +9,9 @@ SELECT * FROM PERSONAS;
 SELECT * FROM DIRECCIONES_PERSONAS;
 SELECT * FROM ENCRIPCION_PASSWORDS;
 SELECT * FROM CORREOS;
+
+SELECT AUTENTICACION('nidiaces@gmail.com','Password1234') FROM DUAL;
+
 */
 
 
@@ -17,7 +20,9 @@ SELECT * FROM CORREOS;
 
 ------------------- Funcion para crear estados -------------------------------------------------
 
-CREATE OR REPLACE FUNCTION CREAR_ENTRADA_ESTADO(P_ID_ENTRADA VARCHAR, P_TABLA VARCHAR, P_COMENTARIO VARCHAR) RETURN VARCHAR
+CREATE OR REPLACE FUNCTION CREAR_ENTRADA_ESTADO(
+    P_ID_ENTRADA VARCHAR, P_TABLA VARCHAR, P_COMENTARIO VARCHAR
+    ) RETURN VARCHAR
 AS
 
     V_ESTADO_ID VARCHAR(250); --Variable para almacenar el ID Del estado
@@ -33,6 +38,60 @@ BEGIN
     COMMIT;
     RETURN V_ESTADO_ID;
 END;
+
+
+------------------- Funcion para autenticar usuarios -------------------------------------------
+CREATE OR REPLACE FUNCTION AUTENTICACION(
+    P_EMAIL VARCHAR,
+    P_PASSWORD VARCHAR
+) RETURN VARCHAR
+AS
+    --- Variables para la contraseña
+    V_LLAVE RAW(32); --Variable para almacenar la llave de encriptacion
+    V_PASSWORD_RAW RAW(2000); --Variable para almaacenar la contraseña encriptada
+    V_PASSWORD_ID VARCHAR(100); -- Variable para almacenar el ID del password
+    V_PASSWORD_DESENCRIPTADO RAW(1000); --Variable para almacenar la contraseña desencriptada
+    V_PASSWORD_DESENCRIPTADO_VARCHAR VARCHAR(100);
+
+    V_RESULTADO VARCHAR(100); --Variable para almacenar el valor final de la operacion
+    
+BEGIN
+    V_RESULTADO := 'FALSE'; --Variable para almacenar el valor final de la operacion
+
+    --Obtenemos el valor del id de la contraseña
+    SELECT PASSWORD_ID 
+    INTO V_PASSWORD_ID
+    FROM PERSONAS 
+    WHERE DIRECCION_DE_CORREO = P_EMAIL;
+
+    --Obtenemos el valor de la llave
+    SELECT LLAVE, PASSWORD_VAL
+    INTO V_LLAVE, V_PASSWORD_RAW
+    FROM ENCRIPCION_PASSWORDS
+    WHERE PASSWORD_ID = V_PASSWORD_ID;
+
+        -- Desencriptar los datos
+    V_PASSWORD_DESENCRIPTADO := DBMS_CRYPTO.DECRYPT(
+                        src => V_PASSWORD_RAW,
+                        typ => DBMS_CRYPTO.ENCRYPT_AES256 + DBMS_CRYPTO.CHAIN_CBC + DBMS_CRYPTO.PAD_PKCS5,
+                        key => V_LLAVE);
+
+    --Convertimos el password de RAW a Varchar
+    V_PASSWORD_DESENCRIPTADO_VARCHAR := UTL_RAW.CAST_TO_VARCHAR2(V_PASSWORD_DESENCRIPTADO); 
+
+
+    IF V_PASSWORD_DESENCRIPTADO_VARCHAR = P_PASSWORD THEN
+        V_RESULTADO := 'TRUE';
+    END IF;
+
+    RETURN V_RESULTADO;
+    
+    EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        V_RESULTADO := 'FALSE';
+        RETURN V_RESULTADO;
+END;
+
 
 --------------------Procedimiento almacenado para insertar un nuevo Distrito--------------------
 
@@ -255,9 +314,6 @@ BEGIN
 
     COMMIT;
 END;   
-
-
-
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
