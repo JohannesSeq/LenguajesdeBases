@@ -74,3 +74,9 @@ EXEC CREAR_MENU('Menu Familiar','Menu con todos los platillos para la familia', 
 --Agregar platillos al menu
 EXEC CREAR_PLATILLO_MENU(1,1,'Agregando platillos al menu');
 EXEC CREAR_PLATILLO_MENU(2,1,'Agregando platillos al menu');
+
+--Agregar pedidos
+EXEC CREAR_PEDIDO(10001,10000,'Nuevo','Agregando_Pedido');
+
+--Agregamos metodos de pago
+EXEC CREAR_METODO_DE_PAGO('Tarjeta','Pago con tarjeta de debito o credito', 'Agregando Metodo de pago');
