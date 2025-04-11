@@ -100,6 +100,8 @@ BEGIN
 END;
 /
 
+------------------- Funcion para calcular el monto total de un pedido --------------------------
+
 --------------------Procedimiento almacenado para insertar un nuevo Distrito--------------------
 
 CREATE OR REPLACE PROCEDURE CREAR_DISTRITO(
