@@ -80,3 +80,7 @@ EXEC CREAR_PEDIDO(10001,10000,'Nuevo','Agregando_Pedido');
 
 --Agregamos metodos de pago
 EXEC CREAR_METODO_DE_PAGO('Tarjeta','Pago con tarjeta de debito o credito', 'Agregando Metodo de pago');
+
+--Agregamos platillos a un pedido
+EXEC CREAR_ENTRADA_LISTA_PLATILLOS(2,2,'Agregando pedidos al pedido 1');
+EXEC CREAR_ENTRADA_LISTA_PLATILLOS(1,2,'Agregando pedidos al pedido 1');
