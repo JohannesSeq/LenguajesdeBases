@@ -48,6 +48,7 @@ EXEC CREAR_ROL('Gerente', 'Gerentes', 'Gerentes del restaurante', 'Creacion del 
 EXEC CREAR_PERSONA(1184401, 'Johannes', 'Sequeira', '123-456','Gerente', 1, 32, 32, 'js@playacacao.com', 'johannes@gmail.com','Password1234','Agregando personas');
 EXEC CREAR_PERSONA(1345667, 'Steven', 'Guerra Fernandez', '222-356','Empleado', 1, 22, 31, 'steven@playacacao.com', 'steven@gmail.com','Password1234','Agregando personas');
 EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 21, 23, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');
+EXEC CREAR_PERSONA(584551, 'Miguel', 'Amador', '123-456','Cliente', 1, 21, 23, 'migue@gmail.com', 'amador@gmail.com','Password1234','Probando borrado');
 
 --Creacion de puestos
 EXEC CREAR_PUESTO('Mesero', 300000, 'Mesero del restaurante', 'Agregando puesto');
@@ -84,3 +85,6 @@ EXEC CREAR_METODO_DE_PAGO('Tarjeta','Pago con tarjeta de debito o credito', 'Agr
 --Agregamos platillos a un pedido
 EXEC CREAR_ENTRADA_LISTA_PLATILLOS(2,2,'Agregando pedidos al pedido 1');
 EXEC CREAR_ENTRADA_LISTA_PLATILLOS(1,2,'Agregando pedidos al pedido 1');
+
+--Agregamos una factura
+EXEC CREAR_FACTURA(2,1,0,'Agregando Factura');
