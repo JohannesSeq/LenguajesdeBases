@@ -18,7 +18,7 @@
                         <div class="dropdown-menu" aria-labelledby="usuarioDropdown">
                             <?php
                                 if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
-                                    echo '<a class="dropdown-item" href="logout.php" id="logout">Cerrar Sesión</a>';
+                                    echo '<a class="dropdown-item" href="index.php" id="logout">Cerrar Sesión</a>';
                                 } else {
                                     echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Iniciar Sesión</a>';
                                     echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#signupModal">Registrarse</a>';
@@ -66,7 +66,7 @@
                                 <div class="dropdown-menu" aria-labelledby="inventarioDropdown">
                                     <a class="dropdown-item" href="agregarProducto.php">Agregar platillo</a>
                                     <a class="dropdown-item" href="modificarProducto.php">Modificar platillo</a>
-                                    <a class="dropdown-item" href="mostrarInventario.php">Mostrar productos</a>
+                                    <a class="dropdown-item" href="mostrarPlatillos.php">Mostrar platillos</a>
                                     <a class="dropdown-item" href="eliminarProducto.php">Eliminar platillo</a>
                                 </div>
                             </li>';
@@ -93,7 +93,7 @@
         </nav>
     </header>
 
-    <!-- Login Modal -->
+    <!-- Login Modal>
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -120,6 +120,6 @@
             </div>
         </div>
     </div>
-    <!-- Registro Modal -->
+    <Registro Modal -->
 
 </body>

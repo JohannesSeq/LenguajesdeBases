@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Inventario - Restaurante Playa Cacao</title>
+        <title>Platillos - Restaurante Playa Cacao</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="../style/style.css">
         <style>
@@ -20,14 +20,14 @@
         </style>
     </head>
 
-    <body onload = "Check_Permissions('Vendedor')" >
+    <body onload = "Check_Permissions('Empleado')" >
         <?php include_once 'header.php'; ?>
         
 
         <div class="container-fluid mt-3">
             <div class="jumbotron">
-                <h1 class="display-4">Inventario</h1>
-                <p class="lead">Revisa tu inventario desde aca.</p>
+                <h1 class="display-4">Platillos</h1>
+                <p class="lead">Revisa los platillos desde aca.</p>
                 <hr class="my-4">
             </div>
         </div>
@@ -35,7 +35,8 @@
         <section class="inventario-form">
 
             <?php 
-                include('../php/connection.php');
+                 $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
+                 
                 $query = "SELECT * FROM productos";
                 $productos = '';
                 $result = $conn->query($query);
