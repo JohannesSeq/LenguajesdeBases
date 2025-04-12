@@ -37,45 +37,57 @@
             <?php 
                  $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
                  
-                $query = "SELECT * FROM productos";
-                $productos = '';
-                $result = $conn->query($query);
+                 $query = "BEGIN " .
+                 "ENVIO_TOTAL_PLATILLOS(:P_CURSOR); " .
+                 "END;";
+
+                //Guardamos el query
+                $stmt = oci_parse($conn, $query);                 
+
+                //Creamos un cursor para almacenar la informacion de la tabla que estamos consultando
+                $cursor = oci_new_cursor($conn);
+                oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+
+                // Ejecutar el procedimiento y el cursor
+                oci_execute($stmt);
+                oci_execute($cursor);
+
+
+                $productos = 
+                '<table class="table">'.
                 
-                if($result != null){
+                '<tr>'.
+                    '<th scope="col">id</th>'.
+                    '<th scope="col">nombre</th>'.
+                    '<th scope="col">precio</th>'.
+                    '<th scope="col">cantidad</th>'.
+            '</tr>'.
+            '</thead>'.
+            '<tbody>'
+            ;
 
-                    $productos = 
-                    '<table class="table">'.
-                    
-                    '<tr>'.
-                        '<th scope="col">id</th>'.
-                        '<th scope="col">nombre</th>'.
-                        '<th scope="col">categoria</th>'.
-                        '<th scope="col">cantidad</th>'.
-                        '<th scope="col">precio</th>'.
-                '</tr>'.
-                '</thead>'.
-                '<tbody>'
-                ;
-
-                    while ($row = $result->fetch_assoc()) {
-
-                        $productos .= 
-                        '<tr>' . 
-                            '<th scope="row">'.$row['id'].'</th>'.
-                            '<th scope="row">'.$row['nombre'].'</th>'.
-                            '<th scope="row">'.$row['categoria'].'</th>'.
-                            '<th scope="row">'.$row['cantidad'].'</th>'.
-                            '<th scope="row">'.$row['precio'].'</th>'.
-                        '</tr>';
-                    }
-
-                    $productos .=    
-                        ' </tr>'.
-                    '</tbody>'.
-                '</table>';
+                while ($row = oci_fetch_assoc($cursor)) {
+                    $productos .= 
+                    '<tr>' . 
+                        '<th scope="row">'.$row['ID_PLATILLO'].'</th>'.
+                        '<th scope="row">'.$row['NOMBRE_PLATILLO'].'</th>'.
+                        '<th scope="row">'.$row['PRECIO_UNITARIO'].'</th>'.
+                        '<th scope="row">'.$row['CANTIDAD'].'</th>'.
+                    '</tr>';
                 }
-                echo $productos;
-                $conn->close();
+
+                $productos .=    
+                    ' </tr>'.
+                '</tbody>'.
+            '</table>';
+
+            echo $productos;
+            // Cerramos la conexion con la DB
+            oci_free_statement($stmt);
+            oci_free_statement($cursor);
+            oci_close($conn);
+
+
             ?>
 
 
