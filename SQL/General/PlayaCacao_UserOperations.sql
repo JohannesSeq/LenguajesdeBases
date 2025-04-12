@@ -69,6 +69,7 @@ EXEC CREAR_PLATILLO('Arroz con camarones', 5000, 50, 'Agregando platillos');
 EXEC CREAR_PLATILLO('Papas fritas', 2000, 100, 'Agregando platillos');
 EXEC CREAR_PLATILLO('Dedos de pollo', 3000, 80, 'Agregando platillos');
 
+SELECT * FROM PLATILLOS;
 
 --Agregar menu
 EXEC CREAR_MENU('Menu Familiar','Menu con todos los platillos para la familia', 'Agregando menus');
