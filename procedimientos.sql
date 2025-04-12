@@ -20,7 +20,7 @@ SELECT * FROM METODO_PAGO;
 SELECT * FROM LISTA_PLATILLOS;
 SELECT * FROM FACTURAS;
 
-SELECT AUTENTICACION('nidiaces@gmail.com','Password1234') FROM DUAL;
+SELECT AUTENTICACION('nidiaces@gmail.com','Password1234') AS RESULTADO_AUTH FROM DUAL;
 SELECT CALCULAR_TOTAL_PEDIDO(2) FROM DUAL;
 
 --EXEC ACTUALIZAR_TOTAL_PEDIDO(2);
@@ -71,16 +71,13 @@ BEGIN
     V_RESULTADO := 'FALSE'; --Variable para almacenar el valor final de la operacion
 
     --Obtenemos el valor del id de la contraseña
-    SELECT PASSWORD_ID 
-    INTO V_PASSWORD_ID
-    FROM PERSONAS 
+    SELECT 
+        PASSWORD_ID,
+        LLAVE_PASSWORD, 
+        PASSWORD_VAL
+    INTO V_PASSWORD_ID, V_LLAVE, V_PASSWORD_RAW
+    FROM VISTA_AUTENTICACION
     WHERE DIRECCION_DE_CORREO = P_EMAIL;
-
-    --Obtenemos el valor de la llave
-    SELECT LLAVE, PASSWORD_VAL
-    INTO V_LLAVE, V_PASSWORD_RAW
-    FROM ENCRIPCION_PASSWORDS
-    WHERE PASSWORD_ID = V_PASSWORD_ID;
 
         -- Desencriptar los datos
     V_PASSWORD_DESENCRIPTADO := DBMS_CRYPTO.DECRYPT(
@@ -104,6 +101,37 @@ BEGIN
         RETURN V_RESULTADO;
 END;
 /
+
+------------ Procedimiento almacenado para enviar la info del usuario autenticado---------------
+
+CREATE OR REPLACE PROCEDURE ENVIO_AUTENTICACION (
+    P_CORREO VARCHAR,
+    P_PASSWORD VARCHAR,
+    P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+)
+AS
+    V_RESULTADO_AUTH VARCHAR(20) := 'False';
+BEGIN
+    V_RESULTADO_AUTH := AUTENTICACION(P_CORREO,P_PASSWORD);
+
+    IF V_RESULTADO_AUTH = 'TRUE' THEN
+        OPEN P_CURSOR_RESULTADO FOR
+        SELECT NOMBRE, DIRECCION_DE_CORREO, ROL
+        FROM VISTA_AUTENTICACION
+        WHERE DIRECCION_DE_CORREO = P_CORREO;
+
+    ELSE
+
+        OPEN P_CURSOR_RESULTADO FOR
+        SELECT NOMBRE, DIRECCION_DE_CORREO, ROL
+        FROM VISTA_AUTENTICACION
+        WHERE DIRECCION_DE_CORREO = 'Invalid';
+    END IF;
+END;
+
+VARIABLE c REFCURSOR;
+EXEC ENVIO_AUTENTICACION('nidiacess@gmaisl.com','Password1234',:c);
+PRINT c;
 
 ------------------- Funcion para calcular el monto total de un pedido --------------------------
 

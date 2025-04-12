@@ -49,6 +49,7 @@ EXEC CREAR_PERSONA(1184401, 'Johannes', 'Sequeira', '123-456','Gerente', 1, 32, 
 EXEC CREAR_PERSONA(1345667, 'Steven', 'Guerra Fernandez', '222-356','Empleado', 1, 22, 31, 'steven@playacacao.com', 'steven@gmail.com','Password1234','Agregando personas');
 EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 21, 23, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');
 EXEC CREAR_PERSONA(584551, 'Miguel', 'Amador', '123-456','Cliente', 1, 21, 23, 'migue@gmail.com', 'amador@gmail.com','Password1234','Probando borrado');
+EXEC CREAR_PERSONA(777777, 'InvalidUser', 'InvalidUser', '00000','Cliente', 1, 32, 32, 'Invalid', 'Invalid','Invalid','Agregando personas');
 
 --Creacion de puestos
 EXEC CREAR_PUESTO('Mesero', 300000, 'Mesero del restaurante', 'Agregando puesto');

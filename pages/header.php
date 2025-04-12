@@ -29,7 +29,7 @@
 
                     <?php                 
                     if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
-                        if($_COOKIE["rol_id"] == "1") {
+                        if($_COOKIE["rol_id"] == "Cliente") {
                             echo '
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="MenuDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,7 +48,7 @@
                                 </div>
                             </li>';
                         } 
-                        elseif ($_COOKIE["rol_id"] == "2" || $_COOKIE["rol_id"] == "3") {
+                        elseif ($_COOKIE["rol_id"] == "Empleado" || $_COOKIE["rol_id"] == "Gerente") {
                             echo '
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="facturasDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,7 +72,7 @@
                             </li>';
                         }
 
-                        if ($_COOKIE["rol_id"] == "3") {
+                        if ($_COOKIE["rol_id"] == "Gerente") {
                             echo '
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="PersonalDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

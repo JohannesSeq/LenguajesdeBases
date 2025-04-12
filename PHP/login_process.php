@@ -1,52 +1,75 @@
 <?php
-require_once('conexion.php');
-$Conexion = new Conexion();
-$Get_Conexion = $Conexion->Conectar_Base_De_Datos();
+    //Passdown de las variables del JS al back end.
+    $correo = $_GET['correo'];;
+    $password = $_GET['password'];
 
-//Passdown de las variables del JS al backend
-$correo = $_GET['correo'];
-$password = $_GET['password'];
+    //String que almacena el estado final de la operacion
+    $usuarioOutput = '';
 
-$usuarioOutput = '';
+    //Variables para almacenar los valores del usuario una vez la autenticacion termine
+    $usuarioNombreQuery = "";
+    $usuarioRolQuery = "";
+    $usuarioCorreoQuery = "";
 
-$query = "SELECT * FROM USUARIOS WHERE CORREO = '".$correo."'";
-$Query_Result = $stmt = $Get_Conexion->prepare($query);
-$stmt->execute();
+    //Iniciamos la conexion con la DB
+    $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
-$UsuarioCorreoQuery = '';
-$UsuarioPasswordQuery = '';
-$usuarioRolQuery = '';
+    //Establecemos el Query de SQL que queramos ejecutar
+    $query = "BEGIN " .
+        "ENVIO_AUTENTICACION(:P_COR,:P_PASS,:P_CURSOR); " .
+        "END;";
 
-$UserArray = array();
+    //Guardamos el query
+        $stmt = oci_parse($conn, $query);
 
 
-while($row = $Query_Result->fetch(PDO::FETCH_ASSOC)) {
-    $UserArray[] = $row;
-    $UsuarioCorreoQuery = $row["correo"];
-    $UsuarioPasswordQuery = $row["password"];
-    $usuarioRolQuery = $row["rol_id"];
+    //Vinculamos los parametros necesarios para el procedimiento almacenado
+    oci_bind_by_name($stmt, ":P_COR", $correo);
+    oci_bind_by_name($stmt, ":P_PASS", $password);
+
+    //Creamos un cursor para almacenar la informacion de la tabla que estamos consultando
+    $cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+
+    // Ejecutar el procedimiento y el cursor
+    oci_execute($stmt);
+    oci_execute($cursor);
+
+    // Obtener los resultados
+    while ($row = oci_fetch_assoc($cursor)) {
+        $usuarioNombreQuery = $row['NOMBRE'];
+        $usuarioRolQuery = $row['ROL'];
+        $usuarioCorreoQuery = $row['DIRECCION_DE_CORREO'];
+    }
+
+    //ECHO $usuarioNombreQuery;
+    //ECHO $usuarioRolQuery;
+    //ECHO $usuarioCorreoQuery;
     
-}
-
-if($UsuarioCorreoQuery != null){
-
-    if($UsuarioCorreoQuery == $correo && $UsuarioPasswordQuery == $password){
-
-        setcookie('email', $UsuarioCorreoQuery, time() + 3600, '/');
+    if ($usuarioCorreoQuery != "Invalid"){
+        //Seteamos los valores de la cookie para que almacene la info del usuario
+        setcookie('email', $usuarioCorreoQuery, time() + 3600, '/');
         setcookie('rol_id', $usuarioRolQuery, time() + 3600, '/');
-        setcookie('nombre', $UsuarioCorreoQuery, time() + 3600, '/');
+        setcookie('nombre', $usuarioNombreQuery, time() + 3600, '/');
 
-        $usuarioOutput = 'Success';
-    }    
+        //Confirmamos que la autenticacion fue exitosa
+        $usuarioOutput = "Success";
 
-} else {
-    setcookie('email', '', time() + 3600, '/');
-    setcookie('rol_id', '', time() + 3600, '/');
-    setcookie('nombre', '', time() + 3600, '/');
+    } else {
+        //Seteamos los valores de la cookie
+        setcookie('email', '', time() + 3600, '/');
+        setcookie('rol_id', '', time() + 3600, '/');
+        setcookie('nombre', '', time() + 3600, '/');
+
+        $usuarioOutput = "Faulure";
+        
+    }
     
-    $usuarioOutput = 'Failure';
-}
+    //Devolvemos el resultado de la operacion
+    ECHO $usuarioOutput;
 
-echo $usuarioOutput;
-
+    // Cerramos la conexion con la DB
+    oci_free_statement($stmt);
+    oci_free_statement($cursor);
+    oci_close($conn);
 ?>
