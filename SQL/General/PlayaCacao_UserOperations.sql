@@ -45,12 +45,12 @@ EXEC CREAR_ROL('Empleado', 'Empleados', 'Empleados del restaurante', 'Creacion d
 EXEC CREAR_ROL('Gerente', 'Gerentes', 'Gerentes del restaurante', 'Creacion del rol');
 
 --Creacion de personas
-EXEC CREAR_PERSONA(1184401, 'Johannes', 'Sequeira', '123-456','Gerente', 1, 32, 32, 'js@playacacao.com', 'johannes@gmail.com','Password1234','Agregando personas');
-EXEC CREAR_PERSONA(1345667, 'Steven', 'Guerra Fernandez', '222-356','Empleado', 1, 22, 31, 'steven@playacacao.com', 'steven@gmail.com','Password1234','Agregando personas');
-EXEC CREAR_PERSONA(1899889, 'Ryan', 'Umana', '222-356','Gerente', 1, 22, 31, 'ryan@playacacao.com', 'ryan@gmail.com','Password1234','Agregando personas');
-EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 21, 23, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');
-EXEC CREAR_PERSONA(584551, 'Miguel', 'Amador', '123-456','Cliente', 1, 21, 23, 'migue@gmail.com', 'amador@gmail.com','Password1234','Probando borrado');
-EXEC CREAR_PERSONA(777777, 'InvalidUser', 'InvalidUser', '00000','Cliente', 1, 32, 32, 'Invalid', 'Invalid','Invalid','Agregando personas');
+EXEC CREAR_PERSONA(1184401, 'Johannes', 'Sequeira', '123-456','Gerente', 1, 1, 1, 'js@playacacao.com', 'johannes@gmail.com','Password1234','Agregando personas');
+EXEC CREAR_PERSONA(1345667, 'Steven', 'Guerra Fernandez', '222-356','Empleado', 1, 1, 1, 'steven@playacacao.com', 'steven@gmail.com','Password1234','Agregando personas');
+EXEC CREAR_PERSONA(1899889, 'Ryan', 'Umana', '222-356','Gerente', 1, 1, 1, 'ryan@playacacao.com', 'ryan@gmail.com','Password1234','Agregando personas');
+EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 1, 1, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');
+EXEC CREAR_PERSONA(584551, 'Miguel', 'Amador', '123-456','Cliente', 1, 1, 1, 'migue@gmail.com', 'amador@gmail.com','Password1234','Probando borrado');
+EXEC CREAR_PERSONA(777777, 'InvalidUser', 'InvalidUser', '00000','Cliente', 1, 1, 1, 'Invalid', 'Invalid','Invalid','Agregando personas');
 
 --Creacion de puestos
 EXEC CREAR_PUESTO('Mesero', 300000, 'Mesero del restaurante', 'Agregando puesto');
@@ -63,14 +63,12 @@ EXEC CREAR_DEPARTAMENTO('Saloneria','Departamento de salon', 'Agregando Departam
 EXEC CREAR_DEPARTAMENTO('Cocina','Departamento de cocina', 'Agregando Departamento');
 
 --Creacion de empleados
-EXEC CREAR_EMPLEADO(10001,1,22,1000000,1184401,'Agregando Empleado');
+EXEC CREAR_EMPLEADO(10001,1,1,1000000,1184401,'Agregando Empleado');
 
 --Agregar platillos
 EXEC CREAR_PLATILLO('Arroz con camarones', 5000, 50, 'Agregando platillos');
 EXEC CREAR_PLATILLO('Papas fritas', 2000, 100, 'Agregando platillos');
 EXEC CREAR_PLATILLO('Dedos de pollo', 3000, 80, 'Agregando platillos');
-
-SELECT * FROM PLATILLOS;
 
 --Agregar menu
 EXEC CREAR_MENU('Menu Familiar','Menu con todos los platillos para la familia', 'Agregando menus');
@@ -91,3 +89,9 @@ EXEC CREAR_ENTRADA_LISTA_PLATILLOS(1,2,'Agregando pedidos al pedido 1');
 
 --Agregamos una factura
 EXEC CREAR_FACTURA(2,1,0,'Agregando Factura');
+
+SELECT * FROM PROVINCIA;
+SELECT * FROM CANTON;
+SELECT * FROM DISTRITO;
+SELECT * FROM PERSONAS;
+SELECT * FROM PLATILLOS;

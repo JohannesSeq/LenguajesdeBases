@@ -102,9 +102,6 @@ BEGIN
             FROM VISTA_PLATILLOS;
 END;
 
-VARIABLE c REFCURSOR;
-EXEC ENVIO_TOTAL_PLATILLOS(:c);
-PRINT c;
 
 
 ------------------------------ ACTUALIZAR PLATILLO ------------------------------------
