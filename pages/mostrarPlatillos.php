@@ -20,7 +20,7 @@
         </style>
     </head>
 
-    <body onload = "Check_Permissions('Empleado')" >
+    <!--body onload = "Check_Permissions('Empleado')" -->
         <?php include_once 'header.php'; ?>
         
 
@@ -100,7 +100,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="../script/cookie_management.js"></script>
         <script src="../script/platillos.js"></script>
-        <script src="../script/permissions.js"></script>
+        <!--script src="../script/permissions.js"></script-->
 
     </body>
 
