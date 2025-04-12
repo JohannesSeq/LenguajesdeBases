@@ -1,7 +1,8 @@
 ------------------- Correr en System ---------------------------------------
 --Creacion del Schema para la base de datos
+alter session set "_ORACLE_SCRIPT"=true;
 CREATE TABLESPACE PLAYA_CACAO_TBS
-DATAFILE 'D:\Oracle\oradata\XE\PLAYA_CACAO_TBS.dbf' SIZE 100M;
+DATAFILE 'C:\ORACLE\oradata\XE\PLAYA_CACAO_TBS.dbf' SIZE 100M;
 
 --Creacion del usuario para la base de datos
 CREATE USER PlayaCacaoDB IDENTIFIED BY PlayaCacao12345;
