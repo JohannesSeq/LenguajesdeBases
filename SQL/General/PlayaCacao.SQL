@@ -4,9 +4,10 @@ alter session set "_ORACLE_SCRIPT"=true;
 CREATE TABLESPACE PLAYA_CACAO_TBS
 DATAFILE 'C:\ORACLE\oradata\XE\PLAYA_CACAO_TBS.dbf' SIZE 100M;
 
+
 --Creacion del usuario para la base de datos
 CREATE USER PlayaCacaoDB IDENTIFIED BY PlayaCacao12345;
-
+GRANT EXECUTE ON DBMS_CRYPTO TO PlayaCacaoDB;
 GRANT UNLIMITED TABLESPACE to PlayaCacaoDB;
  
 --Creacion de Roles para el usuario en la DB
