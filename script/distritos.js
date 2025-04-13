@@ -1,16 +1,16 @@
 $(document).ready(function(){
 
-    $('#Agregar_Canton_Form').submit(function(e){
+    $('#Agregar_Distrito_Form').submit(function(e){
 
         // Previene el comportamiento por defecto del formulario (recarga de página)
         e.preventDefault();
 
         // Obtiene los valores de los campos del formulario
-        var nombre = $('#nombre_canton').val();
+        var nombre = $('#nombre_distrito').val();
         
-        // Realiza una petición AJAX para enviar los datos del nuevo canton a agregarCanton_Process.php
+        // Realiza una petición AJAX para enviar los datos del nuevo distrito a agregarDistrito_Process.php
         $.ajax({
-            url: '../php/Cantones/agregarCanton_Process.php',
+            url: '../php/agregarDistrito_Process.php',
             method: 'POST',
 
             data: {
@@ -20,7 +20,7 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
-                dispararAlertaExito("Canton agregado correctamente").then(() => {       
+                dispararAlertaExito("Distrito agregado correctamente").then(() => {       
                         
                 });
                 location.reload();  
@@ -28,34 +28,34 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el botón de modificar canton
+    // Manejador para el botón de modificar distrito
     $(document).on('click', '.btn-modify', function () {
-        var canton_id = $(this).data('id'); // Obtiene el ID del canton a modificar
-        console.log('id_canton:' + canton_id);
-        // Realiza una petición AJAX para obtener los datos del canton según su ID
+        var distrito_id = $(this).data('id'); // Obtiene el ID del distrito a modificar
+        console.log('id_distrito:' + distrito_id);
+        // Realiza una petición AJAX para obtener los datos del distrito según su ID
         $.ajax({
-            url: '../PHP/Cantones/listadocantonindividual_process.php', // URL del archivo PHP que devolverá los detalles del canton
+            url: '../PHP/listadodistritoindividual_process.php', // URL del archivo PHP que devolverá los detalles del distrito
             method: 'GET', // Método HTTP para solicitar los datos
-            // Envía el ID del canton como parámetro
+            // Envía el ID del distrito como parámetro
             data: {
-                 id: canton_id  
+                 id: distrito_id  
                 }, 
             
             success: function (response) {
                 
-                var canton = JSON.parse(response); // Parse la respuesta JSON
-                console.log(canton);
+                var distrito = JSON.parse(response); // Parse la respuesta JSON
+                console.log(distrito);
 
                 if (response.error) {
 
                     alert(response.error); // Muestra un mensaje de error si lo hay
 
                 } else {
-                    // Muestra el modal para modificar el canton
-                    $('#modificarcantonmodal').modal('show'); 
-                    // Rellena el formulario modal con los datos del canton para su modificación
-                    $('#modificarcantonmodal input[name="nombre"]').val(canton[0].NOMBRE_CANTON);
-                    $('#modificarcantonmodal').data('id', canton_id); // Guarda el ID del canton en el modal
+                    // Muestra el modal para modificar el distrito
+                    $('#modificardistritomodal').modal('show'); 
+                    // Rellena el formulario modal con los datos del distrito para su modificación
+                    $('#modificardistritomodal input[name="nombre"]').val(distrito[0].NOMBRE_DISTRITO);
+                    $('#modificardistritomodal').data('id', distrito_id); // Guarda el ID del distrito en el modal
 
                 }
             },
@@ -65,27 +65,27 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el envío del formulario de modificar canton
-    $('#ModificarCantonForm').on('submit', function (e) {
+    // Manejador para el envío del formulario de modificar distrito
+    $('#ModificarDistritoForm').on('submit', function (e) {
         e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
-        var canton_id = $('#modificarcantonmodal').data('id');  // Obtiene el ID del canton a modificar
-        var formData = $(this).serialize() + '&id=' + canton_id;  // Serializa los datos del formulario y añade el ID del canton
+        var distrito_id = $('#modificardistritomodal').data('id');  // Obtiene el ID del distrito a modificar
+        var formData = $(this).serialize() + '&id=' + distrito_id;  // Serializa los datos del formulario y añade el ID del distrito
 
-        // Realiza una petición AJAX para actualizar los datos del canton
+        // Realiza una petición AJAX para actualizar los datos del distrito
         $.ajax({
-            url: '../PHP/Cantones/modificarcanton_process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            url: '../PHP/modificardistrito_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
             success: function (response) {
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el canton").then(() => { });
+                    dispararAlertaError("Error actualizando el distrito").then(() => { });
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("canton actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
+                    dispararAlertaExito("Distrito actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
                     location.reload();  
-                    $('#modificarcantonmodal').modal('hide'); // Oculta el modal
+                    $('#modificardistritomodal').modal('hide'); // Oculta el modal
                 }
             },
             error: function (error) {
@@ -94,9 +94,9 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el botón de eliminar canton
+    // Manejador para el botón de eliminar distrito
     $(document).on('click', '.btn-delete', function () {
-        var cantonId = $(this).data('id'); // Obtiene el ID del canton a eliminar
+        var distritoId = $(this).data('id'); // Obtiene el ID del distrito a eliminar
 
         // Muestra una alerta de confirmación usando SweetAlert2
         Swal.fire({
@@ -110,21 +110,21 @@ $(document).ready(function(){
 
         }).then((result) => {
             if (result.isConfirmed) {
-                // Si el usuario confirma, realiza una petición AJAX para eliminar el canton
+                // Si el usuario confirma, realiza una petición AJAX para eliminar el distrito
                 $.ajax({
-                    url: '../PHP/Cantones/eliminarcanton_process.php', // URL del archivo PHP que procesará la eliminación
+                    url: '../PHP/eliminardistrito_process.php', // URL del archivo PHP que procesará la eliminación
                     method: 'POST', // Método HTTP para enviar la solicitud de eliminación
-                    data: { id: cantonId }, // Envía el ID del canton como parámetro
+                    data: { id: distritoId }, // Envía el ID del distrito como parámetro
                     success: function (response) {
                         if (response.error) {
-                            Swal.fire('Error', 'No se pudo eliminar la canton.', 'error');
+                            Swal.fire('Error', 'No se pudo eliminar el distrito.', 'error');
 
                         } else {
 
-                            dispararAlertaExito("El canton ha sido eliminado.").then(() => { 
+                            dispararAlertaExito("El distrito ha sido eliminado.").then(() => { 
                                 
                             }); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de cantones
+                            location.reload();  // Recarga la lista de distritos
 
                         }
                     },
@@ -138,25 +138,25 @@ $(document).ready(function(){
 
 });
 
-// Función para cargar la lista de cantones desde la base de datos
-function listadocantones() {
+// Función para cargar la lista de distritos desde la base de datos
+function listadodistritos() {
     $.ajax({
-        url: '../PHP/Cantones/listarcantones_process.php', // URL del archivo PHP que devolverá la lista de cantones
+        url: '../PHP/listardistritos_process.php', // URL del archivo PHP que devolverá la lista de distritos
         method: 'GET', // Método HTTP para solicitar los datos
 
         success: function (data) {
-            var cantones = JSON.parse(data); // Parse la respuesta JSON
-            var tbody = $('#cantonesTable tbody');
+            var distritos = JSON.parse(data); // Parse la respuesta JSON
+            var tbody = $('#distritosTable tbody');
             tbody.empty(); // Limpia la tabla antes de añadir nuevos datos
 
-            cantones.forEach(function (canton) {
+            distritos.forEach(function (distrito) {
                 // Construye una fila de la tabla con los datos del pedid
                 var row = `<tr>
-                    <td>${canton.ID_CANTON}</td>
-                    <td>${canton.NOMBRE_CANTON}</td>
+                    <td>${distrito.ID_DISTRITO}</td>
+                    <td>${distrito.NOMBRE_DISTRITO}</td>
                     <td>
-                        <button class="btn btn-primary btn-modify" data-id="${canton.ID_CANTON}">Modificar</button>
-                        <button class="btn btn-danger btn-delete" data-id="${canton.ID_CANTON}">Eliminar</button>
+                        <button class="btn btn-primary btn-modify" data-id="${distrito.ID_DISTRITO}">Modificar</button>
+                        <button class="btn btn-danger btn-delete" data-id="${distrito.ID_DISTRITO}">Eliminar</button>
                     </td>
                 </tr>`;
                 tbody.append(row); // Añade la fila a la tabla

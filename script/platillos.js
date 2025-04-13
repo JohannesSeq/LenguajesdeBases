@@ -12,7 +12,7 @@ $(document).ready(function(){
         
         // Realiza una petición AJAX para enviar los datos del nuevo platillo a agregarPlatillo_Process.php
         $.ajax({
-            url: '../php/agregarPlatillo_Process.php',
+            url: '../php/Platillos/agregarPlatillo_Process.php',
             method: 'POST',
 
             data: {
@@ -38,7 +38,7 @@ $(document).ready(function(){
         console.log('id_platillo:' + platillo_id);
         // Realiza una petición AJAX para obtener los datos del platillo según su ID
         $.ajax({
-            url: '../PHP/listadoplatilloindividual_process.php', // URL del archivo PHP que devolverá los detalles del platillo
+            url: '../PHP/Platillos/listadoplatilloindividual_process.php', // URL del archivo PHP que devolverá los detalles del platillo
             method: 'GET', // Método HTTP para solicitar los datos
             // Envía el ID del platillo como parámetro
             data: {
@@ -80,7 +80,7 @@ $(document).ready(function(){
 
         // Realiza una petición AJAX para actualizar los datos del platillo
         $.ajax({
-            url: '../PHP/modificarplatillo_process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            url: '../PHP/Platillos/modificarplatillo_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
             success: function (response) {
@@ -118,7 +118,7 @@ $(document).ready(function(){
             if (result.isConfirmed) {
                 // Si el usuario confirma, realiza una petición AJAX para eliminar el platillo
                 $.ajax({
-                    url: '../PHP/eliminarplatillo_process.php', // URL del archivo PHP que procesará la eliminación
+                    url: '../PHP/Platillos/eliminarplatillo_process.php', // URL del archivo PHP que procesará la eliminación
                     method: 'POST', // Método HTTP para enviar la solicitud de eliminación
                     data: { id: platilloId }, // Envía el ID del platillo como parámetro
                     success: function (response) {
@@ -147,7 +147,7 @@ $(document).ready(function(){
 // Función para cargar la lista de platillos desde la base de datos
 function listadoplatillos() {
     $.ajax({
-        url: '../PHP/listarplatillos_process.php', // URL del archivo PHP que devolverá la lista de platillos
+        url: '../PHP/Platillos/listarplatillos_process.php', // URL del archivo PHP que devolverá la lista de platillos
         method: 'GET', // Método HTTP para solicitar los datos
 
         success: function (data) {

@@ -1,35 +1,3 @@
---------------------Procedimiento almacenado para insertar un nuevo Distrito--------------------
-
-CREATE OR REPLACE PROCEDURE CREAR_DISTRITO(
-    P_NOMBRE_DISTRITO VARCHAR,
-    P_COMENTARIO VARCHAR 
-)
-AS
-    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
-    V_ID_DISTRITO NUMBER; --Variable para almacenar la id del distrito
-BEGIN
-    
-    --Insercion del distrito
-    INSERT INTO DISTRITO(NOMBRE_DISTRITO) VALUES (P_NOMBRE_DISTRITO);
-    
-    --Obtenemos el id del distrito por medio del nombre
-    SELECT ID_DISTRITO
-        INTO V_ID_DISTRITO
-        FROM DISTRITO
-        WHERE NOMBRE_DISTRITO = P_NOMBRE_DISTRITO;
-    
-    --Creamos el estado del rol llamando a la funcion delegada
-    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_DISTRITO),'DISTRITO', P_COMENTARIO);
-    
-    --Actualizamos el id del estado
-    UPDATE DISTRITO
-    SET ID_ESTADO = V_ESTADO_ID
-    WHERE ID_DISTRITO = V_ID_DISTRITO;
-    
-    COMMIT;
-
-END;
-/
 
 
 ------Procedimiento almacenado para insertar un nuevo rol en la aplicacion-----------------
@@ -334,3 +302,97 @@ CREATE OR REPLACE PACKAGE BODY PKT_CANTONES AS
 
 END PKT_CANTONES;
 ---------------------------------Fin del paquete cantones ------------------------------------------------
+
+ --------------------------------Creacion del paquete Distritos ------------------------------------------
+
+CREATE OR REPLACE PACKAGE PKT_DISTRITOS AS
+
+    PROCEDURE CREAR_DISTRITO( P_NOMBRE_DISTRITO VARCHAR, P_COMENTARIO VARCHAR );
+    PROCEDURE ENVIO_TOTAL_DISTRITOS ( P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+    PROCEDURE ENVIO_DISTRITO ( P_ID_DISTRITO NUMBER, P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+    PROCEDURE ACTUALIZAR_DISTRITO ( P_ID_DISTRITO NUMBER, P_NUEVO_NOMBRE VARCHAR);
+
+END PKT_DISTRITOS;
+
+CREATE OR REPLACE PACKAGE BODY PKT_DISTRITOS AS
+
+--Procedimiento almacenado para insertar un nuevo Distrito
+
+    PROCEDURE CREAR_DISTRITO(
+        P_NOMBRE_DISTRITO VARCHAR,
+        P_COMENTARIO VARCHAR 
+    )
+    AS
+        V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+        V_ID_DISTRITO NUMBER; --Variable para almacenar la id del distrito
+    BEGIN
+        
+        --Insercion del distrito
+        INSERT INTO DISTRITO(NOMBRE_DISTRITO) VALUES (P_NOMBRE_DISTRITO);
+        
+        --Obtenemos el id del distrito por medio del nombre
+        SELECT ID_DISTRITO
+            INTO V_ID_DISTRITO
+            FROM DISTRITO
+            WHERE NOMBRE_DISTRITO = P_NOMBRE_DISTRITO;
+        
+        --Creamos el estado del rol llamando a la funcion delegada
+        V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_DISTRITO),'DISTRITO', P_COMENTARIO);
+        
+        --Actualizamos el id del estado
+        UPDATE DISTRITO
+        SET ID_ESTADO = V_ESTADO_ID
+        WHERE ID_DISTRITO = V_ID_DISTRITO;
+        
+        COMMIT;
+
+    END CREAR_DISTRITO;
+
+--Procedimiento almacenado para leer todas los DISTRITOS--
+
+    PROCEDURE ENVIO_TOTAL_DISTRITOS (
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_DISTRITO, NOMBRE_DISTRITO
+            FROM VISTA_DISTRITOS;
+    END ENVIO_TOTAL_DISTRITOS;
+
+--Procedimiento almacenado para leer una provincia --
+
+    PROCEDURE ENVIO_DISTRITO (
+        P_ID_DISTRITO NUMBER,
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_DISTRITO, NOMBRE_DISTRITO
+            FROM VISTA_DISTRITOS
+            WHERE ID_DISTRITO = P_ID_DISTRITO;
+    END ENVIO_DISTRITO;
+
+--Procedimiento almacenado para actualizar una provincia--
+
+    PROCEDURE ACTUALIZAR_DISTRITO (
+        P_ID_DISTRITO NUMBER,
+        P_NUEVO_NOMBRE VARCHAR
+    )
+    AS
+    BEGIN
+
+        UPDATE DISTRITO
+        SET NOMBRE_DISTRITO = P_NUEVO_NOMBRE
+        WHERE ID_DISTRITO = P_ID_DISTRITO;
+
+        COMMIT;
+
+    END ACTUALIZAR_DISTRITO;
+
+
+
+END PKT_DISTRITOS;
+---------------------------------Fin del paquete Distritos -----------------------------------------------
+

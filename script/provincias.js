@@ -10,7 +10,7 @@ $(document).ready(function(){
         
         // Realiza una petición AJAX para enviar los datos de la nueva provincia a agregarProvincia_Process.php
         $.ajax({
-            url: '../php/agregarProvincia_Process.php',
+            url: '../php/Provincias/agregarProvincia_Process.php',
             method: 'POST',
 
             data: {
@@ -34,7 +34,7 @@ $(document).ready(function(){
         console.log('id_provincia:' + provincia_id);
         // Realiza una petición AJAX para obtener los datos de la provincia según su ID
         $.ajax({
-            url: '../PHP/listadoprovinciaindividual_process.php', // URL del archivo PHP que devolverá los detalles de la provincia
+            url: '../PHP/Provincias/listadoprovinciaindividual_process.php', // URL del archivo PHP que devolverá los detalles de la provincia
             method: 'GET', // Método HTTP para solicitar los datos
             // Envía el ID de la provincia como parámetro
             data: {
@@ -74,7 +74,7 @@ $(document).ready(function(){
 
         // Realiza una petición AJAX para actualizar los datos del provincia
         $.ajax({
-            url: '../PHP/modificarprovincia_process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            url: '../PHP/Provincias/modificarprovincia_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
             success: function (response) {
@@ -112,7 +112,7 @@ $(document).ready(function(){
             if (result.isConfirmed) {
                 // Si el usuario confirma, realiza una petición AJAX para eliminar el provincia
                 $.ajax({
-                    url: '../PHP/eliminarprovincia_process.php', // URL del archivo PHP que procesará la eliminación
+                    url: '../PHP/Provincias/eliminarprovincia_process.php', // URL del archivo PHP que procesará la eliminación
                     method: 'POST', // Método HTTP para enviar la solicitud de eliminación
                     data: { id: provinciaId }, // Envía el ID del provincia como parámetro
                     success: function (response) {
@@ -141,7 +141,7 @@ $(document).ready(function(){
 // Función para cargar la lista de provincias desde la base de datos
 function listadoprovincias() {
     $.ajax({
-        url: '../PHP/listarprovincias_process.php', // URL del archivo PHP que devolverá la lista de provincias
+        url: '../PHP/Provincias/listarprovincias_process.php', // URL del archivo PHP que devolverá la lista de provincias
         method: 'GET', // Método HTTP para solicitar los datos
 
         success: function (data) {
