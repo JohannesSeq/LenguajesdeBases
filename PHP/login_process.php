@@ -1,6 +1,6 @@
 <?php
     //Passdown de las variables del JS al back end.
-    $correo = $_GET['correo'];;
+    $correo = $_GET['correo'];
     $password = $_GET['password'];
 
     //String que almacena el estado final de la operacion

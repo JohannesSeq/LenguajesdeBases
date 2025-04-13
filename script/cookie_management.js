@@ -21,8 +21,7 @@ $(document).ready(function(){
     if(cookie != null){
 
         var Cookie_Array = cookie.split(";");
-        var Usr_Email = Cookie_Array[0].slice(Cookie_Array[0].indexOf('=') + 1, Cookie_Array[0].length);;
-        console.log(Usr_Email);
+        var Usr_Email = Cookie_Array[0].slice(Cookie_Array[0].indexOf('=') + 1, Cookie_Array[0].length);
         
         if(Usr_Email != ""){
 
