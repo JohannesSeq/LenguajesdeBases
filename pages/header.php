@@ -81,7 +81,7 @@
                                 <div class="dropdown-menu" aria-labelledby="PersonalDropdown">
                                     <a class="dropdown-item" href="agregarUsuario.php">Manejar Personas</a>
                                     <a class="dropdown-item" href="mostrarProvincias.php">Manejar Provincias</a>
-                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar Cantones</a>
+                                    <a class="dropdown-item" href="mostrarCantones.php">Manejar Cantones</a>
                                     <a class="dropdown-item" href="modificarUsuario.php">Manejar Distritos</a>
                                     <a class="dropdown-item" href="modificarUsuario.php">Manejar tipos de usuarios</a>
                                     <a class="dropdown-item" href="modificarUsuario.php">Manejar Puestos</a>

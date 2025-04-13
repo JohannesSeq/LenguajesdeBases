@@ -30,37 +30,7 @@ BEGIN
 
 END;
 /
---------------------Procedimiento almacenado para insertar un nuevo Canton----------------------
-CREATE OR REPLACE PROCEDURE CREAR_CANTON(
-    P_NOMBRE_CANTON VARCHAR,
-    P_COMENTARIO VARCHAR 
-)
-AS
-    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
-    V_ID_CANTON NUMBER; --Variable para almacenar la id del distrito
-BEGIN
-    
-    --Insercion del distrito
-    INSERT INTO CANTON(NOMBRE_CANTON) VALUES (P_NOMBRE_CANTON);
-    
-    --Obtenemos el id del distrito por medio del nombre
-    SELECT ID_CANTON
-        INTO V_ID_CANTON
-        FROM CANTON
-        WHERE NOMBRE_CANTON = P_NOMBRE_CANTON;
-    
-    --Creamos el estado del rol llamando a la funcion delegada
-    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_CANTON),'CANTON', P_COMENTARIO);
-    
-    --Actualizamos el id del estado
-    UPDATE CANTON
-    SET ID_ESTADO = V_ESTADO_ID
-    WHERE ID_CANTON = V_ID_CANTON;
-    
-    COMMIT;
 
-END;
-/
 
 ------Procedimiento almacenado para insertar un nuevo rol en la aplicacion-----------------
 
@@ -208,14 +178,14 @@ CREATE OR REPLACE PACKAGE BODY PKT_PROVINCIAS AS
         P_COMENTARIO VARCHAR 
     )
     AS
-        V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
-        V_ID_PROVINCIA NUMBER; --Variable para almacenar la id del distrito
+        V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado de la provincia
+        V_ID_PROVINCIA NUMBER; --Variable para almacenar la id de la provincia
     BEGIN
         
-        --Insercion del distrito
+        --Insercion de la provincia
         INSERT INTO PROVINCIA(NOMBRE_PROVINCIA) VALUES (P_NOMBRE_PROVINCIA);
         
-        --Obtenemos el id del distrito por medio del nombre
+        --Obtenemos el id de la provincia por medio del nombre
         SELECT ID_PROVINCIA
             INTO V_ID_PROVINCIA
             FROM PROVINCIA
@@ -232,6 +202,7 @@ CREATE OR REPLACE PACKAGE BODY PKT_PROVINCIAS AS
         COMMIT;
 
     END CREAR_PROVINCIA;
+
 --Procedimiento almacenado para leer todas las provincias--
 
     PROCEDURE ENVIO_TOTAL_PROVINCIAS (
@@ -278,8 +249,88 @@ CREATE OR REPLACE PACKAGE BODY PKT_PROVINCIAS AS
 END PKT_PROVINCIAS;
 ---------------------------------Fin del paquete provincias----------------------------------------------
 
+ --------------------------------Creacion del paquete cantones ------------------------------------------
+
+CREATE OR REPLACE PACKAGE PKT_CANTONES AS
+
+        PROCEDURE CREAR_CANTON(P_NOMBRE_CANTON VARCHAR,P_COMENTARIO VARCHAR );
+        PROCEDURE ENVIO_TOTAL_CANTONES ( P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+        PROCEDURE ENVIO_CANTON ( P_ID_CANTON NUMBER, P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+        PROCEDURE ACTUALIZAR_CANTON ( P_ID_CANTON NUMBER, P_NUEVO_NOMBRE VARCHAR);
+
+END PKT_CANTONES;
+
+CREATE OR REPLACE PACKAGE BODY PKT_CANTONES AS
+
+--Procedimiento  para insertar un nuevo Canton
+    PROCEDURE CREAR_CANTON(
+        P_NOMBRE_CANTON VARCHAR,
+        P_COMENTARIO VARCHAR 
+    )
+    AS
+        V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+        V_ID_CANTON NUMBER; --Variable para almacenar la id del distrito
+    BEGIN
+        
+        --Insercion del canton
+        INSERT INTO CANTON(NOMBRE_CANTON) VALUES (P_NOMBRE_CANTON)
+        RETURNING ID_CANTON INTO V_ID_CANTON;
+
+        --Creamos el estado del rol llamando a la funcion delegada
+        V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_CANTON),'CANTON', P_COMENTARIO);
+        
+        --Actualizamos el id del estado
+        UPDATE CANTON
+        SET ID_ESTADO = V_ESTADO_ID
+        WHERE ID_CANTON = V_ID_CANTON;
+        
+        COMMIT;
+
+    END CREAR_CANTON;
 
 
+--Procedimiento almacenado para leer todas los cantones--
 
+    PROCEDURE ENVIO_TOTAL_CANTONES (
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_CANTON, NOMBRE_CANTON
+            FROM VISTA_CANTONES;
+    END ENVIO_TOTAL_CANTONES;
 
+--Procedimiento almacenado para leer una provincia --
 
+    PROCEDURE ENVIO_CANTON (
+        P_ID_CANTON NUMBER,
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_CANTON, NOMBRE_CANTON
+            FROM VISTA_CANTONES
+            WHERE ID_CANTON = P_ID_CANTON;
+    END ENVIO_CANTON;
+
+--Procedimiento almacenado para actualizar una provincia--
+
+    PROCEDURE ACTUALIZAR_CANTON (
+        P_ID_CANTON NUMBER,
+        P_NUEVO_NOMBRE VARCHAR
+    )
+    AS
+    BEGIN
+
+        UPDATE CANTON
+        SET NOMBRE_CANTON = P_NUEVO_NOMBRE
+        WHERE ID_CANTON = P_ID_CANTON;
+
+        COMMIT;
+
+    END ACTUALIZAR_CANTON;
+
+END PKT_CANTONES;
+---------------------------------Fin del paquete cantones ------------------------------------------------
