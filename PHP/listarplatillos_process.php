@@ -2,7 +2,7 @@
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
     $query = "BEGIN " .
-    "ENVIO_TOTAL_PLATILLOS(:P_CURSOR); " .
+    "PKT_PLATILLOS.ENVIO_TOTAL_PLATILLOS(:P_CURSOR); " .
     "END;";
 
     //Guardamos el query

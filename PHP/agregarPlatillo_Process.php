@@ -12,7 +12,7 @@ if (isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['cantidad
 
     //Establecemos el Query de SQL que queramos ejecutar
     $query = "BEGIN " . 
-             "CREAR_PLATILLO(:nombre, :precio, :cantidad, 'Insertando Platillo'); " .  
+             "PKT_PLATILLOS.CREAR_PLATILLO(:nombre, :precio, :cantidad, 'Insertando Platillo'); " .  
              "END;";
     
     

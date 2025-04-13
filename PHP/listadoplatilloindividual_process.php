@@ -4,7 +4,7 @@
     $platillo_id = $_GET['id'];
 
     $query = "BEGIN " .
-    "ENVIO_PLATILLO_INDIVIDUAL(:P_ID,:P_CURSOR); " .
+    "PKT_PLATILLOS.ENVIO_PLATILLO_INDIVIDUAL(:P_ID,:P_CURSOR); " .
     "END;";
 
     //Guardamos el query

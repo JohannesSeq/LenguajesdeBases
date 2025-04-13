@@ -61,37 +61,7 @@ BEGIN
 
 END;
 /
-------------------Procedimiento almacenado para insertar una nueva provincia--------------------
-CREATE OR REPLACE PROCEDURE CREAR_PROVINCIA(
-    P_NOMBRE_PROVINCIA VARCHAR,
-    P_COMENTARIO VARCHAR 
-)
-AS
-    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
-    V_ID_PROVINCIA NUMBER; --Variable para almacenar la id del distrito
-BEGIN
-    
-    --Insercion del distrito
-    INSERT INTO PROVINCIA(NOMBRE_PROVINCIA) VALUES (P_NOMBRE_PROVINCIA);
-    
-    --Obtenemos el id del distrito por medio del nombre
-    SELECT ID_PROVINCIA
-        INTO V_ID_PROVINCIA
-        FROM PROVINCIA
-        WHERE NOMBRE_PROVINCIA = P_NOMBRE_PROVINCIA;
-    
-    --Creamos el estado del rol llamando a la funcion delegada
-    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_PROVINCIA),'PROVINCIA', P_COMENTARIO);
 
-    --Actualizamos el id del estado
-    UPDATE PROVINCIA
-    SET ID_ESTADO = V_ESTADO_ID
-    WHERE ID_PROVINCIA = V_ID_PROVINCIA;
-    
-    COMMIT;
-
-END;
-/
 ------Procedimiento almacenado para insertar un nuevo rol en la aplicacion-----------------
 
 CREATE OR REPLACE PROCEDURE CREAR_ROL(
@@ -220,3 +190,96 @@ BEGIN
     COMMIT;
 END;   
 /
+ --------------------------------Creacion del paquete provincias---------------------------------------
+CREATE OR REPLACE PACKAGE PKT_PROVINCIAS AS
+
+    PROCEDURE CREAR_PROVINCIA( P_NOMBRE_PROVINCIA VARCHAR, P_COMENTARIO VARCHAR);
+    PROCEDURE ENVIO_TOTAL_PROVINCIAS (P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+    PROCEDURE ENVIO_PROVINCIA (P_ID_PROVINCIA NUMBER, P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+    PROCEDURE ACTUALIZAR_PROVINCIA (P_ID_PROVINCIA NUMBER,P_NUEVO_NOMBRE VARCHAR);
+
+END PKT_PROVINCIAS;
+
+CREATE OR REPLACE PACKAGE BODY PKT_PROVINCIAS AS
+
+--Procedimiento almacenado para insertar una nueva provincia--
+    PROCEDURE CREAR_PROVINCIA(
+        P_NOMBRE_PROVINCIA VARCHAR,
+        P_COMENTARIO VARCHAR 
+    )
+    AS
+        V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del distrito
+        V_ID_PROVINCIA NUMBER; --Variable para almacenar la id del distrito
+    BEGIN
+        
+        --Insercion del distrito
+        INSERT INTO PROVINCIA(NOMBRE_PROVINCIA) VALUES (P_NOMBRE_PROVINCIA);
+        
+        --Obtenemos el id del distrito por medio del nombre
+        SELECT ID_PROVINCIA
+            INTO V_ID_PROVINCIA
+            FROM PROVINCIA
+            WHERE NOMBRE_PROVINCIA = P_NOMBRE_PROVINCIA;
+        
+        --Creamos el estado del rol llamando a la funcion delegada
+        V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_PROVINCIA),'PROVINCIA', P_COMENTARIO);
+
+        --Actualizamos el id del estado
+        UPDATE PROVINCIA
+        SET ID_ESTADO = V_ESTADO_ID
+        WHERE ID_PROVINCIA = V_ID_PROVINCIA;
+        
+        COMMIT;
+
+    END CREAR_PROVINCIA;
+--Procedimiento almacenado para leer todas las provincias--
+
+    PROCEDURE ENVIO_TOTAL_PROVINCIAS (
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_PROVINCIA, NOMBRE_PROVINCIA
+            FROM VISTA_PROVINCIAS;
+    END ENVIO_TOTAL_PROVINCIAS;
+
+--Procedimiento almacenado para leer una provincia --
+
+    PROCEDURE ENVIO_PROVINCIA (
+        P_ID_PROVINCIA NUMBER,
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_PROVINCIA, NOMBRE_PROVINCIA
+            FROM VISTA_PROVINCIAS
+            WHERE ID_PROVINCIA = P_ID_PROVINCIA;
+    END ENVIO_PROVINCIA;
+
+--Procedimiento almacenado para actualizar una provincia--
+
+    PROCEDURE ACTUALIZAR_PROVINCIA (
+        P_ID_PROVINCIA NUMBER,
+        P_NUEVO_NOMBRE VARCHAR
+    )
+    AS
+    BEGIN
+
+        UPDATE PROVINCIA
+        SET NOMBRE_PROVINCIA = P_NUEVO_NOMBRE
+        WHERE ID_PROVINCIA = P_ID_PROVINCIA;
+
+        COMMIT;
+
+    END ACTUALIZAR_PROVINCIA;
+
+END PKT_PROVINCIAS;
+---------------------------------Fin del paquete provincias----------------------------------------------
+
+
+
+
+
+

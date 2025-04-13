@@ -7,7 +7,7 @@
     $cantidad = $_POST['cantidad'];
     
     $query = "BEGIN " .
-    "ACTUALIZAR_PLATILLO(:P_ID,:P_NOMBRE, :P_PRECIO, :P_CANTIDAD); " .
+    "PKT_PLATILLOS.ACTUALIZAR_PLATILLO(:P_ID,:P_NOMBRE, :P_PRECIO, :P_CANTIDAD); " .
     "END;";
 
     //Guardamos el query
