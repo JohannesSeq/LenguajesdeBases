@@ -12,7 +12,7 @@ $(document).ready(function(){
 
         $.ajax({
             
-            url: '../PHP/login_process.php',
+            url: '../PHP/Login/login_process.php',
             method: 'GET',
             data: {
                 correo: correo,
