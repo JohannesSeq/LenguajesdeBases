@@ -51,12 +51,14 @@
                         elseif ($_COOKIE["rol_id"] == "Empleado" || $_COOKIE["rol_id"] == "Gerente") {
                             echo '
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="facturasDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="facturasyPedidosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Facturas
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="facturasDropdown">
-                                    <a class="dropdown-item" href="agregarFactura.php">Generar Factura</a>
-                                    <a class="dropdown-item" href="listadoFacturas.php">Historial de Facturas</a>
+                                <div class="dropdown-menu" aria-labelledby="facturasyPedidosDropdown">
+                                    <a class="dropdown-item" href="listadoFacturas.php">Manejar pedidos</a>
+                                    <a class="dropdown-item" href="listadoFacturas.php">Manejar metodos de pago</a>
+                                    <a class="dropdown-item" href="agregarFactura.php">Manejar Facturas</a>
+                                    
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -65,6 +67,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="inventarioDropdown">
                                     <a class="dropdown-item" href="mostrarPlatillos.php">Manejar platillos</a>
+                                    <a class="dropdown-item" href="mostrarPlatillos.php">Manejar menus</a>
                                 </div>
                             </li>';
                         }
@@ -76,10 +79,14 @@
                                     Opciones Gerenciales
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="PersonalDropdown">
-                                    <a class="dropdown-item" href="agregarUsuario.php">Agregar Usuario</a>
-                                    <a class="dropdown-item" href="modificarUsuario.php">Gestionar Usuarios</a>
-                                    <a class="dropdown-item" href="agregarEmpleado.php">Agregar Empleado</a>
-                                    <a class="dropdown-item" href="gestionarEmpleados.php">Gestionar Empleados</a>
+                                    <a class="dropdown-item" href="agregarUsuario.php">Manejar Personas</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar Provincias</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar Cantones</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar Distritos</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar tipos de usuarios</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar Puestos</a>
+                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar Departamentos</a>
+                                    <a class="dropdown-item" href="agregarEmpleado.php">Manejar Empleados</a>
                                 </div>
                             </li>';
                         }
