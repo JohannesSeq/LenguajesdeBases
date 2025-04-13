@@ -34,28 +34,35 @@ $(document).ready(function(){
 
     // Manejador para el botón de modificar platillo
     $(document).on('click', '.btn-modify', function () {
-        var id_platillo = $(this).data('ID_PLATILLO'); // Obtiene el ID del platillo a modificar
-        
+        var platillo_id = $(this).data('id'); // Obtiene el ID del platillo a modificar
+        console.log('id_platillo:' + platillo_id);
         // Realiza una petición AJAX para obtener los datos del platillo según su ID
         $.ajax({
             url: '../PHP/listadoplatilloindividual_process.php', // URL del archivo PHP que devolverá los detalles del platillo
             method: 'GET', // Método HTTP para solicitar los datos
-            data: { id: id_platillo }, // Envía el ID del platillo como parámetro
+            // Envía el ID del platillo como parámetro
+            data: {
+                 id: platillo_id  
+                }, 
             
-            success: function (platillo) {
-                var platillo = JSON.parse(platillo); // Parse la respuesta JSON
-                if (platillo.error) {
-                    alert(platillo.error); // Muestra un mensaje de error si lo hay
-                } else {
-                    // Rellena el formulario modal con los datos del platillo para su modificación
-                    $('#modifyOrderModal input[name="nombre"]').val(platillo.Nombre_cliente);
-                    $('#modifyOrderModal input[name="direccion"]').val(platillo.Direcion_entrega);
-                    $('#modifyOrderModal input[name="telefono"]').val(platillo.telefono);
-                    $('#modifyOrderModal textarea[name="detalles"]').val(platillo.Detalle_pedido);
-                    $('#modifyOrderModal select[name="estado"]').val(platillo.estado); 
-                    $('#modifyOrderModal').data('id', pedidoId); // Guarda el ID del platillo en el modal
+            success: function (response) {
+                
+                var platillo = JSON.parse(response); // Parse la respuesta JSON
+                console.log(platillo);
 
-                    $('#modifyOrderModal').modal('show'); // Muestra el modal para modificar el platillo
+                if (response.error) {
+
+                    alert(response.error); // Muestra un mensaje de error si lo hay
+
+                } else {
+                    // Muestra el modal para modificar el platillo
+                    $('#modificarplatillomodal').modal('show'); 
+                    // Rellena el formulario modal con los datos del platillo para su modificación
+                    $('#modificarplatillomodal input[name="nombre"]').val(platillo[0].NOMBRE_PLATILLO);
+                    $('#modificarplatillomodal input[name="precio"]').val(platillo[0].PRECIO_UNITARIO);
+                    $('#modificarplatillomodal input[name="cantidad"]').val(platillo[0].CANTIDAD);
+                    $('#modificarplatillomodal').data('id', platillo_id); // Guarda el ID del platillo en el modal
+
                 }
             },
             error: function (error) {
@@ -64,31 +71,73 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el envío del formulario de modificar pedido
-    $('#modifyOrderForm').on('submit', function (e) {
+    // Manejador para el envío del formulario de modificar platillo
+    $('#ModificarPlatilloForm').on('submit', function (e) {
         e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
-        var pedidoId = $('#modifyOrderModal').data('id');  // Obtiene el ID del pedido a modificar
-        var formData = $(this).serialize() + '&id=' + pedidoId;  // Serializa los datos del formulario y añade el ID del pedido
+        var platillo_id = $('#modificarplatillomodal').data('id');  // Obtiene el ID del platillo a modificar
+        var formData = $(this).serialize() + '&id=' + platillo_id;  // Serializa los datos del formulario y añade el ID del platillo
 
-        // Realiza una petición AJAX para actualizar los datos del pedido
+        // Realiza una petición AJAX para actualizar los datos del platillo
         $.ajax({
-            url: '../PHP/ModificarPedido_Process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            url: '../PHP/modificarplatillo_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
             success: function (response) {
-                if (response.includes("éxito")) {
-                    alert('Pedido actualizado correctamente'); // Muestra un mensaje de éxito
-                    $('#modifyOrderModal').modal('hide'); // Oculta el modal
-                    fetchOrders();  // Recarga la lista de pedidos
-                } else {
-                    alert('Error actualizando el pedido');
+                if (response.error) {
+                    dispararAlertaError("Error actualizando el platillo").then(() => { });
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
+                } else {
+                    dispararAlertaExito("Platillo actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
+                    location.reload();  
+                    $('#modificarplatillomodal').modal('hide'); // Oculta el modal
                 }
             },
             error: function (error) {
                 console.error('Error updating order:', error);
+            }
+        });
+    });
+
+    // Manejador para el botón de eliminar platillo
+    $(document).on('click', '.btn-delete', function () {
+        var platilloId = $(this).data('id'); // Obtiene el ID del platillo a eliminar
+
+        // Muestra una alerta de confirmación usando SweetAlert2
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma, realiza una petición AJAX para eliminar el platillo
+                $.ajax({
+                    url: '../PHP/eliminarplatillo_process.php', // URL del archivo PHP que procesará la eliminación
+                    method: 'POST', // Método HTTP para enviar la solicitud de eliminación
+                    data: { id: platilloId }, // Envía el ID del platillo como parámetro
+                    success: function (response) {
+                        if (response.error) {
+                            Swal.fire('Error', 'No se pudo eliminar el platillo.', 'error');
+
+                        } else {
+
+                            dispararAlertaExito("El platillo ha sido eliminado.").then(() => { 
+                                
+                            }); // Muestra un mensaje de éxito
+                            location.reload();  // Recarga la lista de platillos
+
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error deleting order:', error);
+                    }
+                });
             }
         });
     });

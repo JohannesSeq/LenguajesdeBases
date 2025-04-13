@@ -131,22 +131,25 @@ END;
 
 ------------------------------ BORRADO LOGICO -----------------------------------------
 CREATE OR REPLACE PROCEDURE BORRADO_LOGICO(
-    P_ID_ESTADO VARCHAR,
+    P_TABLA VARCHAR,
+    P_ID VARCHAR,
     P_COMENTARIO VARCHAR
 )
 AS
     V_ESTADO_ID VARCHAR(250);
-    V_SQL VARCHAR(1000);
+    V_ID_ESTADO VARCHAR(250);
 BEGIN
+
+    V_ESTADO_ID := 'ST_' || TO_CHAR(P_ID) || '_' || P_TABLA;
 
     UPDATE ESTADOS
     SET ESTADO = 'Inactivo', FECHA_CAMBIO = CURRENT_DATE
-    WHERE ID_ESTADO = P_ID_ESTADO;
+    WHERE ID_ESTADO = V_ESTADO_ID;
 
     COMMIT;
 END;
 /
-
+EXEC BORRADO_LOGICO('PLATILLOS',45,'Probando Borrado');
 
 ------------------------------ CREAR RESERVACION ---------------------------------
 CREATE OR REPLACE PROCEDURE CREAR_RESERVACION(

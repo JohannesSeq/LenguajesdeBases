@@ -1,7 +1,7 @@
 <?php 
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
-    $id_platillo = $_GET['ID_PLATILLO'];
+    $platillo_id = $_GET['id'];
 
     $query = "BEGIN " .
     "ENVIO_PLATILLO_INDIVIDUAL(:P_ID,:P_CURSOR); " .
@@ -11,7 +11,7 @@
     $stmt = oci_parse($conn, $query);                 
 
     //Vinculamos los parametros necesarios para el procedimiento almacenado
-    oci_bind_by_name($stmt, ":P_ID", $id_platillo);
+    oci_bind_by_name($stmt, ":P_ID", $platillo_id);
 
     //Creamos un cursor para almacenar la informacion de la tabla que estamos consultando
     $cursor = oci_new_cursor($conn);

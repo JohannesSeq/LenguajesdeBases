@@ -64,10 +64,7 @@
                                     Inventario
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="inventarioDropdown">
-                                    <a class="dropdown-item" href="agregarPlatillo.php">Agregar platillo</a>
-                                    <a class="dropdown-item" href="modificarProducto.php">Modificar platillo</a>
-                                    <a class="dropdown-item" href="mostrarPlatillos.php">Mostrar platillos</a>
-                                    <a class="dropdown-item" href="eliminarProducto.php">Eliminar platillo</a>
+                                    <a class="dropdown-item" href="mostrarPlatillos.php">Manejar platillos</a>
                                 </div>
                             </li>';
                         }
