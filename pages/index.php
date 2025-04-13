@@ -28,6 +28,21 @@
             font-size: 1.2rem;
             line-height: 1.6;
         }
+
+        .Error_Message {
+            padding: 25px 0;
+            text-align: center;
+            color: red;
+        }
+
+        .login {
+            padding: 50px 0;
+        }
+
+        .login .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 
@@ -47,7 +62,7 @@
                     } else
                         { 
                             echo '<p>Por favor, inicia sesión para acceder a todas las funcionalidades de la plataforma.</p>';
-                            echo '<a class="button-62" href="login.php" role="button" id="loginBtn">Iniciar Sesión</a>';
+                            echo '<a class="button-62" href="#" data-toggle="modal" data-target="#loginModal" role="button" id="loginBtn">Iniciar Sesión</a>';
                         }
                 ?>
                 
@@ -102,6 +117,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="../script/cookie_management.js"></script>
+        <script src="../script/login.js"></script>
 
     </body>
 
