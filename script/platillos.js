@@ -24,9 +24,7 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
-                dispararAlertaExito("Platillo agregado correctamente").then(() => {       
-                        
-                });
+                dispararAlertaExito("Platillo agregado correctamente");
                 location.reload();  
             }
         });
@@ -85,11 +83,11 @@ $(document).ready(function(){
             data: formData, // Envía los datos del formulario
             success: function (response) {
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el platillo").then(() => { });
+                    dispararAlertaError("Error actualizando el platillo");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("Platillo actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
+                    dispararAlertaExito("Platillo actualizado correctamente"); // Muestra un mensaje de éxito
                     location.reload();  
                     $('#modificarplatillomodal').modal('hide'); // Oculta el modal
                 }
@@ -127,9 +125,7 @@ $(document).ready(function(){
 
                         } else {
 
-                            dispararAlertaExito("El platillo ha sido eliminado.").then(() => { 
-                                
-                            }); // Muestra un mensaje de éxito
+                            dispararAlertaExito("El platillo ha sido eliminado."); // Muestra un mensaje de éxito
                             location.reload();  // Recarga la lista de platillos
 
                         }
@@ -171,7 +167,7 @@ function listadoplatillos() {
             });
         },
         error: function (error) {
-            console.error('Error fetching orders:', error); // Muestra el error en la consola
+            console.error('Error cargando los platillos:', error); // Muestra el error en la consola
         }
     });
 }

@@ -1,31 +1,6 @@
 
 
-------Procedimiento almacenado para insertar un nuevo rol en la aplicacion-----------------
 
-CREATE OR REPLACE PROCEDURE CREAR_ROL(
-    P_ID_ROL VARCHAR,
-    P_NOMBRE_LARGO_TIPO VARCHAR,
-    P_DESCRIPCION VARCHAR,
-    P_COMENTARIO VARCHAR
-)
-
-AS
-    V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del rol
-BEGIN
-    --Insertamos el rol en tabla de roles
-    INSERT INTO ROL_PERSONA(ID_ROL_PERSONA, NOMBRE_LARGO_TIPO, DESCRIPCION) VALUES
-    (P_ID_ROL, P_NOMBRE_LARGO_TIPO, P_DESCRIPCION);
-
-    --Creamos el estado del rol llamando a la funcion delegada
-    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(P_ID_ROL,'ROL_PERSONA', P_COMENTARIO);
-
-    UPDATE ROL_PERSONA
-    SET ID_ESTADO = V_ESTADO_ID
-    WHERE ID_ROL_PERSONA = P_ID_ROL;
-
-    COMMIT;
-END;
-/
 ------Procedimiento almacenado para insertar una nueva direccion para una persona----------
 CREATE OR REPLACE PROCEDURE CREAR_PERSONA(
     P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR, P_ID_ROL VARCHAR, --Parametros de la persona
@@ -396,3 +371,99 @@ CREATE OR REPLACE PACKAGE BODY PKT_DISTRITOS AS
 END PKT_DISTRITOS;
 ---------------------------------Fin del paquete Distritos -----------------------------------------------
 
+ --------------------------------Creacion del paquete Roles ----------------------------------------------
+
+EXEC PKT_ROL_PERSONA.CREAR_ROL_PERSONA('Prueba01','Prueba01','limitado','probando paquete');
+EXEC PKT_ROL_PERSONA.CREAR_ROL_PERSONA('Prueba05', 'Prueba01', 'Prueba01', 'limitado', 'Insertando distritos');
+SELECT * FROM ROL_PERSONA;
+
+CREATE OR REPLACE PACKAGE PKT_ROL_PERSONA AS
+
+    PROCEDURE CREAR_ROL_PERSONA(P_ID_ROL VARCHAR,P_NOMBRE_LARGO_TIPO VARCHAR,P_DESCRIPCION VARCHAR, P_NIVEL VARCHAR, P_COMENTARIO VARCHAR);
+    PROCEDURE ENVIO_TOTAL_ROL_PERSONA (P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+    PROCEDURE ENVIO_ROL_PERSONA (P_ID_ROL_PERSONA VARCHAR,P_CURSOR_RESULTADO OUT SYS_REFCURSOR);
+    PROCEDURE ACTUALIZAR_ROL_PERSONA (P_ID_ROL_PERSONA NUMBER, P_NUEVO_NOMBRE_LARGO_TIPO VARCHAR, P_NUEVA_DESCRIPCION VARCHAR, P_NUEVO_NIVEL_PERMISO VARCHAR);
+
+END PKT_ROL_PERSONA;
+
+
+CREATE OR REPLACE PACKAGE BODY PKT_ROL_PERSONA AS
+
+--Procedimiento almacenado para insertar un nuevo rol en la aplicacion
+
+    PROCEDURE CREAR_ROL_PERSONA(
+        P_ID_ROL VARCHAR,
+        P_NOMBRE_LARGO_TIPO VARCHAR,
+        P_DESCRIPCION VARCHAR,
+        P_NIVEL VARCHAR,
+        P_COMENTARIO VARCHAR
+    )
+
+    AS
+        V_ESTADO_ID VARCHAR(250); --Variable para almacenar la id del estado del rol
+    BEGIN
+        --Insertamos el rol en tabla de roles
+        INSERT INTO ROL_PERSONA(ID_ROL_PERSONA, NOMBRE_LARGO_TIPO, DESCRIPCION, NIVEL_PERMISO) VALUES
+        (P_ID_ROL, P_NOMBRE_LARGO_TIPO, P_DESCRIPCION, P_NIVEL);
+
+        --Creamos el estado del rol llamando a la funcion delegada
+        V_ESTADO_ID := CREAR_ENTRADA_ESTADO(P_ID_ROL,'ROL_PERSONA', P_COMENTARIO);
+
+        UPDATE ROL_PERSONA
+        SET ID_ESTADO = V_ESTADO_ID
+        WHERE ID_ROL_PERSONA = P_ID_ROL;
+
+        COMMIT;
+    END CREAR_ROL_PERSONA;
+
+--Procedimiento almacenado para leer todas los ROL_PERSONA--
+
+    PROCEDURE ENVIO_TOTAL_ROL_PERSONA (
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_ROL_PERSONA, NOMBRE_LARGO_TIPO, DESCRIPCION, NIVEL_PERMISO
+            FROM VISTA_ROL_PERSONA;
+    END ENVIO_TOTAL_ROL_PERSONA;
+
+--Procedimiento almacenado para leer un rol --
+
+    PROCEDURE ENVIO_ROL_PERSONA (
+        P_ID_ROL_PERSONA VARCHAR,
+        P_CURSOR_RESULTADO OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN P_CURSOR_RESULTADO FOR
+            SELECT ID_ROL_PERSONA, NOMBRE_LARGO_TIPO, DESCRIPCION, NIVEL_PERMISO
+            FROM VISTA_ROL_PERSONA
+            WHERE ID_ROL_PERSONA = P_ID_ROL_PERSONA;
+    END ENVIO_ROL_PERSONA;
+
+--Procedimiento almacenado para actualizar un rol--
+
+    PROCEDURE ACTUALIZAR_ROL_PERSONA (
+        P_ID_ROL_PERSONA NUMBER,
+        P_NUEVO_NOMBRE_LARGO_TIPO VARCHAR,
+        P_NUEVA_DESCRIPCION VARCHAR,
+        P_NUEVO_NIVEL_PERMISO VARCHAR
+    )
+    AS
+    BEGIN
+
+        UPDATE ROL_PERSONA
+        SET 
+        
+            NOMBRE_LARGO_TIPO = P_NUEVO_NOMBRE_LARGO_TIPO,
+            DESCRIPCION = P_NUEVA_DESCRIPCION,
+            NIVEL_PERMISO = P_NUEVO_NIVEL_PERMISO
+
+        WHERE ID_ROL_PERSONA = P_ID_ROL_PERSONA;
+
+        COMMIT;
+
+    END ACTUALIZAR_ROL_PERSONA;
+
+END PKT_ROL_PERSONA;

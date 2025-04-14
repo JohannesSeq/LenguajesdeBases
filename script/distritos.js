@@ -10,7 +10,7 @@ $(document).ready(function(){
         
         // Realiza una petición AJAX para enviar los datos del nuevo distrito a agregarDistrito_Process.php
         $.ajax({
-            url: '../php/agregarDistrito_Process.php',
+            url: '../php/Distritos/agregarDistrito_Process.php',
             method: 'POST',
 
             data: {
@@ -20,9 +20,7 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
-                dispararAlertaExito("Distrito agregado correctamente").then(() => {       
-                        
-                });
+                dispararAlertaExito("Distrito agregado correctamente");
                 location.reload();  
             }
         });
@@ -34,7 +32,7 @@ $(document).ready(function(){
         console.log('id_distrito:' + distrito_id);
         // Realiza una petición AJAX para obtener los datos del distrito según su ID
         $.ajax({
-            url: '../PHP/listadodistritoindividual_process.php', // URL del archivo PHP que devolverá los detalles del distrito
+            url: '../PHP/Distritos/listadodistritoindividual_process.php', // URL del archivo PHP que devolverá los detalles del distrito
             method: 'GET', // Método HTTP para solicitar los datos
             // Envía el ID del distrito como parámetro
             data: {
@@ -74,16 +72,16 @@ $(document).ready(function(){
 
         // Realiza una petición AJAX para actualizar los datos del distrito
         $.ajax({
-            url: '../PHP/modificardistrito_process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            url: '../PHP/Distritos/modificardistrito_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
             success: function (response) {
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el distrito").then(() => { });
+                    dispararAlertaError("Error actualizando el distrito");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("Distrito actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
+                    dispararAlertaExito("Distrito actualizado correctamente"); // Muestra un mensaje de éxito
                     location.reload();  
                     $('#modificardistritomodal').modal('hide'); // Oculta el modal
                 }
@@ -112,7 +110,7 @@ $(document).ready(function(){
             if (result.isConfirmed) {
                 // Si el usuario confirma, realiza una petición AJAX para eliminar el distrito
                 $.ajax({
-                    url: '../PHP/eliminardistrito_process.php', // URL del archivo PHP que procesará la eliminación
+                    url: '../PHP/Distritos/eliminardistrito_process.php', // URL del archivo PHP que procesará la eliminación
                     method: 'POST', // Método HTTP para enviar la solicitud de eliminación
                     data: { id: distritoId }, // Envía el ID del distrito como parámetro
                     success: function (response) {
@@ -121,9 +119,7 @@ $(document).ready(function(){
 
                         } else {
 
-                            dispararAlertaExito("El distrito ha sido eliminado.").then(() => { 
-                                
-                            }); // Muestra un mensaje de éxito
+                            dispararAlertaExito("El distrito ha sido eliminado."); // Muestra un mensaje de éxito
                             location.reload();  // Recarga la lista de distritos
 
                         }
@@ -141,7 +137,7 @@ $(document).ready(function(){
 // Función para cargar la lista de distritos desde la base de datos
 function listadodistritos() {
     $.ajax({
-        url: '../PHP/listardistritos_process.php', // URL del archivo PHP que devolverá la lista de distritos
+        url: '../PHP/Distritos/listardistritos_process.php', // URL del archivo PHP que devolverá la lista de distritos
         method: 'GET', // Método HTTP para solicitar los datos
 
         success: function (data) {
@@ -163,7 +159,7 @@ function listadodistritos() {
             });
         },
         error: function (error) {
-            console.error('Error fetching orders:', error); // Muestra el error en la consola
+            console.error('Error cargando los distritos:', error); // Muestra el error en la consola
         }
     });
 }

@@ -83,7 +83,7 @@
                                     <a class="dropdown-item" href="mostrarProvincias.php">Manejar Provincias</a>
                                     <a class="dropdown-item" href="mostrarCantones.php">Manejar Cantones</a>
                                     <a class="dropdown-item" href="mostrarDistritos.php">Manejar Distritos</a>
-                                    <a class="dropdown-item" href="modificarUsuario.php">Manejar tipos de usuarios</a>
+                                    <a class="dropdown-item" href="mostrarRol_persona.php">Manejar los roles de acceso</a>
                                     <a class="dropdown-item" href="modificarUsuario.php">Manejar Puestos</a>
                                     <a class="dropdown-item" href="modificarUsuario.php">Manejar Departamentos</a>
                                     <a class="dropdown-item" href="agregarEmpleado.php">Manejar Empleados</a>

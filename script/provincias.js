@@ -20,9 +20,7 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
-                dispararAlertaExito("Provincia agregada correctamente").then(() => {       
-                        
-                });
+                dispararAlertaExito("Provincia agregada correctamente");
                 location.reload();  
             }
         });
@@ -79,11 +77,11 @@ $(document).ready(function(){
             data: formData, // Envía los datos del formulario
             success: function (response) {
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el provincia").then(() => { });
+                    dispararAlertaError("Error actualizando el provincia");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("Provincia actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
+                    dispararAlertaExito("Provincia actualizado correctamente"); // Muestra un mensaje de éxito
                     location.reload();  
                     $('#modificarprovinciamodal').modal('hide'); // Oculta el modal
                 }
@@ -121,9 +119,7 @@ $(document).ready(function(){
 
                         } else {
 
-                            dispararAlertaExito("La provincia ha sido eliminado.").then(() => { 
-                                
-                            }); // Muestra un mensaje de éxito
+                            dispararAlertaExito("La provincia ha sido eliminado."); // Muestra un mensaje de éxito
                             location.reload();  // Recarga la lista de provincias
 
                         }
@@ -163,7 +159,7 @@ function listadoprovincias() {
             });
         },
         error: function (error) {
-            console.error('Error fetching orders:', error); // Muestra el error en la consola
+            console.error('Error cargando las provincia :', error); // Muestra el error en la consola
         }
     });
 }

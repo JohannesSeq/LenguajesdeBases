@@ -5,7 +5,7 @@
     $nombre = $_POST['nombre'];
     
     $query = "BEGIN " .
-                "PKT_CANTONES.ACTUALIZAR_CANTON(:P_ID,:P_NOMBRE); " .
+                "PKT_DISTRITOS.ACTUALIZAR_DISTRITO(:P_ID,:P_NOMBRE); " .
              "END;";
 
     //Guardamos el query

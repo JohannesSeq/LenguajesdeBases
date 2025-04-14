@@ -1,12 +1,17 @@
 <?php 
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
+    $rol_persona_id = $_GET['id'];
+
     $query = "BEGIN " .
-    "PKT_DISTRITOS.ENVIO_TOTAL_DISTRITOS(:P_CURSOR); " .
-    "END;";
+                "PKT_ROL_PERSONA.ENVIO_ROL_PERSONA(:P_ID,:P_CURSOR); " .
+             "END;";
 
     //Guardamos el query
     $stmt = oci_parse($conn, $query);                 
+
+    //Vinculamos los parametros necesarios para el procedimiento almacenado
+    oci_bind_by_name($stmt, ":P_ID", $rol_persona_id);
 
     //Creamos un cursor para almacenar la informacion de la tabla que estamos consultando
     $cursor = oci_new_cursor($conn);
@@ -16,14 +21,14 @@
     oci_execute($stmt);
     oci_execute($cursor);
 
-    $distritos = array();
+    $rol_persona = array();
 
     while ($row = oci_fetch_assoc($cursor)) {
-        $distritos[] = $row;
+        $rol_persona[] = $row;
     }
 
     // Devolver los pedidos en formato JSON
-    echo json_encode($distritos);
+    echo json_encode($rol_persona);
 
     // Cerramos la conexion con la DB
     oci_free_statement($stmt);

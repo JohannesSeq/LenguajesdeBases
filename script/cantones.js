@@ -20,9 +20,7 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
-                dispararAlertaExito("Canton agregado correctamente").then(() => {       
-                        
-                });
+                dispararAlertaExito("Canton agregado correctamente");
                 location.reload();  
             }
         });
@@ -79,11 +77,11 @@ $(document).ready(function(){
             data: formData, // Envía los datos del formulario
             success: function (response) {
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el canton").then(() => { });
+                    dispararAlertaError("Error actualizando el canton");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("canton actualizado correctamente").then(() => { }); // Muestra un mensaje de éxito
+                    dispararAlertaExito("canton actualizado correctamente"); // Muestra un mensaje de éxito
                     location.reload();  
                     $('#modificarcantonmodal').modal('hide'); // Oculta el modal
                 }
@@ -121,9 +119,7 @@ $(document).ready(function(){
 
                         } else {
 
-                            dispararAlertaExito("El canton ha sido eliminado.").then(() => { 
-                                
-                            }); // Muestra un mensaje de éxito
+                            dispararAlertaExito("El canton ha sido eliminado."); // Muestra un mensaje de éxito
                             location.reload();  // Recarga la lista de cantones
 
                         }
@@ -163,7 +159,7 @@ function listadocantones() {
             });
         },
         error: function (error) {
-            console.error('Error fetching orders:', error); // Muestra el error en la consola
+            console.error('Error cargando los cantones:', error); // Muestra el error en la consola
         }
     });
 }
