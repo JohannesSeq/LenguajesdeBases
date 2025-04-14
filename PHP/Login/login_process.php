@@ -8,7 +8,7 @@
 
     //Variables para almacenar los valores del usuario una vez la autenticacion termine
     $usuarioNombreQuery = "";
-    $usuarioRolQuery = "";
+    $usuarioPermisoQuery = "";
     $usuarioCorreoQuery = "";
 
     //Iniciamos la conexion con la DB
@@ -38,18 +38,18 @@
     // Obtener los resultados
     while ($row = oci_fetch_assoc($cursor)) {
         $usuarioNombreQuery = $row['NOMBRE'];
-        $usuarioRolQuery = $row['ROL'];
+        $usuarioPermisoQuery = $row['NIVEL_PERMISO'];
         $usuarioCorreoQuery = $row['DIRECCION_DE_CORREO'];
     }
 
     //ECHO $usuarioNombreQuery;
-    //ECHO $usuarioRolQuery;
+    //ECHO $usuarioPermisoQuery;
     //ECHO $usuarioCorreoQuery;
     
     if ($usuarioCorreoQuery != "Invalid"){
         //Seteamos los valores de la cookie para que almacene la info del usuario
         setcookie('email', $usuarioCorreoQuery, time() + 3600, '/');
-        setcookie('rol_id', $usuarioRolQuery, time() + 3600, '/');
+        setcookie('permiso', $usuarioPermisoQuery, time() + 3600, '/');
         setcookie('nombre', $usuarioNombreQuery, time() + 3600, '/');
 
         //Confirmamos que la autenticacion fue exitosa
@@ -58,7 +58,7 @@
     } else {
         //Seteamos los valores de la cookie
         setcookie('email', '', time() + 3600, '/');
-        setcookie('rol_id', '', time() + 3600, '/');
+        setcookie('permiso', '', time() + 3600, '/');
         setcookie('nombre', '', time() + 3600, '/');
 
         $usuarioOutput = "Faulure";

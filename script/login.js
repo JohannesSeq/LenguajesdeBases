@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function(){
     
     $('#formulario_login').submit(function(e){
@@ -45,18 +42,18 @@ function escribir_error(){
     paragraph.textContent = 'Usuario o contraseña incorrectos';
 }
 
-function write_cookie(email,rol_id,nombre){
+function write_cookie(email,permiso,nombre){
     document.cookie = "email=  ; path=/";
-    document.cookie = "rol_id=  ; path=/";
+    document.cookie = "permiso=  ; path=/";
     document.cookie = "nombre=  ; path=/";
 
     document.cookie = "email" + "=" + email + ";" + "path=/" + ";";
-    document.cookie = "rol_id" + "=" + rol_id + ";" + "path=/" + ";";
+    document.cookie = "permiso" + "=" + permiso + ";" + "path=/" + ";";
     document.cookie = "nombre" + "=" + nombre + ";" + "path=/" + ";";
 }
 
 function clear_cookie(){
     document.cookie = "email= ; path=/";
-    document.cookie = "rol_id= ; path=/";
+    document.cookie = "permiso= ; path=/";
     document.cookie = "nombre=  ; path=/";
 }

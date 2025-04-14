@@ -1,11 +1,11 @@
-function Check_Permissions(rol_minimo) {
+function Check_Permissions(permiso_minimo) {
 
     console.log('Prueba');
     console.log(leer_cookie('rol'));
-    console.log(valor_rol(rol_minimo));
+    console.log(valor_rol(permiso_minimo));
     console.log(valor_rol(leer_cookie('rol')));
     
-    if(valor_rol(rol_minimo) > valor_rol(leer_cookie('rol_id'))){
+    if(valor_rol(permiso_minimo) > valor_rol(leer_cookie('permiso'))){
         window.location.href = "unauthorized.php";
     }
 
@@ -27,13 +27,13 @@ function leer_cookie(nombre_cookie) {
     return "";
 }
 
-function valor_rol(rol){
+function valor_rol(perm){
 
-    if(rol == 'Gerente'){
+    if(perm == 'Completo'){
         return 3;
-    } else if (rol == 'Empleado'){
+    } else if (perm == 'Parcial'){
         return 2;
-    } else if(rol == 'Cliente'){
+    } else if(perm == 'Limitado'){
         return 1;
     }
     return 0;
