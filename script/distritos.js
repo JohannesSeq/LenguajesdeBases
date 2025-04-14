@@ -171,7 +171,7 @@ function dispararAlertaExito(mensaje) {
         title: mensaje, // Título de la alerta
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload();  // Recarga la página después de cerrar la alerta
+        //location.reload();  // Recarga la página después de cerrar la alerta
     });
 }
 // Función para mostrar una alerta de error usando SweetAlert2

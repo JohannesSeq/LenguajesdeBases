@@ -4,7 +4,7 @@
     $id = $_POST['id'];
     
     $query = "BEGIN " .
-                "BORRADO_LOGICO('DISTRITO',:P_ID,'Borrando canton'); " .
+                "BORRADO_LOGICO('ROL_PERSONA',:P_ID,'Borrando rol'); " .
              "END;";
 
     //Guardamos el query

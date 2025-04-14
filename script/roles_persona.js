@@ -37,7 +37,7 @@ $(document).ready(function(){
                 } else {
                     console.log(response);
                     dispararAlertaExito("Rol agregado correctamente");
-                    //location.reload();  
+                    location.reload();  
                 }
 
 
@@ -85,28 +85,29 @@ $(document).ready(function(){
     });
 
     // Manejador para el envío del formulario de modificar rol_persona
-    $('#ModificarRol_personaForm').on('submit', function (e) {
+    $('#Modificarrol_personaForm').on('submit', function (e) {
         e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
         var rol_persona_id = $('#modificarrol_personamodal').data('id');  // Obtiene el ID del rol_persona a modificar
         var formData = $(this).serialize() + '&id=' + rol_persona_id;  // Serializa los datos del formulario y añade el ID del rol_persona
-        
+
         // Realiza una petición AJAX para actualizar los datos del rol_persona
         $.ajax({
             url: '../PHP/Roles_persona/modificar_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
+
             success: function (response) {
-                /*
+
                 if (response.error) {
                     dispararAlertaError("Error actualizando el rol");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("Rol actualizado correctamente"); // Muestra un mensaje de éxito
-                    //location.reload();  
+                    dispararAlertaExito("Rol actualizado correctamente"); // Muestra un mensaje de éxito 
                     $('#modificarrol_personamodal').modal('hide'); // Oculta el modal
-                }*/
+                    location.reload(); 
+                }
             },
             error: function (error) {
                 console.error('Error updating order:', error);
@@ -132,7 +133,7 @@ $(document).ready(function(){
             if (result.isConfirmed) {
                 // Si el usuario confirma, realiza una petición AJAX para eliminar el rol_persona
                 $.ajax({
-                    url: '../PHP/Roles_persona/eliminarrol_persona_process.php', // URL del archivo PHP que procesará la eliminación
+                    url: '../PHP/Roles_persona/eliminar_process.php', // URL del archivo PHP que procesará la eliminación
                     method: 'POST', // Método HTTP para enviar la solicitud de eliminación
                     data: { id: rol_personaId }, // Envía el ID del rol_persona como parámetro
                     success: function (response) {
