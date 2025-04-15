@@ -2,8 +2,8 @@
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
     $query = "BEGIN " .
-                "PKT_PROVINCIAS.ENVIO_TOTAL_PROVINCIAS(:P_CURSOR); " .
-             "END;";
+    "PKT_PERSONAS.ENVIO_TOTAL_PERSONAS(:P_CURSOR); " .
+    "END;";
 
     //Guardamos el query
     $stmt = oci_parse($conn, $query);                 
@@ -16,14 +16,14 @@
     oci_execute($stmt);
     oci_execute($cursor);
 
-    $provincias = array();
+    $personas = array();
 
     while ($row = oci_fetch_assoc($cursor)) {
-        $provincias[] = $row;
+        $personas[] = $row;
     }
 
     // Devolver los pedidos en formato JSON
-    echo json_encode($provincias);
+    echo json_encode($personas);
 
     // Cerramos la conexion con la DB
     oci_free_statement($stmt);

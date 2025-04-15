@@ -79,7 +79,7 @@
                                     Opciones Gerenciales
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="PersonalDropdown">
-                                    <a class="dropdown-item" href="agregarUsuario.php">Manejar Personas</a>
+                                    <a class="dropdown-item" href="mostrarPersonas.php">Manejar Personas</a>
                                     <a class="dropdown-item" href="mostrarProvincias.php">Manejar Provincias</a>
                                     <a class="dropdown-item" href="mostrarCantones.php">Manejar Cantones</a>
                                     <a class="dropdown-item" href="mostrarDistritos.php">Manejar Distritos</a>

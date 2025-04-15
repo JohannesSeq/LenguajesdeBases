@@ -2,8 +2,8 @@
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
     $query = "BEGIN " .
-    "PKT_CANTONES.ENVIO_TOTAL_CANTONES(:P_CURSOR); " .
-    "END;";
+                 "PKT_CANTONES.ENVIO_TOTAL_CANTONES(:P_CURSOR); " .
+             "END;";
 
     //Guardamos el query
     $stmt = oci_parse($conn, $query);                 
