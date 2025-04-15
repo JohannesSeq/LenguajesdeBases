@@ -72,6 +72,7 @@ $(document).ready(function(){
                     // Muestra el modal para modificar la persona
                     $('#modificarpersonamodal').modal('show'); 
                     // Rellena el formulario modal con los datos de la persona para su modificación
+                    $('#modificarpersonamodal input[name="cedula"]').val(persona_id);
                     $('#modificarpersonamodal input[name="nombre_persona"]').val(persona[0].NOMBRE);
                     $('#modificarpersonamodal input[name="apellidos_persona"]').val(persona[0].APELLIDO);
                     $('#modificarpersonamodal input[name="numero_telefono"]').val(persona[0].NUMERO_DE_TELEFONO);
@@ -80,6 +81,7 @@ $(document).ready(function(){
                     $('#modificarpersonamodal select[name="canton"]').val(persona[0].ID_CANTON);
                     $('#modificarpersonamodal select[name="distrito"]').val(persona[0].ID_DISTRITO);
                     $('#modificarpersonamodal input[name="correo_respaldo"]').val(persona[0].CORREO_DE_RESPALDO);
+                    $('#modificarpersonamodal input[name="correo"]').val(persona[0].DIRECCION_DE_CORREO);
                     $('#modificarpersonamodal').data('id', persona_id); // Guarda el ID de la persona en el modal
 
                 }
@@ -107,13 +109,13 @@ $(document).ready(function(){
                 console.log(response);
                 
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el persona");
+                    dispararAlertaError("Error actualizando la persona");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("Persona actualizado correctamente"); // Muestra un mensaje de éxito
+                    dispararAlertaExito("Persona actualizada correctamente"); // Muestra un mensaje de éxito
                     
-                    //location.reload();  
+                    location.reload();  
                     $('#modificarpersonamodal').modal('hide'); // Oculta el modal
                 }
             },
@@ -163,6 +165,85 @@ $(document).ready(function(){
         });
     });
 
+
+
+
+
+
+
+
+    // Manejador para el botón de reiniciar contraseña
+    $(document).on('click', '.btn-rst', function () {
+        var persona_id = $(this).data('id'); // Obtiene el ID del persona a modificar
+        console.log('id_persona:' + persona_id);
+        // Realiza una petición AJAX para obtener los datos de la persona según su ID
+        $.ajax({
+            url: '../PHP/Personas/listadopersonaindividual_process.php', // URL del archivo PHP que devolverá los detalles de la persona
+            method: 'GET', // Método HTTP para solicitar los datos
+            // Envía el ID de la persona como parámetro
+            data: {
+                    id: persona_id  
+                }, 
+            
+            success: function (response) {
+                
+                var persona = JSON.parse(response); // Parse la respuesta JSON
+                console.log(persona);
+
+                if (response.error) {
+
+                    alert(response.error); // Muestra un mensaje de error si lo hay
+
+                } else {
+                    // Muestra el modal para modificar la persona
+                    $('#reiniciarpassmodal').modal('show'); 
+                    $('#reiniciarpassmodal').data('id', persona_id); // Guarda el ID de la persona en el modal
+                    // Rellena el formulario modal con los datos de la persona para su modificación
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching person details:', error); // Muestra el error en la consola
+            }
+        });
+    });
+
+    // Manejador para el envío del formulario de modificar persona
+    $('#ReiniciarPassForm').on('submit', function (e) {
+        e.preventDefault(); // Previene el comportamiento por defecto del formulario
+
+        var persona_id = $('#reiniciarpassmodal').data('id');  // Obtiene el ID de la persona a modificar
+        var formData = $(this).serialize() + '&id=' + persona_id;  // Serializa los datos del formulario y añade el ID del persona
+
+        // Realiza una petición AJAX para actualizar los datos del persona
+        $.ajax({
+            url: '../PHP/Personas/reiniciarpass_process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            method: 'POST', // Método HTTP para enviar los datos actualizados
+            data: formData, // Envía los datos del formulario
+            success: function (response) {
+                console.log(formData);
+                console.log(response);
+                
+                if (response.error) {
+                    dispararAlertaError("Error actualizando la contraseña");
+                    console.error(response);
+                    alert(response); // Muestra la respuesta en un alert
+                } else {
+                    dispararAlertaExito("Contraseña actualizada correctamente"); // Muestra un mensaje de éxito
+                    
+                    //location.reload();  
+                    $('#reiniciarpassmodal').modal('hide'); // Oculta el modal
+                }
+            },
+            error: function (error) {
+                console.error('Error updating order:', error);
+            }
+        });
+    });
+
+
+
+
+
 });
 
 // Función para cargar la lista de personas desde la base de datos
@@ -182,7 +263,7 @@ function listadopersonas() {
                     <td>${persona.CEDULA}</td>
                     <td>${persona.NOMBRE} ${persona.APELLIDO}</td>
                     <td>
-                        <button class="btn btn-primary btn-modify" data-id="${persona.CEDULA}">Modificar</button>
+                        <button class="btn btn-primary btn-modify" data-id="${persona.CEDULA}">Modificar y ver propiedades</button>
                         <button class="btn btn-primary btn-rst" data-id="${persona.CEDULA}">Reiniciar Contraseña</button>
                         <button class="btn btn-danger btn-delete" data-id="${persona.CEDULA}">Eliminar</button>
                     </td>

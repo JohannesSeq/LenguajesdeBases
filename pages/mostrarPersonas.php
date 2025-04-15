@@ -17,6 +17,12 @@
                 margin: 0 auto;
             }
 
+            .Error_Message {
+            padding: 25px 0;
+            text-align: center;
+            color: red;
+        }
+
         </style>
     </head>
 
@@ -131,7 +137,6 @@
                         <h6>Cuenta de la persona</h6>
                         <hr class="my-3">
 
-
                         <div class="form-group">
                             <label for="correo">Correo electronico</label>
                             <input type="text" class="form-control" id="correo" placeholder="Ingresa el correo electronico de la persona." required>
@@ -156,7 +161,30 @@
         </div>
     </div>
 
+        <!--Modal para reiniciar la contraseña-->
+        <div class="modal fade" id="reiniciarpassmodal" tabindex="-1" role="dialog" aria-labelledby="reiniciarpassmodalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reiniciarpassmodalLabel">Reiniciar la contraseña de la persona</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="ReiniciarPassForm">
 
+                            <div class="form-group">
+                                <label for="password_persona">Nueva contraseña</label>
+                                <input type="password" class="form-control" name="password_persona" placeholder="Ingresa la contraseña">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Guardar contraseña</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>       
 
         <!--Modal para modificar el persona-->
         <div class="modal fade" id="modificarpersonamodal" tabindex="-1" role="dialog" aria-labelledby="modificarpersonamodalLabel" aria-hidden="true">
@@ -174,6 +202,13 @@
                             <h6 class="modal-title">Informacion de la persona</h6>
                             <hr class="my-3">
         
+
+
+                                <div class="form-group">
+                                    <label for="cedula">Cedula de la persona</label>
+                                    <input type="text" class="form-control" name="cedula" readonly>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="nombre_persona">Nombre de la Persona</label>
                                     <input type="text" class="form-control" name="nombre_persona" placeholder="Ingresa el nombre de la persona." required>
@@ -229,6 +264,11 @@
                                 <h6>Cuenta de la persona</h6>
                                 <hr class="my-3">
         
+                                <div class="form-group">
+                                    <label for="correo">Correo electronico</label>
+                                    <input type="text" class="form-control" name="correo" placeholder="Ingresa el correo electronico de la persona." readonly>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="correo_respaldo">Correo de respaldo</label>
                                     <input type="text" class="form-control" name="correo_respaldo" placeholder="Ingresa el correo de respaldo de la persona." required>
