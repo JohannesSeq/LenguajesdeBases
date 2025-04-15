@@ -171,7 +171,6 @@
                     <div class="modal-body">
                         <form id="ModificarPersonaForm">
 
-
                             <h6 class="modal-title">Informacion de la persona</h6>
                             <hr class="my-3">
         
@@ -229,12 +228,6 @@
                                 </br>
                                 <h6>Cuenta de la persona</h6>
                                 <hr class="my-3">
-        
-        
-                                <div class="form-group">
-                                    <label for="correo">Correo electronico</label>
-                                    <input type="text" class="form-control" name="correo" placeholder="Ingresa el correo electronico de la persona." required>
-                                </div>
         
                                 <div class="form-group">
                                     <label for="correo_respaldo">Correo de respaldo</label>

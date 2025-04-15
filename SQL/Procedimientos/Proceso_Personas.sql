@@ -18,7 +18,7 @@ CREATE OR REPLACE PACKAGE PKT_PERSONAS AS
     PROCEDURE ACTUALIZAR_PERSONA(
         P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR, P_ID_ROL VARCHAR,
         P_ID_PROVINCIA NUMBER, P_ID_CANTON NUMBER, P_ID_DISTRITO NUMBER,
-        P_CORREO VARCHAR, P_CORREO_RESPALDO VARCHAR
+        P_CORREO_RESPALDO VARCHAR
     );
 
     PROCEDURE ACTUALIZAR_PASSWORD( P_CEDULA NUMBER, P_PASSWORD VARCHAR);
@@ -162,53 +162,38 @@ CREATE OR REPLACE PACKAGE BODY PKT_PERSONAS AS
     PROCEDURE ACTUALIZAR_PERSONA(
         P_CEDULA NUMBER, P_NOMBRE VARCHAR, P_APELLIDO VARCHAR, P_NUMERO_DE_TELEFONO VARCHAR, P_ID_ROL VARCHAR,
         P_ID_PROVINCIA NUMBER, P_ID_CANTON NUMBER, P_ID_DISTRITO NUMBER,
-        P_CORREO VARCHAR, P_CORREO_RESPALDO VARCHAR
+        P_CORREO_RESPALDO VARCHAR
     )
     AS
+        V_CORREO VARCHAR(100);
         --- Variables de IDs ---
         V_ID_DIRECCION_PERSONA VARCHAR(100) := 'Dir_' || TO_CHAR(P_CEDULA); -- Variable para almacenar el id de de la direccion
         
     BEGIN
-
-        ------------------------------------------------------------
-        --- Bloque direccion                                    ----
-        ------------------------------------------------------------
-        
+        --- Bloque direccion
         UPDATE DIRECCIONES_PERSONAS
             SET ID_DISTRITO = P_ID_DISTRITO,
                 ID_CANTON = P_ID_CANTON,
                 ID_PROVINCIA = P_ID_PROVINCIA
             WHERE ID_DIRECCION = V_ID_DIRECCION_PERSONA;
-        
-        ------------------------------------------------------------
-        --- Bloque Correos                                      ----
-        ------------------------------------------------------------
 
-        --Borramos el correo para poder editarlo despues
-        UPDATE PERSONAS
-            SET DIRECCION_DE_CORREO = NULL
-            WHERE CEDULA = P_CEDULA;
+        --- Bloque Correos
+        --Obtenemos la direccion de correo
+        SELECT DIRECCION_DE_CORREO INTO V_CORREO FROM VISTA_PERSONAS_COMPLETA WHERE CEDULA = P_CEDULA;
 
         --Actualizamos el correo
-        UPDATE CORREOS
-            SET DIRECCION_DE_CORREO = P_CORREO,
-                CORREO_DE_RESPALDO = P_CORREO_RESPALDO
-            WHERE DIRECCION_DE_CORREO = P_CORREO;
+        UPDATE CORREOS SET CORREO_DE_RESPALDO = P_CORREO_RESPALDO WHERE DIRECCION_DE_CORREO = V_CORREO;
+        COMMIT;
 
-
-        ------------------------------------------------------------
-        --- Bloque PERSONAS                                     ----
-        ------------------------------------------------------------
-
+        --- Bloque PERSONAS
         UPDATE PERSONAS
             SET NOMBRE = P_NOMBRE,
                 APELLIDO = P_APELLIDO,
                 NUMERO_DE_TELEFONO = P_NUMERO_DE_TELEFONO,
-                ID_ROL_PERSONA = P_ID_ROL,
-                DIRECCION_DE_CORREO = P_CORREO
+                ID_ROL_PERSONA = P_ID_ROL
             WHERE CEDULA = P_CEDULA;
-    
         COMMIT;
+
     END ACTUALIZAR_PERSONA;
 
 --Procedimiento para actualizar contraseñas

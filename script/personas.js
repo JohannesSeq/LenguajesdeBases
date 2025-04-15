@@ -79,10 +79,7 @@ $(document).ready(function(){
                     $('#modificarpersonamodal select[name="provincia"]').val(persona[0].ID_PROVINCIA);
                     $('#modificarpersonamodal select[name="canton"]').val(persona[0].ID_CANTON);
                     $('#modificarpersonamodal select[name="distrito"]').val(persona[0].ID_DISTRITO);
-                    $('#modificarpersonamodal input[name="correo"]').val(persona[0].DIRECCION_DE_CORREO);
                     $('#modificarpersonamodal input[name="correo_respaldo"]').val(persona[0].CORREO_DE_RESPALDO);
-
-
                     $('#modificarpersonamodal').data('id', persona_id); // Guarda el ID de la persona en el modal
 
                 }
