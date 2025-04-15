@@ -139,12 +139,12 @@
 
                         <div class="form-group">
                             <label for="correo">Correo electronico</label>
-                            <input type="text" class="form-control" id="correo" placeholder="Ingresa el correo electronico de la persona." required>
+                            <input type="email" class="form-control" id="correo" placeholder="Ingresa el correo electronico de la persona." required>
                         </div>
 
                         <div class="form-group">
                             <label for="correo_respaldo">Correo de respaldo</label>
-                            <input type="text" class="form-control" id="correo_respaldo" placeholder="Ingresa el correo de respaldo de la persona." required>
+                            <input type="email" class="form-control" id="correo_respaldo" placeholder="Ingresa el correo de respaldo de la persona." required>
                         </div>
 
                         <div class="form-group">

@@ -153,7 +153,7 @@ $(document).ready(function(){
                         } else {
 
                             dispararAlertaExito("La persona ha sido eliminado."); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de personas
+                            //location.reload();  // Recarga la lista de personas
 
                         }
                     },
@@ -207,7 +207,7 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el envío del formulario de modificar persona
+    // Manejo del envio de la contraseña
     $('#ReiniciarPassForm').on('submit', function (e) {
         e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
