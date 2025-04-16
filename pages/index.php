@@ -61,8 +61,10 @@
                             echo "<p>¡Bienvenido, " . $_COOKIE["nombre"] . "!</p>";
                     } else
                         { 
-                            echo '<p>Por favor, inicia sesión para acceder a todas las funcionalidades de la plataforma.</p>';
+                            echo '<p>Por favor, inicia sesión para acceder a todas las funcionalidades de la plataforma o registrese ahora mismo si no tiene una cuenta!</p>';
                             echo '<a class="button-62" href="#" data-toggle="modal" data-target="#loginModal" role="button" id="loginBtn">Iniciar Sesión</a>';
+                            echo '<a> </a>';
+                            echo '<a class="button-62" href="#" data-toggle="modal" data-target="#RegistroModal" role="button" id="rgstBtn">Registrarme</a>';
                         }
                 ?>
                 
