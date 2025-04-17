@@ -128,6 +128,7 @@ BEGIN
         WHERE DIRECCION_DE_CORREO = 'Invalid';
     END IF;
 END;
+/
 
 ------------------------------ BORRADO LOGICO -----------------------------------------
 CREATE OR REPLACE PROCEDURE BORRADO_LOGICO(
