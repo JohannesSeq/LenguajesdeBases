@@ -29,7 +29,7 @@
 
                     <?php                 
                     if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
-                        if($_COOKIE["permiso"] == "Limitado") {
+                        if($_COOKIE["permiso"] == "Limitado" || $_COOKIE["permiso"] == "Completo" ) {
                             echo '
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="MenuDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,20 +45,21 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="pedidosDropdown">
                                     <a class="dropdown-item" href="agregarPedido.php">Hacer Pedido</a>
+                                    <a class="dropdown-item" href="agregarReservacion.php">Hacer Reservación</a>
                                 </div>
                             </li>';
                         } 
-                        elseif ($_COOKIE["permiso"] == "Parcial" || $_COOKIE["permiso"] == "Completo") {
+                        if ($_COOKIE["permiso"] == "Parcial" || $_COOKIE["permiso"] == "Completo") {
                             echo '
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="facturasyPedidosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Facturas
+                                    Gestiones
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="facturasyPedidosDropdown">
                                     <a class="dropdown-item" href="listadoFacturas.php">Manejar pedidos</a>
                                     <a class="dropdown-item" href="listadoFacturas.php">Manejar metodos de pago</a>
                                     <a class="dropdown-item" href="agregarFactura.php">Manejar Facturas</a>
-                                    
+                                    <a class="dropdown-item" href="mostrarReservaciones.php">Manejar Reservaciones</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

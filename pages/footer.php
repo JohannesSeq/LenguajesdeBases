@@ -1,5 +1,3 @@
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-aEtUUnHNeH44U0ibnCDEY8EoVoUIutV1kzMX7Mk9ihpO1D8k5T0yA5UjL+yJ/hC9p2VgBoN2kF4mN4qT2sqo1g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <footer class="site-footer">
   <div class="container">
