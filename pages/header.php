@@ -68,7 +68,9 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="inventarioDropdown">
                                     <a class="dropdown-item" href="mostrarPlatillos.php">Manejar platillos</a>
-                                    <a class="dropdown-item" href="mostrarPlatillos.php">Manejar menus</a>
+                                    <a class="dropdown-item" href="mostrarMenu.php">Manejar menus</a>
+                                    <a class="dropdown-item" href="mostrarHorarios.php">Manejar Horarios</a>
+                                    <a class="dropdown-item" href="mostrarMesas.php">Manejar Mesas</a>
                                 </div>
                             </li>';
                         }
