@@ -112,8 +112,6 @@ END;
 
 ------------------------------ CREAR PLATILLO MENU -------------------------------
 
-
-
 CREATE OR REPLACE PROCEDURE CREAR_PLATILLO_MENU(
     P_ID_PLATILLO NUMBER,
     P_ID_MENU NUMBER,

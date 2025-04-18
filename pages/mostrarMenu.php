@@ -121,6 +121,7 @@
                             <td>${menu.NOMBRE_MENU}</td>
                             <td>${menu.DESCRIPCION}</td>
                             <td>
+                                <a class="btn btn-secondary" href="detallesMenu.php?id=${menu.ID_MENU}">Mostrar Platillos</a>
                                 <button class="btn btn-info" onclick="abrirModalModificarMenu(${menu.ID_MENU}, '${menu.NOMBRE_MENU}', '${menu.DESCRIPCION}')">Modificar</button>
                                 <button class="btn btn-danger" onclick="eliminarMenu(${menu.ID_MENU})">Eliminar</button>
                             </td>
@@ -138,7 +139,7 @@
                 select.empty();
 
                 platillos.forEach(p => {
-                    select.append(`<option value="${p.ID_PLATILLO}">${p.NOMBRE}</option>`);
+                    select.append(`<option value="${p.ID_PLATILLO}">${p.NOMBRE_PLATILLO}</option>`);
                 });
             });
         }
