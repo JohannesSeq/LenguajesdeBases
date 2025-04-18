@@ -65,6 +65,7 @@ function cargarPlatillosMenu(idMenu) {
                     <td>${p.NOMBRE_PLATILLO}</td>
                     <td>
                         <button class="btn btn-danger" onclick="removerPlatillo(${idMenu}, ${p.ID_PLATILLO})">Eliminar</button>
+                        <button class="btn btn-info" onclick="window.location.href='detallesPlatillo.php?id=${p.ID_PLATILLO}'">Detalles</button>
                     </td>
                 </tr>
             `;
