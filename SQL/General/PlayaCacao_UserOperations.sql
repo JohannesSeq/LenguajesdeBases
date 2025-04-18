@@ -46,6 +46,8 @@ EXEC CREAR_ROL('Gerente', 'Gerentes', 'Gerentes del restaurante', 'Creacion del 
 
 --Creacion de personas
 EXEC CREAR_PERSONA(1184401, 'Johannes', 'Sequeira', '123-456','Gerente', 1, 1, 1, 'js@playacacao.com', 'johannes@gmail.com','Password1234','Agregando personas');
+EXEC CREAR_PERSONA(1184402, 'Johannes2', 'Sequeira2', '123-4567','Gerente', 1, 1, 1, 'js2@playacacao.com', 'johannesburgo@gmail.com','Password12345','Agregando personas');
+
 EXEC CREAR_PERSONA(1345667, 'Steven', 'Guerra Fernandez', '222-356','Empleado', 1, 1, 1, 'steven@playacacao.com', 'steven@gmail.com','Password1234','Agregando personas');
 EXEC CREAR_PERSONA(1899889, 'Ryan', 'Umana', '222-356','Gerente', 1, 1, 1, 'ryan@playacacao.com', 'ryan@gmail.com','Password1234','Agregando personas');
 EXEC CREAR_PERSONA(1200345, 'Nidia', 'Infante', '123-456','Cliente', 1, 1, 1, 'nidiaces@gmail.com', 'infante@gmail.com','Password1234','TestPersona');

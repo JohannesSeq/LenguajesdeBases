@@ -195,3 +195,65 @@ BEGIN
     COMMIT;
 END;
 /
+
+
+------------------------------ Procedimientos Horarios ----------------------------------
+
+CREATE OR REPLACE PROCEDURE CREAR_HORARIO_MESA (
+    P_DISPONIBILIDAD    VARCHAR,
+    P_HORA_EXACTA       DATE,
+    P_COMENTARIO        VARCHAR
+)
+AS
+    V_ID_HORARIO   NUMBER;
+    V_ESTADO_ID    VARCHAR2(250);
+BEGIN
+    -- Insertar nuevo horario (sin especificar ID_HORARIO)
+    INSERT INTO HORARIOS_MESA (DISPONIBILIDAD, HORA_EXACTA, ID_ESTADO)
+    VALUES (P_DISPONIBILIDAD, P_HORA_EXACTA, NULL) 
+    RETURNING ID_HORARIO INTO V_ID_HORARIO;
+
+    -- Crear entrada en historial de estados
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_HORARIO), 'HORARIOS_MESA', P_COMENTARIO);
+
+    -- Actualizar el horario con el ID de estado
+    UPDATE HORARIOS_MESA
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_HORARIO = V_ID_HORARIO;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20002, 'Error al crear el horario: ' || SQLERRM);
+END CREAR_HORARIO_MESA;
+
+
+
+----- Probando el Proceso Almacenado -----------
+
+
+SELECT * FROM HORARIOS_MESA;
+
+SHOW ERRORS PROCEDURE CREAR_HORARIO_MESA;
+
+BEGIN
+    CREAR_HORARIO_MESA(
+        P_DISPONIBILIDAD => 'DISPONIBLE',
+        P_HORA_EXACTA    => TO_DATE('2025-04-17 18:00', 'YYYY-MM-DD HH24:MI'),
+        P_COMENTARIO     => 'Horario creado para prueba'
+    );
+END;
+/
+
+
+/*CREATE TABLE HORARIOS_MESA(
+    ID_HORARIO NUMBER PRIMARY KEY,
+    DISPONIBILIDAD VARCHAR(10),
+    HORA_EXACTA DATE,
+    ID_ESTADO VARCHAR(250)
+                     CONSTRAINT ESTADO_HORARIOS_FK
+                     REFERENCES ESTADOS(ID_ESTADO)
+);
+*/
