@@ -47,7 +47,7 @@
                     <form id="formPedido">
                         <div class="form-group">
                             <label for="cedula_cliente">Cédula del Cliente</label>
-                            <input type="number" class="form-control" id="cedula_cliente" required>
+                            <input type="number" class="form-control" id="cedula_cliente" readonly required>
                         </div>
                         <div class="form-group">
                             <label for="comentario">Comentario del Pedido</label>
@@ -170,7 +170,31 @@
             }
         });
 
+        function getEmailFromCookie() {
+            const match = document.cookie.match(/(?:^|; )email=([^;]*)/);
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
+        function cargarCedulaDesdeEmail() {
+            const email = getEmailFromCookie();
+            if (!email) return;
+
+            fetch(`../PHP/Personas/listadoindividualcliente_process.php?email=${encodeURIComponent(email)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data[0] && data[0].CEDULA) {
+                        document.getElementById("cedula_cliente").value = data[0].CEDULA;
+                    } else {
+                        Swal.fire("Error", "No se pudo obtener la cédula del cliente", "error");
+                    }
+                })
+                .catch(() => {
+                    Swal.fire("Error", "Fallo la consulta del cliente", "error");
+                });
+        }
+
         cargarCarrito();
+        cargarCedulaDesdeEmail(); // Cargar cédula al abrir el modal
     </script>
 </body>
 

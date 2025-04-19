@@ -234,3 +234,16 @@ END PKT_PERSONAS;
 
 ---------------------------------Fin del paquete personas----------------------------------------------
 
+-- Procedimiento para obtener cédula por correo
+CREATE OR REPLACE PROCEDURE OBTENER_CEDULA_DESDE_CORREO (
+    P_CORREO IN VARCHAR,
+    P_CURSOR OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CURSOR FOR
+        SELECT CEDULA
+        FROM VISTA_CLIENTES_CEDULA_CORREO
+        WHERE DIRECCION_DE_CORREO = P_CORREO;
+END;
+/

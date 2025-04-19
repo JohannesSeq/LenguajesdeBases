@@ -128,7 +128,6 @@ BEGIN
 
     COMMIT;
 END;
-
 ------------------------------ CREAR FACTURA -------------------------------------
 
 CREATE OR REPLACE PROCEDURE CREAR_FACTURA(
