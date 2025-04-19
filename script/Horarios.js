@@ -1,192 +1,129 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-    $('#Agregar_Horario_Form').submit(function(e){
-
-        // Previene el comportamiento por defecto del formulario (recarga de página)
+    // Agregar horario
+    $('#Agregar_Horario_Form').submit(function (e) {
         e.preventDefault();
 
-        // Obtiene los valores de los campos del formulario
-        var disponibilidad = $('#disponibilidad').val();
-        var Hora = $('#Hora').val();
-        
-        // Realiza una petición AJAX para enviar los datos del nuevo Horario a agregarHorario_Process.php
+        const formData = $(this).serialize();
+
         $.ajax({
-            url: '../php/Horarios/AgregarHorario_Process.php',
+            url: '../PHP/Horarios/AgregarHorario_Process.php',
             method: 'POST',
-
-            data: {
-                disponibilidad: disponibilidad,
-                Hora: Hora
-                
-            },
-
-            // Muestra una alerta de éxito y recarga la página
+            data: formData,
             success: function (response) {
-                // Muestra una alerta de éxito y recarga la página
                 dispararAlertaExito("Horario agregado correctamente");
-                location.reload();  
+            },
+            error: function (error) {
+                dispararAlertaError("Error agregando el horario");
+                console.error(error);
             }
         });
     });
 
-    // Manejador para el botón de modificar Horario
+    // Abrir modal de modificación
     $(document).on('click', '.btn-modify', function () {
-        var ID_HORARIO = $(this).data('id'); // Obtiene el ID del Horario a modificar
-        console.log('ID_HORARIO:' + ID_HORARIO);
-        // Realiza una petición AJAX para obtener los datos del Horario según su ID
+        const idHorario = $(this).data('id');
+
         $.ajax({
-            url: '../PHP/Horarios/listarHorarios_process.php', // URL del archivo PHP que devolverá los detalles del Horario
-            method: 'GET', // Método HTTP para solicitar los datos
-            // Envía el ID del Horario como parámetro
-            data: {
-                 id: ID_HORARIO  
-                }, 
-            
+            url: '../PHP/Horarios/listarHorarios_process.php',
+            method: 'GET',
+            data: { id: idHorario },
             success: function (response) {
-                
-                var Horarios = JSON.parse(response); // Parse la respuesta JSON
-                console.log(Horarios);
+                const horario = JSON.parse(response)[0];
+                $('#modificar_id_horario').val(idHorario);
+                $('input[name="disponibilidad"]').val(horario.DISPONIBILIDAD);
+                $('input[name="hora_exacta"]').val(horario.HORA_EXACTA.replace(' ', 'T'));
+                $('input[name="comentario"]').val("Actualización de horario");
 
-                if (response.error) {
-
-                    alert(response.error); // Muestra un mensaje de error si lo hay
-
-                } else {
-                    // Muestra el modal para modificar el Horario
-                    $('#modificarhorariomodal').modal('show'); 
-                    // Rellena el formulario modal con los datos del horario para su modificación
-                    $('#modificarhorariomodal input[name="disponibilidad"]').val(Horarios[0].DISPONIBILIDAD);
-                    $('#modificarhorariomodal input[name="HORA_EXACTA"]').val(Horarios[0].HORA_EXACTA);
-                    $('#modificarhorariomodal').data('id', ID_HORARIO); // Guarda el ID del horario en el modal
-
-                }
+                $('#modificarhorariomodal').modal('show');
             },
             error: function (error) {
-                console.error('Error fetching order details:', error); // Muestra el error en la consola
+                dispararAlertaError("No se pudo cargar el horario.");
+                console.error(error);
             }
         });
     });
 
-    // Manejador para el envío del formulario de modificar horario
-    $('#ModificarHorarioForm').on('submit', function (e) {
-        e.preventDefault(); // Previene el comportamiento por defecto del formulario
+    // Guardar cambios (modificar horario)
+    $('#ModificarHorarioForm').submit(function (e) {
+        e.preventDefault();
 
-        var ID_HORARIO = $('#modificarhorariomodal').data('id');  // Obtiene el ID del horario a modificar
-        var formData = $(this).serialize() + '&id=' + ID_HORARIO;  // Serializa los datos del formulario y añade el ID del horario
+        const formData = $(this).serialize();
 
-        // Realiza una petición AJAX para actualizar los datos del horario
         $.ajax({
-            url: '../PHP/Horarios/modificarhorario_process.php', // URL del archivo PHP que procesará la solicitud de actualización
-            method: 'POST', // Método HTTP para enviar los datos actualizados
-            data: formData, // Envía los datos del formulario
+            url: '../PHP/Horarios/modificarhorario_process.php',
+            method: 'POST',
+            data: formData,
             success: function (response) {
-                if (response.error) {
-                    dispararAlertaError("Error actualizando el horario");
-                    console.error(response);
-                    alert(response); // Muestra la respuesta en un alert
-                } else {
-                    dispararAlertaExito("horario actualizado correctamente"); // Muestra un mensaje de éxito
-                    location.reload();  
-                    $('#modificarhorariomodal').modal('hide'); // Oculta el modal
-                }
-            },
-            error: function (error) {
-                console.error('Error updating order:', error);
-            }
-        });
-    });
-
-    // Manejador para el botón de eliminar platillo
-    $(document).on('click', '.btn-delete', function () {
-        var platilloId = $(this).data('id'); // Obtiene el ID del platillo a eliminar
-
-        // Muestra una alerta de confirmación usando SweetAlert2
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "No podrás revertir esta acción!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
-
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Si el usuario confirma, realiza una petición AJAX para eliminar el platillo
-                $.ajax({
-                    url: '../PHP/Platillos/eliminarplatillo_process.php', // URL del archivo PHP que procesará la eliminación
-                    method: 'POST', // Método HTTP para enviar la solicitud de eliminación
-                    data: { id: platilloId }, // Envía el ID del platillo como parámetro
-                    success: function (response) {
-                        if (response.error) {
-                            Swal.fire('Error', 'No se pudo eliminar el platillo.', 'error');
-
-                        } else {
-
-                            dispararAlertaExito("El platillo ha sido eliminado."); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de platillos
-
-                        }
-                    },
-                    error: function (error) {
-                        console.error('Error deleting order:', error);
+                try {
+                    const res = JSON.parse(response);
+                    if (res.error) {
+                        dispararAlertaError("Error al modificar: " + res.error);
+                    } else {
+                        dispararAlertaExito("Horario modificado correctamente");
+                        $('#modificarhorariomodal').modal('hide');
                     }
-                });
+                } catch (err) {
+                    console.error("Respuesta inesperada:", response);
+                    dispararAlertaExito("Horario modificado (sin error)");
+                    $('#modificarhorariomodal').modal('hide');
+                }
+            },
+            error: function (error) {
+                dispararAlertaError("Error modificando el horario");
+                console.error(error);
             }
         });
     });
 
+    // Cargar lista de horarios
+    listahorarios();
 });
 
-// Función para cargar la lista de Horarios desde la base de datos
+// Cargar tabla de horarios
 function listahorarios() {
     $.ajax({
-        url: '../PHP/Horarios/listarHorarios_process.php', // URL del archivo PHP que devolverá la lista de platillos
-        method: 'GET', // Método HTTP para solicitar los datos
-
+        url: '../PHP/Horarios/listarHorarios_process.php',
+        method: 'GET',
         success: function (data) {
-            var Horarios = JSON.parse(data); // Parse la respuesta JSON
-            var tbody = $('#HorariosTable tbody');
-            tbody.empty(); // Limpia la tabla antes de añadir nuevos datos
+            const horarios = JSON.parse(data);
+            const tbody = $('#HorariosTable tbody');
+            tbody.empty();
 
-            Horarios.forEach(function (Horarios) {
-                // Construye una fila de la tabla con los datos del pedid
-                var row = `<tr>
-                    <td>${Horarios.ID_HORARIO}</td>
-                    <td>${Horarios.DISPONIBILIDAD}</td>
-                    <td>${Horarios.HORA_EXACTA}</td>
-                    <td>
-                        <button class="btn btn-primary btn-modify" data-id="${Horarios.ID_HORARIO}">Modificar</button>
-                        <button class="btn btn-danger btn-delete" data-id="${Horarios.ID_HORARIO}">Eliminar</button>
-                    </td>
-                </tr>`;
-                tbody.append(row); // Añade la fila a la tabla
+            horarios.forEach(h => {
+                const row = `
+                    <tr>
+                        <td>${h.ID_HORARIO}</td>
+                        <td>${h.DISPONIBILIDAD}</td>
+                        <td>${h.HORA_EXACTA}</td>
+                        <td>
+                            <button class="btn btn-primary btn-modify" data-id="${h.ID_HORARIO}">Modificar</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(row);
             });
         },
         error: function (error) {
-            console.error('Error cargando los platillos:', error); // Muestra el error en la consola
+            dispararAlertaError("No se pudo cargar la tabla de horarios");
+            console.error(error);
         }
     });
 }
 
-// Función para mostrar una alerta de éxito usando SweetAlert2
+// Alertas
 function dispararAlertaExito(mensaje) {
     Swal.fire({
-        icon: "success", // Icono de éxito
-        title: mensaje, // Título de la alerta
-        confirmButtonText: 'Ok' // Texto del botón de confirmación
-    }).then(() => {
-        location.reload();  // Recarga la página después de cerrar la alerta
-    });
-}
-// Función para mostrar una alerta de error usando SweetAlert2
-function dispararAlertaError(mensaje) {
-    Swal.fire({
-        icon: "error", // Icono de error
+        icon: "success",
         title: mensaje,
-        confirmButtonText: 'Ok' // Texto del botón de confirmación
-    }).then(() => {
-        location.reload(); // Recarga la página después de cerrar la alerta
-    });
+        confirmButtonText: 'Ok'
+    }).then(() => location.reload());
 }
 
+function dispararAlertaError(mensaje) {
+    Swal.fire({
+        icon: "error",
+        title: mensaje,
+        confirmButtonText: 'Ok'
+    });
+}

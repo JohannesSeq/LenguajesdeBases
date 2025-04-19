@@ -232,6 +232,7 @@ EXCEPTION
         ROLLBACK;
         RAISE_APPLICATION_ERROR(-20002, 'Error al crear el horario: ' || SQLERRM);
 END CREAR_HORARIO_MESA;
+/
 
 
 
