@@ -29,13 +29,13 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el botón de modificar platillo
+    // Manejador para el botón de modificar Horario
     $(document).on('click', '.btn-modify', function () {
-        var platillo_id = $(this).data('id'); // Obtiene el ID del platillo a modificar
-        console.log('id_platillo:' + platillo_id);
-        // Realiza una petición AJAX para obtener los datos del platillo según su ID
+        var horario_id = $(this).data('id'); // Obtiene el ID del Horario a modificar
+        console.log('ID_HORARIO:' + horario_id);
+        // Realiza una petición AJAX para obtener los datos del Horario según su ID
         $.ajax({
-            url: '../PHP/Platillos/listadoplatilloindividual_process.php', // URL del archivo PHP que devolverá los detalles del platillo
+            url: '../PHP/Horarios/listadoplatilloindividual_process.php', // URL del archivo PHP que devolverá los detalles del platillo
             method: 'GET', // Método HTTP para solicitar los datos
             // Envía el ID del platillo como parámetro
             data: {

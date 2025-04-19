@@ -197,6 +197,10 @@ END;
 /
 
 
+
+
+
+
 ------------------------------ Procedimientos Horarios ----------------------------------
 
 CREATE OR REPLACE PROCEDURE CREAR_HORARIO_MESA (
@@ -257,3 +261,43 @@ END;
                      REFERENCES ESTADOS(ID_ESTADO)
 );
 */
+
+---------------------------- Proceso almacenado para actualizar Horario ----------------------------------
+
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_HORARIO_MESA (
+    P_ID_HORARIO    NUMBER,
+    P_DISPONIBILIDAD VARCHAR,
+    P_HORA_EXACTA    DATE,
+    P_COMENTARIO     VARCHAR
+)
+AS
+    V_ESTADO_ID VARCHAR2(250);
+BEGIN
+    -- Actualizar los datos del horario
+    UPDATE HORARIOS_MESA
+    SET DISPONIBILIDAD = P_DISPONIBILIDAD,
+        HORA_EXACTA = P_HORA_EXACTA
+    WHERE ID_HORARIO = P_ID_HORARIO;
+
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(P_ID_HORARIO), 'HORARIOS_MESA', P_COMENTARIO);
+
+    UPDATE HORARIOS_MESA
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_HORARIO = P_ID_HORARIO;
+
+    COMMIT;
+
+END ACTUALIZAR_HORARIO_MESA;
+
+
+-------------------------------- Para probar la actualizacion -------------------------------
+BEGIN
+    ACTUALIZAR_HORARIO_MESA(
+        P_ID_HORARIO    => 123,  -- Reemplaza con un ID de horario válido
+        P_DISPONIBILIDAD => 'Disponible',
+        P_HORA_EXACTA    => TO_DATE('2025-04-18 14:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        P_COMENTARIO     => 'Actualización de disponibilidad'
+    );
+END;
+/
+
