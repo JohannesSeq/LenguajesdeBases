@@ -18,6 +18,9 @@
                         <div class="dropdown-menu" aria-labelledby="usuarioDropdown">
                             <?php
                                 if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
+                                    echo '<a class="dropdown-item" href="verPedidosUsuario.php">Ver Pedidos</a>';
+                                    echo '<a class="dropdown-item" href="verReservacionesUsuario.php">Ver Reservaciones</a>';
+                                    echo '<a class="dropdown-item" href="mostrarCarrito.php">Ver Carrito</a>';
                                     echo '<a class="dropdown-item" href="index.php" id="logout">Cerrar Sesión</a>';
                                 } else {
                                     echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Iniciar Sesión</a>';

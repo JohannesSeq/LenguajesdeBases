@@ -66,6 +66,7 @@ function cargarPlatillosMenu(idMenu) {
                     <td>
                         <button class="btn btn-danger" onclick="removerPlatillo(${idMenu}, ${p.ID_PLATILLO})">Eliminar</button>
                         <button class="btn btn-info" onclick="window.location.href='detallesPlatillo.php?id=${p.ID_PLATILLO}'">Detalles</button>
+                        <button class="btn btn-primary" onclick="agregarAlCarrito(${p.ID_PLATILLO})">Agregar al carrito</button>
                     </td>
                 </tr>
             `;
@@ -110,6 +111,19 @@ function removerPlatillo(idMenu, idPlatillo) {
         cargarPlatillosMenu(idMenu);
         cargarPlatillosDisponibles(idMenu);
     });
+}
+
+function agregarAlCarrito(idPlatillo) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || {};
+    
+    if (carrito[idPlatillo]) {
+        carrito[idPlatillo] += 1;
+    } else {
+        carrito[idPlatillo] = 1;
+    }
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    Swal.fire("Agregado", "Platillo agregado al carrito", "success");
 }
 </script>
 </body>

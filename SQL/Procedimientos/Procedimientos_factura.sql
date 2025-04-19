@@ -111,7 +111,7 @@ BEGIN
 
     COMMIT;
 END;
-
+/
 ----------------------------Actualizar el monto total de un pedido----------------
 
 CREATE OR REPLACE PROCEDURE ACTUALIZAR_TOTAL_PEDIDO(
