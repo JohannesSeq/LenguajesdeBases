@@ -48,7 +48,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="pedidosDropdown">
                                     <a class="dropdown-item" href="mostrarCarrito.php">Ver Carrito</a>
-                                    <a class="dropdown-item" href="agregarReservacion.php">Hacer Reservación</a>
+                                    <a class="dropdown-item" href="usuarioAgregarReservacion.php">Hacer Reservación</a>
                                 </div>
                             </li>';
                         } 

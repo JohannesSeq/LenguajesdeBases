@@ -1,16 +1,16 @@
 $(document).ready(function () {
-    console.log("reservaciones.js cargado");
     cargarCedulaDesdeEmail();
-    cargarMesas('#mesa', '#horario_mesa');
-    cargarMesas('#editar_mesa', '#editar_horario');
+    cargarHorariosDisponibles('#horario');
+    listarreservaciones();
 
+    // Agregar reservación
     $('#FormularioAgregarReservacion').submit(function (e) {
         e.preventDefault();
 
         const data = {
             cedula: $('#cedula_cliente').val(),
             mesa: $('#mesa').val(),
-            confirmacion: "Confirmado" // por defecto
+            confirmacion: "Confirmado"
         };
 
         $.post('../PHP/Reservaciones/agregarReservacion_Process.php', data, function () {
@@ -18,6 +18,13 @@ $(document).ready(function () {
         });
     });
 
+    // Al cambiar el horario (agregar), cargar mesas para ese horario
+    $('#horario').on('change', function () {
+        const idHorario = $(this).val();
+        cargarMesasPorHorario(idHorario, '#mesa');
+    });
+
+    // Editar reservación
     $('#FormularioEditarReservacion').submit(function (e) {
         e.preventDefault();
 
@@ -32,17 +39,37 @@ $(document).ready(function () {
         });
     });
 
+    // Lógica del modal de editar
+    $('#editar_horario').on('change', function () {
+        const idHorario = $(this).val();
+        cargarMesasPorHorario(idHorario, '#editar_mesa');
+    });
+
+    // Abrir modal y precargar datos
     $(document).on('click', '.btn-modify', function () {
         const id = $(this).data('id');
         $.get('../PHP/Reservaciones/listadoReservacionIndividual_Process.php', { id }, function (res) {
             const reserva = JSON.parse(res)[0];
             $('#editar_id').val(reserva.ID_RESERVA);
             $('#editar_confirmacion').val(reserva.CONFIRMACION);
-            $('#editar_mesa').val(reserva.MESA).trigger('change');
+
+            // Cargar horarios y preseleccionar
+            cargarHorariosDisponibles('#editar_horario');
+            setTimeout(() => {
+                $('#editar_horario').val(reserva.ID_HORARIO).trigger('change');
+
+                // Esperar a que se carguen mesas disponibles antes de seleccionar
+                setTimeout(() => {
+                    $('#editar_mesa').val(reserva.MESA);
+                }, 300);
+
+            }, 300);
+
             $('#modalEditarReservacion').modal('show');
         });
     });
 
+    // Eliminar reservación
     $(document).on('click', '.btn-delete', function () {
         const id = $(this).data('id');
         Swal.fire({
@@ -71,7 +98,7 @@ function listarreservaciones() {
                 <td>${reserva.CONFIRMACION}</td>
                 <td>${reserva.CLIENTE}</td>
                 <td>${reserva.MESA}</td>
-                <td>${reserva.ID_HORARIO}</td>
+                <td>${reserva.HORARIO}</td>
                 <td>
                     <button class="btn btn-primary btn-modify" data-id="${reserva.ID_RESERVA}">Modificar</button>
                     <button class="btn btn-danger btn-delete" data-id="${reserva.ID_RESERVA}">Eliminar</button>
@@ -93,7 +120,6 @@ function cargarCedulaDesdeEmail() {
     fetch(`../PHP/Personas/listadoindividualcliente_process.php?email=${encodeURIComponent(email)}`)
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             if (data && data[0] && data[0].CEDULA) {
                 $('#cedula_cliente').val(data[0].CEDULA);
             } else {
@@ -105,22 +131,26 @@ function cargarCedulaDesdeEmail() {
         });
 }
 
-function cargarMesas(selectMesaId, inputHorarioId) {
-    $.get('../PHP/Mesas/listarMesasDisponibles.php', function (data) {
+// selectId puede ser #horario o #editar_horario
+function cargarHorariosDisponibles(selectId = '#horario') {
+    $.get('../PHP/Horarios/listarHorariosDisponibles.php', function (data) {
+        const horarios = JSON.parse(data);
+        const select = $(selectId);
+        select.empty().append('<option value="" disabled selected>Seleccione un horario</option>');
+        horarios.forEach(h => {
+            select.append(`<option value="${h.ID_HORARIO}">${h.HORA_EXACTA}</option>`);
+        });
+    });
+}
+
+// selectId puede ser #mesa o #editar_mesa
+function cargarMesasPorHorario(idHorario, selectId = '#mesa') {
+    $.get(`../PHP/Mesas/listarMesasPorHorario.php?id_horario=${idHorario}`, function (data) {
         const mesas = JSON.parse(data);
-        const select = $(selectMesaId);
+        const select = $(selectId);
         select.empty();
         mesas.forEach(m => {
-            select.append(`<option value="${m.ID_MESA}" data-horario="${m.HORA_EXACTA}">${m.NOMBRE_MESA}</option>`);
-        });
-
-        // Cargar horario inicial
-        const horarioInicial = select.find(':selected').data('horario');
-        $(inputHorarioId).val(horarioInicial);
-
-        select.on('change', function () {
-            const horario = $(this).find(':selected').data('horario');
-            $(inputHorarioId).val(horario);
+            select.append(`<option value="${m.ID_MESA}">${m.NOMBRE_MESA}</option>`);
         });
     });
 }

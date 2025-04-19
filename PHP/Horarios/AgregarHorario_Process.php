@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-if (isset($_POST['disponibilidad']) && isset($_POST['Hora'])) {
+if (isset($_POST['disponibilidad']) && isset($_POST['hora_exacta'])) {
 
     // Iniciamos la conexión
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
@@ -14,7 +14,8 @@ if (isset($_POST['disponibilidad']) && isset($_POST['Hora'])) {
 
     // Recuperamos las variables de POST
     $disponibilidad = $_POST['disponibilidad'];
-    $hora = $_POST['Hora'];  // Se espera el formato 'YYYY-MM-DD HH24:MI' o similar
+    $hora = str_replace("T", " ", $_POST['hora_exacta']);
+
 
     // Query para ejecutar el procedimiento almacenado
     $query = "BEGIN 
@@ -31,7 +32,6 @@ if (isset($_POST['disponibilidad']) && isset($_POST['Hora'])) {
     // Ejecutamos la consulta
     $Operacion = oci_execute($stmt);
 
-    // Comprobamos si la ejecución fue exitosa
     if ($Operacion) {
         echo json_encode(["success" => true, "message" => "Horario creado exitosamente"]);
     } else {
@@ -39,7 +39,6 @@ if (isset($_POST['disponibilidad']) && isset($_POST['Hora'])) {
         echo json_encode(["success" => false, "message" => "Error al crear horario", "error" => $e['message']]);
     }
 
-    // Liberamos los recursos
     oci_free_statement($stmt);
     oci_close($conn);
 
