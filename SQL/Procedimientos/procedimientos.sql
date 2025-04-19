@@ -295,3 +295,18 @@ END;
 SELECT * FROM VISTA_HORARIOS;
 
 
+
+------------------------------ Procedimiento para obtener pedidos cliente ----------------------------
+
+CREATE OR REPLACE PROCEDURE OBTENER_PEDIDOS_CLIENTE (
+    P_CEDULA IN NUMBER,
+    P_CURSOR OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CURSOR FOR
+        SELECT * 
+        FROM VISTA_PEDIDOS_CLIENTE
+        WHERE CEDULA_CLIENTE = P_CEDULA;
+END;
+/
