@@ -67,19 +67,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="ModificarHorarioForm">
+                        <form id="modificarHorarioForm">
                             <div class="form-group">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" value="" name="nombre" required >
+                                <label for="nombre">DISPONIBILIDAD</label>
+                                <input type="text" class="form-control" value="" name="disponibilidad" required >
                             </div>
                             <div class="form-group">
-                                <label for="precio">Precio</label>
-                                <input type="number" class="form-control" name="precio" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cantidad">Cantidad</label>
-                                <input type="number" class="form-control" name="cantidad" required>
-                            </div>
+                                <label for="precio">HORA</label>
+                                <input type="date" class="form-control" name="HORA_EXACTA" required>
+                            </div>                           
                             <button type="submit" class="btn btn-primary">Guardar cambios</button>
                         </form>
                     </div>

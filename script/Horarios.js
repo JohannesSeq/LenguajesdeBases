@@ -9,7 +9,7 @@ $(document).ready(function(){
         var disponibilidad = $('#disponibilidad').val();
         var Hora = $('#Hora').val();
         
-        // Realiza una petición AJAX para enviar los datos del nuevo platillo a agregarHorario_Process.php
+        // Realiza una petición AJAX para enviar los datos del nuevo Horario a agregarHorario_Process.php
         $.ajax({
             url: '../php/Horarios/AgregarHorario_Process.php',
             method: 'POST',
@@ -31,34 +31,33 @@ $(document).ready(function(){
 
     // Manejador para el botón de modificar Horario
     $(document).on('click', '.btn-modify', function () {
-        var horario_id = $(this).data('id'); // Obtiene el ID del Horario a modificar
-        console.log('ID_HORARIO:' + horario_id);
+        var ID_HORARIO = $(this).data('id'); // Obtiene el ID del Horario a modificar
+        console.log('ID_HORARIO:' + ID_HORARIO);
         // Realiza una petición AJAX para obtener los datos del Horario según su ID
         $.ajax({
-            url: '../PHP/Horarios/listadoplatilloindividual_process.php', // URL del archivo PHP que devolverá los detalles del platillo
+            url: '../PHP/Horarios/listarHorarios_process.php', // URL del archivo PHP que devolverá los detalles del Horario
             method: 'GET', // Método HTTP para solicitar los datos
-            // Envía el ID del platillo como parámetro
+            // Envía el ID del Horario como parámetro
             data: {
-                 id: platillo_id  
+                 id: ID_HORARIO  
                 }, 
             
             success: function (response) {
                 
-                var platillo = JSON.parse(response); // Parse la respuesta JSON
-                console.log(platillo);
+                var Horarios = JSON.parse(response); // Parse la respuesta JSON
+                console.log(Horarios);
 
                 if (response.error) {
 
                     alert(response.error); // Muestra un mensaje de error si lo hay
 
                 } else {
-                    // Muestra el modal para modificar el platillo
-                    $('#modificarplatillomodal').modal('show'); 
-                    // Rellena el formulario modal con los datos del platillo para su modificación
-                    $('#modificarplatillomodal input[name="nombre"]').val(platillo[0].NOMBRE_PLATILLO);
-                    $('#modificarplatillomodal input[name="precio"]').val(platillo[0].PRECIO_UNITARIO);
-                    $('#modificarplatillomodal input[name="cantidad"]').val(platillo[0].CANTIDAD);
-                    $('#modificarplatillomodal').data('id', platillo_id); // Guarda el ID del platillo en el modal
+                    // Muestra el modal para modificar el Horario
+                    $('#modificarhorariomodal').modal('show'); 
+                    // Rellena el formulario modal con los datos del horario para su modificación
+                    $('#modificarhorariomodal input[name="disponibilidad"]').val(Horarios[0].DISPONIBILIDAD);
+                    $('#modificarhorariomodal input[name="HORA_EXACTA"]').val(Horarios[0].HORA_EXACTA);
+                    $('#modificarhorariomodal').data('id', ID_HORARIO); // Guarda el ID del horario en el modal
 
                 }
             },
@@ -68,27 +67,27 @@ $(document).ready(function(){
         });
     });
 
-    // Manejador para el envío del formulario de modificar platillo
-    $('#ModificarPlatilloForm').on('submit', function (e) {
+    // Manejador para el envío del formulario de modificar horario
+    $('#ModificarHorarioForm').on('submit', function (e) {
         e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
-        var platillo_id = $('#modificarplatillomodal').data('id');  // Obtiene el ID del platillo a modificar
-        var formData = $(this).serialize() + '&id=' + platillo_id;  // Serializa los datos del formulario y añade el ID del platillo
+        var ID_HORARIO = $('#modificarhorariomodal').data('id');  // Obtiene el ID del horario a modificar
+        var formData = $(this).serialize() + '&id=' + ID_HORARIO;  // Serializa los datos del formulario y añade el ID del horario
 
-        // Realiza una petición AJAX para actualizar los datos del platillo
+        // Realiza una petición AJAX para actualizar los datos del horario
         $.ajax({
-            url: '../PHP/Platillos/modificarplatillo_process.php', // URL del archivo PHP que procesará la solicitud de actualización
+            url: '../PHP/Horarios/modificarhorario_process.php', // URL del archivo PHP que procesará la solicitud de actualización
             method: 'POST', // Método HTTP para enviar los datos actualizados
             data: formData, // Envía los datos del formulario
             success: function (response) {
                 if (response.error) {
-                    dispararAlertaError("Error actualizando el platillo");
+                    dispararAlertaError("Error actualizando el horario");
                     console.error(response);
                     alert(response); // Muestra la respuesta en un alert
                 } else {
-                    dispararAlertaExito("Platillo actualizado correctamente"); // Muestra un mensaje de éxito
+                    dispararAlertaExito("horario actualizado correctamente"); // Muestra un mensaje de éxito
                     location.reload();  
-                    $('#modificarplatillomodal').modal('hide'); // Oculta el modal
+                    $('#modificarhorariomodal').modal('hide'); // Oculta el modal
                 }
             },
             error: function (error) {
