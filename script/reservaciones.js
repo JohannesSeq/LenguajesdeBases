@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    console.log("reservaciones.js cargado");
     cargarCedulaDesdeEmail();
     cargarMesas('#mesa', '#horario_mesa');
     cargarMesas('#editar_mesa', '#editar_horario');
@@ -105,7 +106,7 @@ function cargarCedulaDesdeEmail() {
 }
 
 function cargarMesas(selectMesaId, inputHorarioId) {
-    $.get('../PHP/Reservaciones/listarMesasDisponibles.php', function (data) {
+    $.get('../PHP/Mesas/listarMesasDisponibles.php', function (data) {
         const mesas = JSON.parse(data);
         const select = $(selectMesaId);
         select.empty();

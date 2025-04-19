@@ -107,6 +107,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="../script/permissions.js"></script>
 <script src="../script/cookie_management.js"></script>
-<script src="../script/reservaciones.js"></script>
+<script src="../script/reservaciones.js?v=1.0"></script>
 </body>
 </html>
