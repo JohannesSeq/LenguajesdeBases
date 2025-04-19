@@ -258,7 +258,7 @@ SELECT
 FROM PEDIDOS P
 JOIN PERSONAS PER ON PER.CEDULA = P.CEDULA_CLIENTE;
 
----- Vista Mesas -------------------------------------
+------------------------ Vista Mesas -------------------------------------
 
 CREATE OR REPLACE VIEW VISTA_MESAS AS
 SELECT
@@ -272,3 +272,18 @@ JOIN
     ESTADOS E ON M.ID_ESTADO = E.ID_ESTADO
 WHERE
     E.ESTADO = 'Activo';
+
+---------------------- Vista de Mesas Disponibles -------------------------------
+
+CREATE OR REPLACE VIEW VISTA_MESAS_DISPONIBLES AS
+SELECT
+    M.ID_MESA,
+    M.NOMBRE_MESA,
+    M.ID_HORARIO,
+    H.HORA_EXACTA
+FROM
+    MESAS M
+JOIN ESTADOS E ON M.ID_ESTADO = E.ID_ESTADO
+JOIN HORARIOS_MESA H ON M.ID_HORARIO = H.ID_HORARIO
+WHERE
+    E.ESTADO = 'Activo' AND H.DISPONIBILIDAD = 'Disponible';
