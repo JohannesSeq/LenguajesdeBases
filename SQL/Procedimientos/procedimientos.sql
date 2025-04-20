@@ -311,3 +311,98 @@ BEGIN
         WHERE CEDULA_CLIENTE = P_CEDULA;
 END;
 /
+
+------------------------------ Procedimiento para obtener pedidos cliente ----------------------------
+/*
+CREATE OR REPLACE PROCEDURE CREAR_HORARIO_MESA (
+    P_DISPONIBILIDAD    VARCHAR,
+    P_HORA_EXACTA       DATE,
+    P_COMENTARIO        VARCHAR
+)
+AS
+    V_ID_HORARIO   NUMBER;
+    V_ESTADO_ID    VARCHAR2(250);
+BEGIN
+    -- Insertar nuevo horario (sin especificar ID_HORARIO)
+    INSERT INTO HORARIOS_MESA (DISPONIBILIDAD, HORA_EXACTA, ID_ESTADO)
+    VALUES (P_DISPONIBILIDAD, P_HORA_EXACTA, NULL) 
+    RETURNING ID_HORARIO INTO V_ID_HORARIO;
+
+    -- Crear entrada en historial de estados
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_HORARIO), 'HORARIOS_MESA', P_COMENTARIO);
+
+    -- Actualizar el horario con el ID de estado
+    UPDATE HORARIOS_MESA
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_HORARIO = V_ID_HORARIO;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20002, 'Error al crear el horario: ' || SQLERRM);
+END CREAR_HORARIO_MESA;
+/
+*/
+
+CREATE OR REPLACE PROCEDURE CREAR_METODO_PAGO (
+    P_NOMBRE_METODO    VARCHAR2,
+    P_DESCRIPCION      VARCHAR2,
+    P_COMENTARIO       VARCHAR2
+)
+AS
+    V_ID_METODO   NUMBER;
+    V_ESTADO_ID   VARCHAR2(250);
+BEGIN
+    -- Validar entrada mínima
+    IF P_NOMBRE_METODO IS NULL OR P_DESCRIPCION IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, 'El nombre y la descripción del método de pago son obligatorios.');
+    END IF;
+
+    -- Insertar nuevo método de pago (ID_ESTADO se actualiza después)
+    INSERT INTO METODO_PAGO (NOMBRE_METODO, DESCRIPCION, ID_ESTADO)
+    VALUES (P_NOMBRE_METODO, P_DESCRIPCION, NULL)
+    RETURNING ID_METODO INTO V_ID_METODO;
+
+    -- Crear entrada en historial de estados
+    V_ESTADO_ID := CREAR_ENTRADA_ESTADO(TO_CHAR(V_ID_METODO), 'METODO_PAGO', P_COMENTARIO);
+
+    -- Actualizar el método con el ID de estado generado
+    UPDATE METODO_PAGO
+    SET ID_ESTADO = V_ESTADO_ID
+    WHERE ID_METODO = V_ID_METODO;
+
+    -- Confirmar transacción
+    COMMIT;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Deshacer cambios y mostrar mensaje personalizado
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20002, 'Error al crear el método de pago: ' || SQLERRM);
+END CREAR_METODO_PAGO;
+/
+
+
+DECLARE
+    -- Parámetros de entrada para el procedimiento
+    V_NOMBRE_METODO   VARCHAR2(50) := 'Tarjeta de Crédito';
+    V_DESCRIPCION     VARCHAR2(250) := 'Pago mediante tarjeta de crédito bancaria.';
+    V_COMENTARIO      VARCHAR2(250) := 'Método de pago creado desde script de prueba.';
+BEGIN
+    -- Llamar al procedimiento
+    CREAR_METODO_PAGO(
+        P_NOMBRE_METODO => V_NOMBRE_METODO,
+        P_DESCRIPCION   => V_DESCRIPCION,
+        P_COMENTARIO    => V_COMENTARIO
+    );
+
+    DBMS_OUTPUT.PUT_LINE('Método de pago creado correctamente.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
+
+SELECT * FROM METODO_PAGO;
