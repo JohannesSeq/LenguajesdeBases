@@ -52,3 +52,23 @@ FOR EACH ROW
 BEGIN
     RAISE_APPLICATION_ERROR(-20003, 'No se permite eliminar usuarios del sistema.');
 END;
+
+
+--- Trigger que evita que se inserten empleados cuyo rol no sea Empleado o gerente
+
+CREATE OR REPLACE TRIGGER TRG_VALIDAR_ROL_EMPLEADO
+BEFORE INSERT ON EMPLEADOS
+FOR EACH ROW
+DECLARE
+    V_ROL VARCHAR(50);
+BEGIN
+    SELECT ID_ROL_PERSONA
+    INTO V_ROL
+    FROM PERSONAS
+    WHERE CEDULA = :NEW.CEDULA;
+
+    IF V_ROL NOT IN ('Empleado', 'Gerente') THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Solo se permiten personas con rol Empleado o Gerente.');
+    END IF;
+END;
+/
