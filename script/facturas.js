@@ -1,79 +1,97 @@
 $(document).ready(function () {
-    cargarFacturas();
+    listarFacturas();
 
-    // Ver detalle
-    $(document).on('click', '.btn-ver', function () {
-        const idFactura = $(this).data('id');
+    // Editar Factura
+    $(document).on('click', '.btn-edit', function () {
+        const id = $(this).data('id');
 
-        $.ajax({
-            url: '../PHP/Facturas/listadoFacturaIndividual_Process.php',
-            method: 'GET',
-            data: { id: idFactura },
-            success: function (data) {
-                const factura = JSON.parse(data)[0];
-
-                $('#detalleFacturaModal #detalle_id').text(factura.ID_FACTURA);
-                $('#detalleFacturaModal #detalle_fecha').text(factura.FECHA);
-                $('#detalleFacturaModal #detalle_monto').text(factura.MONTO_TOTAL);
-                $('#detalleFacturaModal #detalle_cliente').text(factura.NOMBRE_CLIENTE);
-                $('#detalleFacturaModal #detalle_vuelto').text(factura.VUELTO);
-
-                $('#detalleFacturaModal').modal('show');
-            }
+        $.get('../PHP/Facturas/listadoFacturaIndividual_Process.php', { id }, function (res) {
+            const f = JSON.parse(res)[0];
+            $('#editar_id_factura').val(f.ID_FACTURA);
+            $('#editar_vuelto').val(f.VUELTO);
+            $('#editar_descuento').val(f.DESCUENTO);
+            $('#editar_iva').val(f.IVA);
+            cargarMetodosPago('#editar_metodo', f.METODO_PAGO);
+            $('#modalEditarFactura').modal('show');
         });
     });
 
-    // Descargar PDF
-    $(document).on('click', '.btn-pdf', function () {
-        const row = $(this).closest('tr');
-        const doc = new jspdf.jsPDF();
+    $('#formEditarFactura').submit(function (e) {
+        e.preventDefault();
 
-        const factura = {
-            id: row.find('td:eq(0)').text(),
-            fecha: row.find('td:eq(1)').text(),
-            monto: row.find('td:eq(2)').text(),
-            cliente: row.find('td:eq(3)').text(),
-            direccion: row.find('td:eq(4)').text(),
-            telefono: row.find('td:eq(5)').text()
+        const data = {
+            id: $('#editar_id_factura').val(),
+            metodo: $('#editar_metodo').val(),
+            vuelto: $('#editar_vuelto').val(),
+            descuento: $('#editar_descuento').val(),
+            iva: $('#editar_iva').val()
         };
 
-        doc.text('Factura', 20, 20);
-        doc.text(`ID: ${factura.id}`, 20, 40);
-        doc.text(`Fecha: ${factura.fecha}`, 20, 50);
-        doc.text(`Cliente: ${factura.cliente}`, 20, 60);
-        doc.text(`Monto: ${factura.monto}`, 20, 70);
-        doc.text(`Dirección: ${factura.direccion}`, 20, 80);
-        doc.text(`Teléfono: ${factura.telefono}`, 20, 90);
+        $.post('../PHP/Facturas/modificarFactura_Process.php', data, function () {
+            Swal.fire("Actualizado", "Factura modificada correctamente", "success").then(() => location.reload());
+        });
+    });
 
-        doc.save(`factura_${factura.id}.pdf`);
+    // Eliminar Factura
+    $(document).on('click', '.btn-delete', function () {
+        const id = $(this).data('id');
+        Swal.fire({
+            title: '¿Eliminar factura?',
+            input: 'text',
+            inputLabel: 'Comentario',
+            inputPlaceholder: 'Motivo de eliminación',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            preConfirm: (comentario) => {
+                if (!comentario) {
+                    Swal.showValidationMessage('El comentario es obligatorio');
+                }
+                return comentario;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post('../PHP/Facturas/eliminarFactura_Process.php', { id: id, comentario: result.value }, function () {
+                    Swal.fire("Eliminado", "Factura eliminada correctamente", "success").then(() => location.reload());
+                });
+            }
+        });
     });
 });
 
-function cargarFacturas() {
-    $.ajax({
-        url: '../PHP/Facturas/listarFacturas_Process.php',
-        method: 'GET',
-        success: function (data) {
-            const facturas = JSON.parse(data);
-            const tbody = $('#facturaList');
-            tbody.empty();
+function listarFacturas() {
+    $.get('../PHP/Facturas/listarFacturas_Process.php', function (data) {
+        const facturas = JSON.parse(data);
+        const tbody = $('#tablaFacturas tbody');
+        tbody.empty();
 
-            facturas.forEach(f => {
-                const fila = `<tr>
-                    <td>${f.ID_FACTURA}</td>
-                    <td>${f.FECHA}</td>
-                    <td>${f.MONTO_TOTAL}</td>
-                    <td>${f.NOMBRE_CLIENTE}</td>
-                    <td>${f.DIRECCION}</td>
-                    <td>${f.TELEFONO}</td>
-                    <td>${f.ID_PEDIDO}</td>
-                    <td>
-                        <button class="btn btn-info btn-ver" data-id="${f.ID_FACTURA}">Ver</button>
-                        <button class="btn btn-success btn-pdf">PDF</button>
-                    </td>
-                </tr>`;
-                tbody.append(fila);
-            });
-        }
+        facturas.forEach(f => {
+            const fila = `<tr>
+                <td>${f.ID_FACTURA}</td>
+                <td>${f.CLIENTE}</td>
+                <td>${f.ID_PEDIDO}</td>
+                <td>${f.METODO_PAGO}</td>
+                <td>${f.MONTO_TOTAL}</td>
+                <td>${f.VUELTO}</td>
+                <td>${f.DESCUENTO}</td>
+                <td>${f.IVA}</td>
+                <td>${f.ESTADO}</td>
+                <td>
+                    <button class="btn btn-primary btn-edit" data-id="${f.ID_FACTURA}">Modificar</button>
+                    <button class="btn btn-danger btn-delete" data-id="${f.ID_FACTURA}">Eliminar</button>
+                </td>
+            </tr>`;
+            tbody.append(fila);
+        });
+    });
+}
+
+function cargarMetodosPago(selectId, valorSeleccionado) {
+    $.get('../PHP/MetodoPago/listarMetodoPago_Process.php', function (data) {
+        const metodos = JSON.parse(data);
+        const select = $(selectId);
+        select.empty();
+        metodos.forEach(m => {
+            select.append(`<option value="${m.ID_METODO}" ${m.NOMBRE_METODO === valorSeleccionado ? 'selected' : ''}>${m.NOMBRE_METODO}</option>`);
+        });
     });
 }
