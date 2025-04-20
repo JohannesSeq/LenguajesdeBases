@@ -60,7 +60,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="facturasyPedidosDropdown">
                                     <a class="dropdown-item" href="mostrarPedidos.php">Manejar pedidos</a>
-                                    <a class="dropdown-item" href="listadoFacturas.php">Manejar metodos de pago</a>
+                                    <a class="dropdown-item" href="mostrarMetodoPago.php">Manejar metodos de pago</a>
                                     <a class="dropdown-item" href="agregarFactura.php">Manejar Facturas</a>
                                     <a class="dropdown-item" href="mostrarReservaciones.php">Manejar Reservaciones</a>
                                 </div>
@@ -92,7 +92,7 @@
                                     <a class="dropdown-item" href="mostrarRol_persona.php">Manejar los roles de acceso</a>
                                     <a class="dropdown-item" href="mostrarPuestos.php">Manejar Puestos</a>
                                     <a class="dropdown-item" href="mostrarDepartamentos.php">Manejar Departamentos</a>
-                                    <a class="dropdown-item" href="agregarEmpleado.php">Manejar Empleados</a>
+                                    <a class="dropdown-item" href="mostrarEmpleados.php">Manejar Empleados</a>
                                 </div>
                             </li>';
                         }

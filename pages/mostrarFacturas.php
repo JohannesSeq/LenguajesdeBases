@@ -3,68 +3,77 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Facturas - Restaurante Playa Cacao</title>
+    <title>Facturación - Restaurante Playa Cacao</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style/style.css">
-    <style>
-        .factura-list {
-            padding: 50px 0;
-        }
-
-        .factura-list .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-    </style>
 </head>
 
+<body onload="Check_Permissions('Administrador'); listarFacturas();">
+    <?php include_once 'header.php'; ?>
 
-<?php include_once 'header.php'; ?>
-    <body onload = "Check_Permissions('Vendedor')" ></body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Facturas Generadas</h1>
+        <table class="table table-striped" id="tablaFacturas">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Pedido</th>
+                    <th>Método Pago</th>
+                    <th>Total</th>
+                    <th>Vuelto</th>
+                    <th>Descuento</th>
+                    <th>IVA</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- JS llenará dinámicamente -->
+            </tbody>
+        </table>
+    </div>
 
-    <div class="container-fluid mt-3">
-        <div class="jumbotron">
-            <h1 class="display-4">Listado de Facturas</h1>
-            <p class="lead">Visualiza todas las facturas junto con la información del pedido asociado.</p>
-            <hr class="my-4">
+    <!-- Modal Editar Factura -->
+    <div class="modal fade" id="modalEditarFactura" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modificar Factura</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarFactura">
+                        <input type="hidden" id="editar_id_factura">
+                        <div class="form-group">
+                            <label for="editar_metodo">Método de Pago</label>
+                            <select class="form-control" id="editar_metodo" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editar_vuelto">Vuelto</label>
+                            <input type="number" class="form-control" id="editar_vuelto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editar_descuento">Descuento</label>
+                            <input type="number" class="form-control" id="editar_descuento">
+                        </div>
+                        <div class="form-group">
+                            <label for="editar_iva">IVA</label>
+                            <input type="number" class="form-control" id="editar_iva">
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <section class="factura-list">
-        <div class="container">
-            <h2>Facturas</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID Factura</th>
-                        <th>Fecha</th>
-                        <th>Monto Total</th>
-                        <th>Cliente</th>
-                        <th>Dirección</th>
-                        <th>Teléfono</th>
-                        <th>Detalle Pedido</th>
-                        <th>Acciones</th> <!-- Added column for actions -->
-                    </tr>
-                </thead>
-                <tbody id="facturaList">
-                    <!-- Facturas will be loaded here by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </section>
-
     <?php include_once 'footer.php'; ?>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> <!-- Added jsPDF library -->
-    <script src="../script/facturaController.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="../script/permissions.js"></script>
-    <script src="../script/cookie_management.js"></script>
+    <script src="../script/facturas.js"></script>
 </body>
 
 </html>
