@@ -61,7 +61,7 @@
                                 <div class="dropdown-menu" aria-labelledby="facturasyPedidosDropdown">
                                     <a class="dropdown-item" href="mostrarPedidos.php">Manejar pedidos</a>
                                     <a class="dropdown-item" href="mostrarMetodoPago.php">Manejar metodos de pago</a>
-                                    <a class="dropdown-item" href="agregarFactura.php">Manejar Facturas</a>
+                                    <a class="dropdown-item" href="mostrarFacturas.php">Manejar Facturas</a>
                                     <a class="dropdown-item" href="mostrarReservaciones.php">Manejar Reservaciones</a>
                                 </div>
                             </li>
