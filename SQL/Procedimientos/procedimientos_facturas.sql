@@ -65,7 +65,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_FACTURAS AS
 
         -- Cambio de estado del pedido
         UPDATE PEDIDOS
-        SET ESTADO_PEDIDO = 'En preparación'
+        SET ESTADO_PEDIDO = 'En preparacion'
         WHERE ID_PEDIDO = P_ID_PEDIDO;
 
         COMMIT;
