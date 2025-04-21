@@ -4,9 +4,8 @@
 
     if (file_exists($envPath)) {
         $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
         foreach ($lines as $line) {
-            if (strpos(trim($line), '#') === 0) continue; // Ignorar comentarios
+            if (strpos(trim($line), '#') === 0) continue;
             list($key, $value) = explode('=', $line, 2);
             putenv(trim("$key=$value"));
         }
@@ -15,17 +14,15 @@
         exit;
     }
 
-    // Obtener tipo de borrado desde la variable de entorno
     $tipo = getenv("BORRADO_PLATILLO");
 
     if (!$tipo) {
-        echo json_encode(['error' => 'La variable BORRADO_PLATILLO no está definida en el .env']);
+        echo json_encode(['error' => 'Variable BORRADO_PLATILLO no configurada en el .env']);
         exit;
     }
 
-    // Procesar eliminación
     if (isset($_POST['id'])) {
-        $id = $_POST['id']; // ID del platillo
+        $id = (int) $_POST['id']; // ✅ convertir explícitamente a número
 
         $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
@@ -55,8 +52,6 @@
         oci_free_statement($stmt);
         oci_close($conn);
     } else {
-        echo json_encode([
-            'error' => 'Falta parámetro: id'
-        ]);
+        echo json_encode(['error' => 'Falta parámetro: id']);
     }
 ?>

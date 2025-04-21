@@ -131,7 +131,7 @@ END;
 /
 
 ------------------------------ BORRADO LOGICO -----------------------------------------
-CREATE OR REPLACE PROCEDURE BORRADO_LOGICO(
+/*CREATE OR REPLACE PROCEDURE BORRADO_LOGICO(
     P_TABLA VARCHAR,
     P_ID VARCHAR,
     P_COMENTARIO VARCHAR
@@ -145,6 +145,25 @@ BEGIN
 
     UPDATE ESTADOS
     SET ESTADO = 'Inactivo', FECHA_CAMBIO = CURRENT_DATE
+    WHERE ID_ESTADO = V_ESTADO_ID;
+
+    COMMIT;
+END;
+/*/
+
+CREATE OR REPLACE PROCEDURE BORRADO_LOGICO(
+    P_TABLA IN VARCHAR,
+    P_ID IN NUMBER,
+    P_COMENTARIO IN VARCHAR
+)
+AS
+    V_ESTADO_ID VARCHAR(250);
+BEGIN
+    V_ESTADO_ID := 'ST_' || TO_CHAR(P_ID) || '_' || P_TABLA;
+
+    UPDATE ESTADOS
+    SET ESTADO = 'Inactivo',
+        FECHA_CAMBIO = CURRENT_DATE
     WHERE ID_ESTADO = V_ESTADO_ID;
 
     COMMIT;
@@ -415,15 +434,15 @@ CREATE OR REPLACE PROCEDURE ELIMINAR_PLATILLO (
 AS
     V_ID_ESTADO VARCHAR(250);
 BEGIN
-    -- Obtener el ID_ESTADO del platillo antes de eliminarlo
+    -- Obtener ID del estado asociado
     SELECT ID_ESTADO INTO V_ID_ESTADO
     FROM PLATILLOS
     WHERE ID_PLATILLO = P_ID_PLATILLO;
 
-    -- Eliminar el platillo
+    -- Eliminar platillo
     DELETE FROM PLATILLOS WHERE ID_PLATILLO = P_ID_PLATILLO;
 
-    -- Eliminar el estado asociado
+    -- Eliminar estado asociado
     DELETE FROM ESTADOS WHERE ID_ESTADO = V_ID_ESTADO;
 
     COMMIT;
