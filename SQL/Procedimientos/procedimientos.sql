@@ -406,3 +406,26 @@ END;
 /
 
 SELECT * FROM METODO_PAGO;
+
+------- Procedimiento eliminar platillo físico ---------------------
+
+CREATE OR REPLACE PROCEDURE ELIMINAR_PLATILLO (
+    P_ID_PLATILLO IN NUMBER
+)
+AS
+    V_ID_ESTADO VARCHAR(250);
+BEGIN
+    -- Obtener el ID_ESTADO del platillo antes de eliminarlo
+    SELECT ID_ESTADO INTO V_ID_ESTADO
+    FROM PLATILLOS
+    WHERE ID_PLATILLO = P_ID_PLATILLO;
+
+    -- Eliminar el platillo
+    DELETE FROM PLATILLOS WHERE ID_PLATILLO = P_ID_PLATILLO;
+
+    -- Eliminar el estado asociado
+    DELETE FROM ESTADOS WHERE ID_ESTADO = V_ID_ESTADO;
+
+    COMMIT;
+END;
+/
