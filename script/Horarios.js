@@ -98,6 +98,7 @@ function listahorarios() {
                         <td>${h.HORA_EXACTA}</td>
                         <td>
                             <button class="btn btn-primary btn-modify" data-id="${h.ID_HORARIO}">Modificar</button>
+                            <button class="btn btn-danger btn-delete" data-id="${h.ID_HORARIO}">Eliminar</button>
                         </td>
                     </tr>
                 `;
@@ -127,3 +128,39 @@ function dispararAlertaError(mensaje) {
         confirmButtonText: 'Ok'
     });
 }
+
+$(document).on('click', '.btn-delete', function () {
+    const id = $(this).data('id');
+
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esta acción.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../PHP/Horarios/eliminarHorario_Process.php',
+                method: 'POST',
+                data: { id },
+                success: function (data) {
+                    const res = JSON.parse(data);
+
+                    if (res.resultado === "TIPO_INVALIDO") {
+                        dispararAlertaError("Tipo de borrado inválido.");
+                    } else if (res.resultado === "REFERENCIAS_ACTIVAS") {
+                        dispararAlertaError("No se puede eliminar: el horario está en uso.");
+                    } else {
+                        dispararAlertaExito(`Horario eliminado correctamente (${res.resultado}).`);
+                    }
+                },
+                error: function () {
+                    dispararAlertaError("Hubo un error al intentar eliminar el horario.");
+                }
+            });
+        }
+    });
+});
