@@ -1,5 +1,6 @@
 ------------------- Funcion para calcular el monto total de un pedido --------------------------
 
+/*
 CREATE OR REPLACE FUNCTION CALCULAR_TOTAL_PEDIDO(
     P_ID_PEDIDO NUMBER
 ) 
@@ -204,3 +205,4 @@ BEGIN
     COMMIT;
 END;
 /
+*/
