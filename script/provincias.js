@@ -20,7 +20,7 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
-                $('#Agregar_Provincia_Form').modal('hide');
+                $('#modalAgregarProvincia').modal('hide');
                 dispararAlertaExito("Provincia agregada correctamente");
             }
         });

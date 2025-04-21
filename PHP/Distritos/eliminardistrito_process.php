@@ -31,7 +31,7 @@
                   END;";
 
         $stmt = oci_parse($conn, $query);
-        
+
         oci_bind_by_name($stmt, ":P_ID_DISTRITO", $id);
         oci_bind_by_name($stmt, ":P_TIPO", $tipo);
         oci_bind_by_name($stmt, ":P_COMENTARIO", $comentario);
@@ -43,7 +43,7 @@
             'resultado' => $resultado,
             'mensaje' => $resultado === 'TIPO_INVALIDO' 
                 ? 'Tipo de borrado inválido' 
-                : 'Platillo eliminado correctamente (' . $resultado . ')'
+                : 'Distrito eliminado correctamente (' . $resultado . ')'
         ]);
 
         oci_free_statement($stmt);

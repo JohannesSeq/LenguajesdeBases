@@ -43,7 +43,7 @@
             'resultado' => $resultado,
             'mensaje' => $resultado === 'TIPO_INVALIDO' 
                 ? 'Tipo de borrado inválido' 
-                : 'Platillo eliminado correctamente (' . $resultado . ')'
+                : 'Provincia eliminada correctamente (' . $resultado . ')'
         ]);
 
         oci_free_statement($stmt);

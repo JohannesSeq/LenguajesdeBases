@@ -42,6 +42,7 @@ $(document).ready(function(){
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
                 dispararAlertaExito("Persona agregada correctamente");
+                $('#modalAgregarPersona').modal('hide');
             }
         });
     });
@@ -114,8 +115,6 @@ $(document).ready(function(){
                     alert(response); // Muestra la respuesta en un alert
                 } else {
                     dispararAlertaExito("Persona actualizada correctamente"); // Muestra un mensaje de éxito
-                    
-                    location.reload();  
                     $('#modificarpersonamodal').modal('hide'); // Oculta el modal
                 }
             },
@@ -284,7 +283,7 @@ function dispararAlertaExito(mensaje) {
         title: mensaje, // Título de la alerta
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload();  // Recarga la página después de cerrar la alerta
+        listadopersonas();  // Recarga la página después de cerrar la alerta
     });
 }
 // Función para mostrar una alerta de error usando SweetAlert2
@@ -294,7 +293,7 @@ function dispararAlertaError(mensaje) {
         title: mensaje,
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload(); // Recarga la página después de cerrar la alerta
+        listadopersonas(); // Recarga la página después de cerrar la alerta
     });
 }
 

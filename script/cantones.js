@@ -21,7 +21,7 @@ $(document).ready(function(){
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
                 dispararAlertaExito("Canton agregado correctamente");
-                $('#Agregar_Canton_Form').modal('hide'); 
+                $('#modalAgregarCanton').modal('hide'); 
             }
         });
     });

@@ -22,7 +22,7 @@ $(document).ready(function(){
                 // Muestra una alerta de éxito y recarga la página
                 dispararAlertaExito("Distrito agregado correctamente");
                 listadodistritos();
-                $('#Agregar_Distrito_Form').modal('hide');
+                $('#modalAgregarProvincia').modal('hide');
             }
         });
     });

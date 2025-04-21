@@ -36,8 +36,8 @@ $(document).ready(function(){
                     dispararAlertaError("Error creando el rol");
                 } else {
                     console.log(response);
+                    $('#Agregar_Rol_persona_Form').modal('hide');
                     dispararAlertaExito("Rol agregado correctamente");
-                    location.reload();  
                 }
 
 
@@ -143,8 +143,6 @@ $(document).ready(function(){
                         } else {
 
                             dispararAlertaExito("El rol ha sido eliminado."); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de Roles_persona
-
                         }
                     },
                     error: function (error) {
@@ -196,7 +194,7 @@ function dispararAlertaExito(mensaje) {
         title: mensaje, // Título de la alerta
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload();  // Recarga la página después de cerrar la alerta
+        listadoroles_persona();  // Recarga la página después de cerrar la alerta
     });
 }
 // Función para mostrar una alerta de error usando SweetAlert2
@@ -206,7 +204,7 @@ function dispararAlertaError(mensaje) {
         title: mensaje,
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload(); // Recarga la página después de cerrar la alerta
+        listadoroles_persona(); // Recarga la página después de cerrar la alerta
     });
 }
 

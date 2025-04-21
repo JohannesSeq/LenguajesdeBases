@@ -2,7 +2,10 @@
 header("Content-Type: application/json");
 $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
-$sql = "BEGIN PKG_PUESTOS.ENVIO_TOTAL_PUESTOS(:cursor); END;";
+$sql = "BEGIN 
+            PKG_PUESTOS.ENVIO_TOTAL_PUESTOS(:cursor); 
+        END;";
+        
 $stmt = oci_parse($conn, $sql);
 
 $cursor = oci_new_cursor($conn);
