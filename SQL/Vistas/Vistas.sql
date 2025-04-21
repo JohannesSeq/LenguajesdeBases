@@ -104,7 +104,6 @@ FROM
     JOIN ESTADOS EST ON E.ID_ESTADO = EST.ID_ESTADO
 WHERE 
     EST.ESTADO = 'Activo';
-/
 
 
 ------------------------------ VISTA PLATILLOS --------------------------------------
@@ -342,7 +341,7 @@ SELECT
 FROM METODO_PAGO M
 JOIN ESTADOS E ON M.ID_ESTADO = E.ID_ESTADO
 WHERE E.ESTADO = 'Activo';
-/
+
 
 
 -------------------- Vista Facturas ---------------------
@@ -365,4 +364,3 @@ JOIN PERSONAS P ON F.CEDULA_CLIENTE = P.CEDULA
 JOIN METODO_PAGO MP ON F.ID_METODO = MP.ID_METODO
 JOIN ESTADOS ES ON F.ID_ESTADO = ES.ID_ESTADO
 WHERE ES.ESTADO = 'Activo';
-/

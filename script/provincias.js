@@ -20,8 +20,8 @@ $(document).ready(function(){
             // Muestra una alerta de éxito y recarga la página
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
+                $('#Agregar_Provincia_Form').modal('hide');
                 dispararAlertaExito("Provincia agregada correctamente");
-                location.reload();  
             }
         });
     });
@@ -120,8 +120,6 @@ $(document).ready(function(){
                         } else {
 
                             dispararAlertaExito("La provincia ha sido eliminado."); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de provincias
-
                         }
                     },
                     error: function (error) {
@@ -171,7 +169,7 @@ function dispararAlertaExito(mensaje) {
         title: mensaje, // Título de la alerta
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload();  // Recarga la página después de cerrar la alerta
+        listadoprovincias();  // Recarga la página después de cerrar la alerta
     });
 }
 // Función para mostrar una alerta de error usando SweetAlert2
@@ -181,7 +179,7 @@ function dispararAlertaError(mensaje) {
         title: mensaje,
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload(); // Recarga la página después de cerrar la alerta
+        listadoprovincias(); // Recarga la página después de cerrar la alerta
     });
 }
 

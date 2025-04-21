@@ -188,7 +188,7 @@
                         Swal.fire("Error", "No se pudo obtener la cédula del cliente", "error");
                     }
                 })
-                .catch(() => {
+                .catch((error) => {
                     Swal.fire("Error", "Fallo la consulta del cliente", "error");
                 });
         }

@@ -21,7 +21,8 @@ $(document).ready(function(){
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
                 dispararAlertaExito("Distrito agregado correctamente");
-                location.reload();  
+                listadodistritos();
+                $('#Agregar_Distrito_Form').modal('hide');
             }
         });
     });
@@ -82,7 +83,7 @@ $(document).ready(function(){
                     alert(response); // Muestra la respuesta en un alert
                 } else {
                     dispararAlertaExito("Distrito actualizado correctamente"); // Muestra un mensaje de éxito
-                    location.reload();  
+                    listadodistritos();  
                     $('#modificardistritomodal').modal('hide'); // Oculta el modal
                 }
             },
@@ -120,7 +121,7 @@ $(document).ready(function(){
                         } else {
 
                             dispararAlertaExito("El distrito ha sido eliminado."); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de distritos
+                            listadodistritos();  // Recarga la lista de distritos
 
                         }
                     },

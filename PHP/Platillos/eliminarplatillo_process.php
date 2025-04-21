@@ -22,7 +22,7 @@
     }
 
     if (isset($_POST['id'])) {
-        $id = (int) $_POST['id']; // ✅ convertir explícitamente a número
+        $id = (int) $_POST['id'];
 
         $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 

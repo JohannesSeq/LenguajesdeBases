@@ -14,7 +14,6 @@ if (file_exists($envPath)) {
     exit;
 }
 
-// ✅ Variable global compartida por todos los eliminar
 $tipo = getenv("TIPO_BORRADO");
 
 if (!$tipo) {

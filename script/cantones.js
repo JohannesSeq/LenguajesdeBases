@@ -21,7 +21,7 @@ $(document).ready(function(){
             success: function (response) {
                 // Muestra una alerta de éxito y recarga la página
                 dispararAlertaExito("Canton agregado correctamente");
-                location.reload();  
+                $('#Agregar_Canton_Form').modal('hide'); 
             }
         });
     });
@@ -82,7 +82,6 @@ $(document).ready(function(){
                     alert(response); // Muestra la respuesta en un alert
                 } else {
                     dispararAlertaExito("canton actualizado correctamente"); // Muestra un mensaje de éxito
-                    location.reload();  
                     $('#modificarcantonmodal').modal('hide'); // Oculta el modal
                 }
             },
@@ -120,7 +119,6 @@ $(document).ready(function(){
                         } else {
 
                             dispararAlertaExito("El canton ha sido eliminado."); // Muestra un mensaje de éxito
-                            location.reload();  // Recarga la lista de cantones
 
                         }
                     },
@@ -171,7 +169,7 @@ function dispararAlertaExito(mensaje) {
         title: mensaje, // Título de la alerta
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload();  // Recarga la página después de cerrar la alerta
+        listadocantones();  // Recarga la página después de cerrar la alerta
     });
 }
 // Función para mostrar una alerta de error usando SweetAlert2
@@ -181,7 +179,7 @@ function dispararAlertaError(mensaje) {
         title: mensaje,
         confirmButtonText: 'Ok' // Texto del botón de confirmación
     }).then(() => {
-        location.reload(); // Recarga la página después de cerrar la alerta
+        listadocantones(); // Recarga la página después de cerrar la alerta
     });
 }
 
