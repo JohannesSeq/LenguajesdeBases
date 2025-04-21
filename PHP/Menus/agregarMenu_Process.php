@@ -23,7 +23,9 @@ if (isset($_POST['nombre']) && isset($_POST['descripcion']) && isset($_POST['pla
 
     // Asociar platillos
     foreach ($platillos as $id_platillo) {
-        $query2 = "BEGIN CREAR_PLATILLO_MENU(:id_platillo, :id_menu, :comentario); END;";
+        $query2 = "BEGIN 
+                        CREAR_PLATILLO_MENU(:id_platillo, :id_menu, :comentario); 
+                    END;";
         $stmt2 = oci_parse($conn, $query2);
         oci_bind_by_name($stmt2, ":id_platillo", $id_platillo);
         oci_bind_by_name($stmt2, ":id_menu", $id_menu);
