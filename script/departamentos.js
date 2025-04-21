@@ -16,11 +16,13 @@ $(document).ready(function () {
             method: 'POST',
             data: data,
             success: function (response) {
-                Swal.fire("Éxito", "Departamento agregado correctamente", "success").then(() => location.reload());
+                Swal.fire("Éxito", "Departamento agregado correctamente", "success").then(() => listardepartamentos());
+                $('#modalAgregarDepartamento').modal('hide');
             },
             error: function (xhr, status, error) {
                 console.error("Error al agregar departamento:", error);
                 Swal.fire("Error", "No se pudo agregar el departamento", "error");
+                $('#modalAgregarDepartamento').modal('hide');
             }
         });
     });
@@ -40,7 +42,7 @@ $(document).ready(function () {
             method: 'POST',
             data: data,
             success: function () {
-                Swal.fire("Actualizado", "Departamento modificado correctamente", "success").then(() => location.reload());
+                Swal.fire("Actualizado", "Departamento modificado correctamente", "success").then(() => listardepartamentos());
             },
             error: function (xhr, status, error) {
                 console.error("Error al modificar departamento:", error);
@@ -95,7 +97,7 @@ $(document).ready(function () {
                         comentario: 'Eliminación de departamento'
                     },
                     success: function () {
-                        Swal.fire("Eliminado", "El departamento ha sido desactivado", "success").then(() => location.reload());
+                        Swal.fire("Eliminado", "El departamento ha sido desactivado", "success").then(() => listardepartamentos());
                     },
                     error: function (xhr, status, error) {
                         console.error("Error al eliminar departamento:", error);

@@ -16,10 +16,12 @@ $(document).ready(function () {
             method: 'POST',
             data: data,
             success: function () {
-                Swal.fire("Éxito", "Empleado agregado correctamente", "success").then(() => location.reload());
+                Swal.fire("Éxito", "Empleado agregado correctamente", "success").then(() => listarempleados());
+                $('#modalAgregarEmpleado').modal('hide');
             },
             error: function () {
                 Swal.fire("Error", "No se pudo agregar el empleado", "error");
+                $('#modalAgregarEmpleado').modal('hide');
             }
         });
     });
@@ -38,7 +40,7 @@ $(document).ready(function () {
             method: 'POST',
             data: data,
             success: function () {
-                Swal.fire("Éxito", "Empleado modificado correctamente", "success").then(() => location.reload());
+                Swal.fire("Éxito", "Empleado modificado correctamente", "success").then(() => listarempleados());
             },
             error: function () {
                 Swal.fire("Error", "No se pudo modificar el empleado", "error");
@@ -90,7 +92,7 @@ $(document).ready(function () {
                         comentario: result.value
                     },
                     success: function () {
-                        Swal.fire("Eliminado", "Empleado eliminado correctamente", "success").then(() => location.reload());
+                        Swal.fire("Eliminado", "Empleado eliminado correctamente", "success").then(() => listarempleados());
                     }
                 });
             }

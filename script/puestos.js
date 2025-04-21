@@ -12,7 +12,7 @@ $(document).ready(function () {
         };
 
         $.post('../PHP/Puestos/agregarPuesto_Process.php', data, function () {
-            Swal.fire("Éxito", "Puesto agregado correctamente", "success").then(() => location.reload());
+            Swal.fire("Éxito", "Puesto agregado correctamente", "success").then(() => listarpustos());
         });
     });
 
@@ -28,7 +28,9 @@ $(document).ready(function () {
         };
 
         $.post('../PHP/Puestos/modificarPuesto_Process.php', data, function () {
-            Swal.fire("Actualizado", "Puesto modificado correctamente", "success").then(() => location.reload());
+            Swal.fire("Actualizado", "Puesto modificado correctamente", "success").then(() => listarpustos());
+            $('#modalAgregarPuesto').modal('hide');
+
         });
     });
 
@@ -37,7 +39,7 @@ $(document).ready(function () {
         const id = $(this).data('id');
 
         $.get('../PHP/Puestos/listadoindividualpuesto_process.php', { id }, function (res) {
-            const puesto = res[0]; // 👈 aquí está el objeto real
+            const puesto = res[0];
         
             $('#editar_id').val(puesto.ID_PUESTO);
             $('#editar_nombre').val(puesto.NOMBRE_PUESTO);
@@ -59,7 +61,8 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.post('../PHP/Puestos/eliminarPuesto_Process.php', { id }, function () {
-                    Swal.fire("Eliminado", "El puesto ha sido desactivado", "success").then(() => location.reload());
+                    Swal.fire("Eliminado", "El puesto ha sido desactivado", "success").then(() => listarpustos());
+                    $('#modalEditarPuesto').modal('hide');
                 });
             }
         });

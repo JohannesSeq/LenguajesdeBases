@@ -7,7 +7,9 @@ $puesto = $_POST['puesto'];
 $salario = $_POST['salario'];
 $comentario = $_POST['comentario'];
 
-$sql = "BEGIN PKG_EMPLEADOS.AGREGAR_EMPLEADO(:departamento, :puesto, :salario, :cedula, :comentario); END;";
+$sql = "BEGIN 
+            PKG_EMPLEADOS.AGREGAR_EMPLEADO(:departamento, :puesto, :salario, :cedula, :comentario); 
+        END;";
 $stmt = oci_parse($conn, $sql);
 
 oci_bind_by_name($stmt, ":departamento", $departamento);
