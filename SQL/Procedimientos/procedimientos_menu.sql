@@ -202,3 +202,30 @@ BEGIN
         WHERE ID_MENU = P_ID_MENU;
 END;
 /
+
+
+---------------------- ELIMINAR MENU ------------------------------
+
+CREATE OR REPLACE PROCEDURE ELIMINAR_MENU (
+    P_ID_MENU IN NUMBER
+)
+AS
+    V_ID_ESTADO VARCHAR(250);
+BEGIN
+    -- Obtener el ID del estado asociado al menú
+    SELECT ID_ESTADO INTO V_ID_ESTADO
+    FROM MENU
+    WHERE ID_MENU = P_ID_MENU;
+
+    -- Eliminar registros relacionados en PLATILLOS_MENU
+    DELETE FROM PLATILLOS_MENU WHERE ID_MENU = P_ID_MENU;
+
+    -- Eliminar el menú
+    DELETE FROM MENU WHERE ID_MENU = P_ID_MENU;
+
+    -- Eliminar el estado asociado
+    DELETE FROM ESTADOS WHERE ID_ESTADO = V_ID_ESTADO;
+
+    COMMIT;
+END;
+/

@@ -17,7 +17,8 @@
             <h1 class="display-4">Menús</h1>
             <p class="lead">Revisa los menús disponibles.</p>
             <hr class="my-4">
-            <a class="button-62" href="#" role="button" data-toggle="modal" data-target="#modalAgregarMenu">Agregar un nuevo menú</a>
+            <a class="button-62" href="#" role="button" data-toggle="modal" data-target="#modalAgregarMenu">Agregar un
+                nuevo menú</a>
         </div>
     </div>
 
@@ -40,7 +41,8 @@
     </section>
 
     <!-- Modal Agregar Menú -->
-    <div class="modal fade" id="modalAgregarMenu" tabindex="-1" role="dialog" aria-labelledby="modalAgregarMenuLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAgregarMenu" tabindex="-1" role="dialog" aria-labelledby="modalAgregarMenuLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -73,7 +75,8 @@
     </div>
 
     <!-- Modal Modificar Menú -->
-    <div class="modal fade" id="modificarMenuModal" tabindex="-1" role="dialog" aria-labelledby="modificarMenuModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modificarMenuModal" tabindex="-1" role="dialog"
+        aria-labelledby="modificarMenuModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -192,11 +195,32 @@
         });
 
         function eliminarMenu(id) {
-            $.post("../PHP/Menus/eliminarMenu_Process.php", { id: id }, function () {
-                Swal.fire("Eliminado", "Menú eliminado", "success");
-                listadomenus();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede revertir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("../PHP/Menus/eliminarMenu_Process.php", { id: id }, function (data) {
+                        const res = JSON.parse(data);
+
+                        if (res.resultado === "TIPO_INVALIDO") {
+                            Swal.fire("Error", "Tipo de borrado inválido.", "error");
+                        } else {
+                            Swal.fire("Eliminado", `Menú eliminado correctamente (${res.resultado}).`, "success");
+                            listadomenus();
+                        }
+                    }).fail(() => {
+                        Swal.fire("Error", "Hubo un problema al eliminar el menú.", "error");
+                    });
+                }
             });
         }
+
     </script>
 </body>
 
