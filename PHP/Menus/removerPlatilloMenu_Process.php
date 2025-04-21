@@ -12,12 +12,15 @@ if (isset($_POST['id_menu']) && isset($_POST['id_platillo'])) {
     oci_execute($stmt);
 
     $id_platillos_menu = null;
+
     if ($row = oci_fetch_assoc($stmt)) {
         $id_platillos_menu = $row['ID_PLATILLOS_MENU'];
     }
 
     if ($id_platillos_menu !== null) {
-        $delQuery = "BEGIN BORRADO_LOGICO('PLATILLOS_MENU', :ID, 'Removiendo platillo del menú'); END;";
+        $delQuery = "BEGIN 
+                        BORRADO_LOGICO('PLATILLOS_MENU', :ID, 'Removiendo platillo del menú'); 
+                    END;";
         $delStmt = oci_parse($conn, $delQuery);
         oci_bind_by_name($delStmt, ":ID", $id_platillos_menu);
         oci_execute($delStmt);

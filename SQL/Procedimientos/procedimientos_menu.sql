@@ -217,11 +217,11 @@ BEGIN
     FROM MENU
     WHERE ID_MENU = P_ID_MENU;
 
-    -- Eliminar registros relacionados en PLATILLOS_MENU
-    DELETE FROM PLATILLOS_MENU WHERE ID_MENU = P_ID_MENU;
-
     -- Eliminar el menú
     DELETE FROM MENU WHERE ID_MENU = P_ID_MENU;
+
+    -- Eliminar registros relacionados en PLATILLOS_MENU
+    DELETE FROM PLATILLOS_MENU WHERE ID_MENU = P_ID_MENU;
 
     -- Eliminar el estado asociado
     DELETE FROM ESTADOS WHERE ID_ESTADO = V_ID_ESTADO;
@@ -229,3 +229,6 @@ BEGIN
     COMMIT;
 END;
 /
+
+select * from platillos_menu;
+select * from menu;
