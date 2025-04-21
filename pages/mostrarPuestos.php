@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Puestos - Restaurante Playa Cacao</title>
+    <link rel="icon" type="image/x-icon" href="../img/FavIcon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style/style.css">
 </head>
