@@ -55,12 +55,24 @@ $(document).ready(function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post('../PHP/MetodoPago/eliminarMetodoPago_Process.php', { id: id, comentario: result.value }, function () {
-                    Swal.fire("Eliminado", "Método de pago eliminado correctamente", "success").then(() => location.reload());
+                $.post('../PHP/MetodoPago/eliminarMetodoPago_Process.php', { id, comentario: result.value }, function (res) {
+                    const data = JSON.parse(res);
+
+                    if (data.resultado === 'REFERENCIAS_ACTIVAS') {
+                        Swal.fire("Error", "No se puede eliminar: el método está en uso por facturas.", "error");
+                    } else if (data.resultado === 'TIPO_INVALIDO') {
+                        Swal.fire("Error", "Tipo de borrado inválido en configuración.", "error");
+                    } else {
+                        Swal.fire("Eliminado", `Método eliminado correctamente (${data.resultado}).`, "success")
+                            .then(() => location.reload());
+                    }
+                }).fail(() => {
+                    Swal.fire("Error", "Ocurrió un problema con la eliminación.", "error");
                 });
             }
         });
     });
+
 });
 
 function listarMetodosPago() {

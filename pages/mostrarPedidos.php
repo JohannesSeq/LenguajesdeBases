@@ -101,9 +101,8 @@
                                 <td>₡${pedido.MONTO_ESTIMADO}</td>
                                 <td>${pedido.ESTADO_PEDIDO}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning" onclick="abrirModalModificar(${pedido.ID_PEDIDO}, '${pedido.ESTADO_PEDIDO}')">
-                                        Modificar
-                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="abrirModalModificar(${pedido.ID_PEDIDO}, '${pedido.ESTADO_PEDIDO}')">Modificar</button>
+                                    <button class="btn btn-sm btn-danger" onclick="eliminarPedido(${pedido.ID_PEDIDO})">Eliminar</button>
                                 </td>
                             </tr>`;
                         tbody.append(row);
@@ -149,6 +148,36 @@
                 }
             });
         });
+
+
+        function eliminarPedido(id) {
+            Swal.fire({
+                title: '¿Eliminar pedido?',
+                text: 'Esta acción eliminará el pedido y su lista de platillos.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('../PHP/Pedidos/eliminarPedido_Process.php', { id }, function (data) {
+                        const res = JSON.parse(data);
+
+                        if (res.resultado === "REFERENCIAS_ACTIVAS") {
+                            Swal.fire("Error", "No se puede eliminar: el pedido tiene una factura asociada.", "error");
+                        } else if (res.resultado === "TIPO_INVALIDO") {
+                            Swal.fire("Error", "Tipo de borrado inválido.", "error");
+                        } else {
+                            Swal.fire("Eliminado", `Pedido eliminado correctamente (${res.resultado})`, "success");
+                            listadoPedidos();
+                        }
+                    }).fail(() => {
+                        Swal.fire("Error", "Hubo un problema al intentar eliminar el pedido.", "error");
+                    });
+                }
+            });
+        }
     </script>
 </body>
 

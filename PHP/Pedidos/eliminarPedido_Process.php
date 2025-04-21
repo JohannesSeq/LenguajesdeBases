@@ -26,15 +26,15 @@ if (isset($_POST['id'])) {
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
     $query = "BEGIN 
-                :resultado := EJECUTAR_BORRADO_METODO_PAGO(:P_ID_METODO, :P_TIPO, :P_COMENTARIO); 
+                :resultado := EJECUTAR_BORRADO_PEDIDO(:P_ID_PEDIDO, :P_TIPO, :P_COMENTARIO); 
               END;";
 
     $stmt = oci_parse($conn, $query);
 
-    $comentario = 'Eliminando método de pago desde proceso PHP';
+    $comentario = 'Eliminando pedido desde proceso PHP';
     $resultado = '';
 
-    oci_bind_by_name($stmt, ":P_ID_METODO", $id);
+    oci_bind_by_name($stmt, ":P_ID_PEDIDO", $id);
     oci_bind_by_name($stmt, ":P_TIPO", $tipo);
     oci_bind_by_name($stmt, ":P_COMENTARIO", $comentario);
     oci_bind_by_name($stmt, ":resultado", $resultado, 50);
@@ -44,9 +44,9 @@ if (isset($_POST['id'])) {
     echo json_encode([
         'resultado' => $resultado,
         'mensaje' => match($resultado) {
-            'BORRADO_LOGICO' => 'Método de pago marcado como inactivo.',
-            'BORRADO_FISICO' => 'Método de pago eliminado permanentemente.',
-            'REFERENCIAS_ACTIVAS' => 'No se puede eliminar: está asociado a una o más facturas.',
+            'BORRADO_LOGICO' => 'Pedido marcado como inactivo.',
+            'BORRADO_FISICO' => 'Pedido eliminado permanentemente.',
+            'REFERENCIAS_ACTIVAS' => 'No se puede eliminar: el pedido tiene una factura asociada.',
             'TIPO_INVALIDO' => 'Tipo de borrado inválido.',
             default => 'Resultado desconocido.'
         }

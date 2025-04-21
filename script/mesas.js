@@ -37,22 +37,35 @@ $(document).ready(function () {
         });
     });
 
-    // Eliminar mesa
+    // Eliminar mesa con confirmación y resultado detallado
     $(document).on('click', '.btn-delete', function () {
         const id = $(this).data('id');
         Swal.fire({
             title: '¿Eliminar mesa?',
             text: 'Esta acción no se puede deshacer.',
             icon: 'warning',
-            showCancelButton: true
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar'
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post('../PHP/Mesas/eliminarMesa_Process.php', { id }, function () {
-                    Swal.fire("Eliminado", "La mesa ha sido eliminada.", "success").then(() => location.reload());
+                $.post('../PHP/Mesas/eliminarMesa_Process.php', { id }, function (data) {
+                    const res = JSON.parse(data);
+                    if (res.resultado === "REFERENCIAS_ACTIVAS") {
+                        Swal.fire("Error", "No se puede eliminar: la mesa tiene reservaciones.", "error");
+                    } else if (res.resultado === "TIPO_INVALIDO") {
+                        Swal.fire("Error", "Tipo de borrado inválido.", "error");
+                    } else {
+                        Swal.fire("Eliminado", `Mesa eliminada correctamente (${res.resultado})`, "success").then(() => location.reload());
+                    }
+                }).fail(() => {
+                    Swal.fire("Error", "Hubo un problema al intentar eliminar la mesa.", "error");
                 });
             }
         });
     });
+
 });
 
 function listadomesas() {
