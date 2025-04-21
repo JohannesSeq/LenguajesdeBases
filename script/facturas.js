@@ -35,6 +35,7 @@ $(document).ready(function () {
     // Eliminar Factura
     $(document).on('click', '.btn-delete', function () {
         const id = $(this).data('id');
+
         Swal.fire({
             title: '¿Eliminar factura?',
             input: 'text',
@@ -50,12 +51,38 @@ $(document).ready(function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post('../PHP/Facturas/eliminarFactura_Process.php', { id: id, comentario: result.value }, function () {
-                    Swal.fire("Eliminado", "Factura eliminada correctamente", "success").then(() => location.reload());
+                $.post('../PHP/Facturas/eliminarFactura_Process.php', {
+                    id: id,
+                    comentario: result.value
+                }, function (res) {
+                    const data = JSON.parse(res);
+
+                    switch (data.resultado) {
+                        case 'BORRADO_LOGICO':
+                            Swal.fire("Eliminado", "Factura marcada como inactiva.", "success")
+                                .then(() => location.reload());
+                            break;
+                        case 'BORRADO_FISICO':
+                            Swal.fire("Eliminado", "Factura eliminada permanentemente.", "success")
+                                .then(() => location.reload());
+                            break;
+                        case 'NO_EXISTE_FACTURA':
+                            Swal.fire("Aviso", "La factura no existe o ya fue eliminada.", "warning");
+                            break;
+                        case 'TIPO_INVALIDO':
+                            Swal.fire("Error", "Tipo de borrado inválido en configuración.", "error");
+                            break;
+                        default:
+                            Swal.fire("Error", "Resultado inesperado: " + data.resultado, "error");
+                            break;
+                    }
+                }).fail(() => {
+                    Swal.fire("Error", "Ocurrió un problema al eliminar la factura.", "error");
                 });
             }
         });
     });
+
 });
 
 function listarFacturas() {

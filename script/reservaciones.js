@@ -70,21 +70,55 @@ $(document).ready(function () {
     });
 
     // Eliminar reservación
+    // Eliminar reservación con respuesta detallada
     $(document).on('click', '.btn-delete', function () {
         const id = $(this).data('id');
         Swal.fire({
             title: '¿Eliminar reservación?',
             text: 'Esta acción no se puede deshacer.',
             icon: 'warning',
-            showCancelButton: true
+            input: 'text',
+            inputLabel: 'Comentario',
+            inputPlaceholder: 'Motivo de eliminación',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            preConfirm: (comentario) => {
+                if (!comentario) {
+                    Swal.showValidationMessage('El comentario es obligatorio');
+                }
+                return comentario;
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post('../PHP/Reservaciones/eliminarReservacion_Process.php', { id }, function () {
-                    Swal.fire("Eliminado", "La reservación ha sido eliminada.", "success").then(() => location.reload());
+                $.post('../PHP/Reservaciones/eliminarReservacion_Process.php', {
+                    id,
+                    comentario: result.value
+                }, function (res) {
+                    const data = JSON.parse(res);
+
+                    switch (data.resultado) {
+                        case 'BORRADO_LOGICO':
+                            Swal.fire("Eliminado", "Reservación marcada como inactiva.", "success").then(() => location.reload());
+                            break;
+                        case 'BORRADO_FISICO':
+                            Swal.fire("Eliminado", "Reservación eliminada permanentemente.", "success").then(() => location.reload());
+                            break;
+                        case 'NO_EXISTE_RESERVA':
+                            Swal.fire("Aviso", "La reservación no existe o ya fue eliminada.", "warning");
+                            break;
+                        case 'TIPO_INVALIDO':
+                            Swal.fire("Error", "Tipo de borrado inválido.", "error");
+                            break;
+                        default:
+                            Swal.fire("Error", "Resultado inesperado: " + data.resultado, "error");
+                    }
+                }).fail(() => {
+                    Swal.fire("Error", "Ocurrió un problema al eliminar la reservación.", "error");
                 });
             }
         });
     });
+
 });
 
 function listarreservaciones() {
