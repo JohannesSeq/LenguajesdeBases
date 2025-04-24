@@ -11,7 +11,7 @@ BEGIN
     FROM PERSONAS
     WHERE CEDULA = :NEW.CEDULA;
 
-    IF V_ROL NOT IN ('Empleado', 'Gerente') THEN
+    IF V_ROL IN ('Cliente') THEN
         RAISE_APPLICATION_ERROR(-20001, 'Solo se permiten personas con rol Empleado o Gerente.');
     END IF;
 END;
