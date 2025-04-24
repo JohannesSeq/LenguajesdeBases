@@ -34,6 +34,38 @@
             </tbody>
         </table>
     </div>
+    
+<!-- Modal para mostrar el desglose de un pedido -->
+<div class="modal fade" id="modalDesglose" tabindex="-1" role="dialog" aria-labelledby="modalDesgloseLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+       
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarLabel">Desglose del pedido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                
+            <table id="desgloseTable" class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>Nombre del platillo</th>
+                        <th>Precio unitario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS llenará esta sección -->
+                </tbody>
+            </table>     
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Modal Editar Factura -->
     <div class="modal fade" id="modalEditarFactura" tabindex="-1" role="dialog">

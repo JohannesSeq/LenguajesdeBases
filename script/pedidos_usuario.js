@@ -1,3 +1,61 @@
+$(document).ready(function(){
+
+    $(document).on('click', '.btn-desglose', function () {
+        var Pedidoid = $(this).data('id'); // Obtiene el ID del distrito a eliminar
+
+        $.ajax({
+
+
+            url: '../PHP/Pedidos/listarPlatillosPedido_Process.php', // URL del archivo PHP que devolverá los detalles del distrito
+            method: 'GET', // Método HTTP para solicitar los datos
+            // Envía el ID del distrito como parámetro
+            data: 
+            {
+                id: Pedidoid  
+            },                     
+
+            success: function (response) {
+        
+            var platillos = JSON.parse(response); // Parse la respuesta JSON
+            console.log(distrito);
+
+            if (response.error) {
+
+                alert(response.error); // Muestra un mensaje de error si lo hay
+
+            } else {
+
+                var tbody = $('#desgloseTable tbody');
+                tbody.empty(); // Limpia la tabla antes de añadir nuevos datos
+
+                // Muestra el modal para modificar el distrito
+                $('#modalDesglose').modal('show');
+
+                platillos.forEach(function (platillo) {
+
+                // Construye una fila de la tabla con los datos del pedid
+                var row = `<tr>
+                    <td>${platillo.NOMBRE_PLATILLO}</td>
+                    <td>${platillo.PRECIO_DEL_PLATILLO}</td>
+                </tr>`;
+
+        tbody.append(row); // Añade la fila a la tabla
+    });
+
+            }
+        },
+        error: function (error) {
+            console.error('Error fetching order details:', error); // Muestra el error en la consola
+        }
+
+
+        });
+
+        
+    });
+
+});
+
 function getEmailFromCookie() {
     const match = document.cookie.match(/(?:^|; )email=([^;]*)/);
     return match ? decodeURIComponent(match[1]) : null;
@@ -36,14 +94,16 @@ function consultarPedidosPorCedula(cedula, nombre) {
 
         pedidos.forEach(p => {
             const acciones = p.ESTADO_PEDIDO === "Pendiente"
-                ? `<button class="btn btn-success btn-pagar"
+                ? `
+                <button class="btn btn-secondary btn-desglose" data-id="${p.ID_PEDIDO}">Desglose</button>
+                <button class="btn btn-success btn-pagar"
                             data-id="${p.ID_PEDIDO}"
                             data-cliente="${cedula}"
                             data-nombre="${nombre}"
                             data-monto="${p.MONTO_ESTIMADO}">
                         Realizar pago
                    </button>`
-                : "—";
+                : `<button class="btn btn-secondary btn-desglose" data-id="${p.ID_PEDIDO}">Desglose</button>`;
 
             const row = `
                 <tr>

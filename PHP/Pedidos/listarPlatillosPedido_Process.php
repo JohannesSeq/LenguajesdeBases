@@ -1,17 +1,19 @@
-<?php 
+<?php
+
     $conn = oci_connect("PlayaCacaoDB", "PlayaCacao12345", "localhost/XE");
 
-    $distrito_id = $_GET['id'];
+    $pedido_id = $_GET['id'];
 
     $query = "BEGIN " .
-                "PKT_DISTRITOS.ENVIO_DISTRITO(:P_ID,:P_CURSOR); " .
+                "OBTENER_PLATILLOS_PEDIDO(:P_ID,:P_CURSOR); " .
              "END;";
 
     //Guardamos el query
     $stmt = oci_parse($conn, $query);                 
 
     //Vinculamos los parametros necesarios para el procedimiento almacenado
-    oci_bind_by_name($stmt, ":P_ID", $distrito_id);
+    oci_bind_by_name($stmt, ":P_ID", $pedido_id);
+
 
     //Creamos un cursor para almacenar la informacion de la tabla que estamos consultando
     $cursor = oci_new_cursor($conn);
@@ -21,19 +23,17 @@
     oci_execute($stmt);
     oci_execute($cursor);
 
-    $distrito = array();
+    $platillos_pedido = array();
 
     while ($row = oci_fetch_assoc($cursor)) {
-        $distrito[] = $row;
+        $platillos_pedido[] = $row;
     }
 
     // Devolver los pedidos en formato JSON
-    echo json_encode($distrito);
+    echo json_encode($platillos_pedido);
 
     // Cerramos la conexion con la DB
     oci_free_statement($stmt);
     oci_free_statement($cursor);
     oci_close($conn);
-
 ?>
-

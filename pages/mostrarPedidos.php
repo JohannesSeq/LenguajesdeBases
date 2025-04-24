@@ -41,6 +41,39 @@
         </div>
     </section>
 
+<!-- Modal para mostrar el desglose de un pedido -->
+<div class="modal fade" id="modalDesglose" tabindex="-1" role="dialog" aria-labelledby="modalDesgloseLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+       
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarLabel">Desglose del pedido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                
+            <table id="desgloseTable" class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>Nombre del platillo</th>
+                        <th>Precio unitario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS llenará esta sección -->
+                </tbody>
+            </table>     
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <!-- Modal para Modificar Pedido -->
     <div class="modal fade" id="modalModificarPedido" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -84,6 +117,64 @@
     <script src="../script/cookie_management.js"></script>
 
     <script>
+        $(document).ready(function(){
+
+            $(document).on('click', '.btn-desglose', function () {
+                var Pedidoid = $(this).data('id'); // Obtiene el ID del distrito a eliminar
+
+                $.ajax({
+
+      
+                    url: '../PHP/Pedidos/listarPlatillosPedido_Process.php', // URL del archivo PHP que devolverá los detalles del distrito
+                    method: 'GET', // Método HTTP para solicitar los datos
+                    // Envía el ID del distrito como parámetro
+                    data: 
+                    {
+                        id: Pedidoid  
+                    },                     
+
+                    success: function (response) {
+                
+                    var platillos = JSON.parse(response); // Parse la respuesta JSON
+                    console.log(distrito);
+
+                    if (response.error) {
+
+                        alert(response.error); // Muestra un mensaje de error si lo hay
+
+                    } else {
+
+                        var tbody = $('#desgloseTable tbody');
+                        tbody.empty(); // Limpia la tabla antes de añadir nuevos datos
+
+                        // Muestra el modal para modificar el distrito
+                        $('#modalDesglose').modal('show');
+
+                        platillos.forEach(function (platillo) {
+
+                        // Construye una fila de la tabla con los datos del pedid
+                        var row = `<tr>
+                            <td>${platillo.NOMBRE_PLATILLO}</td>
+                            <td>${platillo.PRECIO_DEL_PLATILLO}</td>
+                        </tr>`;
+
+                tbody.append(row); // Añade la fila a la tabla
+            });
+
+                    }
+                },
+                error: function (error) {
+                    console.error('Error fetching order details:', error); // Muestra el error en la consola
+                }
+
+
+                });
+
+                
+            });
+        
+        });
+        
         function listadoPedidos() {
             $.ajax({
                 url: '../PHP/Pedidos/listarPedidos_Process.php',
@@ -102,6 +193,7 @@
                                 <td>₡${pedido.MONTO_ESTIMADO}</td>
                                 <td>${pedido.ESTADO_PEDIDO}</td>
                                 <td>
+                                    <button class="btn btn-secondary btn-desglose btn-sm" data-id="${pedido.ID_PEDIDO}">Desglose</button>
                                     <button class="btn btn-sm btn-warning" onclick="abrirModalModificar(${pedido.ID_PEDIDO}, '${pedido.ESTADO_PEDIDO}')">Modificar</button>
                                     <button class="btn btn-sm btn-danger" onclick="eliminarPedido(${pedido.ID_PEDIDO})">Eliminar</button>
                                 </td>
@@ -115,6 +207,7 @@
                 }
             });
         }
+
 
         function abrirModalModificar(idPedido, estadoActual) {
             $('#modificar_id_pedido').val(idPedido);
