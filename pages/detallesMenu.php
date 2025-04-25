@@ -33,17 +33,29 @@ $id_menu = $_GET['id'];
     </table>
 
     <hr>
-    <h4>Agregar Platillo al Menú</h4>
-    <form id="formAgregarPlatillo">
-        <div class="form-group">
-            <label for="platilloSelect">Platillo disponible:</label>
-            <select class="form-control" id="platilloSelect" name="id_platillo">
-                <!-- Cargado por JS -->
-            </select>
-        </div>
-        <button type="submit" class="btn btn-success">Agregar</button>
-    </form>
-</div>
+    
+
+<?php
+    if (isset($_COOKIE["email"]) && $_COOKIE["email"] != "") {
+        if($_COOKIE["permiso"] == "Limitado" || $_COOKIE["permiso"] == "Completo" ) {
+        
+            echo
+            '<h4>Agregar Platillo al Menú</h4>
+            <form id="formAgregarPlatillo">
+                <div class="form-group">
+                    <label for="platilloSelect">Platillo disponible:</label>
+                    <select class="form-control" id="platilloSelect" name="id_platillo">
+                        <!-- Cargado por JS -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Agregar</button>
+            </form>
+        </div>';       
+
+        }
+    }
+?>
+
 
 <?php include_once 'footer.php'; ?>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
