@@ -93,6 +93,7 @@
                                     <a class="dropdown-item" href="mostrarPuestos.php">Manejar Puestos</a>
                                     <a class="dropdown-item" href="mostrarDepartamentos.php">Manejar Departamentos</a>
                                     <a class="dropdown-item" href="mostrarEmpleados.php">Manejar Empleados</a>
+                                    <a class="dropdown-item" href="mostrarEstados_Inactivos.php">Reactivar entradas</a>
                                 </div>
                             </li>';
                         }
