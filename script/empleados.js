@@ -91,7 +91,7 @@ $(document).ready(function () {
                         id: id,
                         comentario: result.value
                     },
-                    success: function () {
+                    success: function (response) {
                         Swal.fire("Eliminado", "Empleado eliminado correctamente", "success").then(() => listarempleados());
                     }
                 });

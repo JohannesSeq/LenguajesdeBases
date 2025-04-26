@@ -13,6 +13,7 @@ $(document).ready(function () {
 
         $.post('../PHP/Puestos/agregarPuesto_Process.php', data, function () {
             Swal.fire("Éxito", "Puesto agregado correctamente", "success").then(() => listarpustos());
+            $('#modalAgregarPuesto').modal('hide');
         });
     });
 
@@ -29,7 +30,7 @@ $(document).ready(function () {
 
         $.post('../PHP/Puestos/modificarPuesto_Process.php', data, function () {
             Swal.fire("Actualizado", "Puesto modificado correctamente", "success").then(() => listarpustos());
-            $('#modalAgregarPuesto').modal('hide');
+            $('#modalEditarPuesto').modal('hide');
 
         });
     });

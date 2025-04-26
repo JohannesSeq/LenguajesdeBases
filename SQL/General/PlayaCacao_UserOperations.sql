@@ -190,12 +190,6 @@ EXEC PKT_ROL_PERSONA.CREAR_ROL_PERSONA('Supervisor_Limpieza', 'Supervisores de l
 EXEC PKT_ROL_PERSONA.CREAR_ROL_PERSONA('Asistente_Administrativo', 'Asistentes administrativos', 'Soporte a las tareas administrativas', 'Creacion del rol', 'Limitado');
 EXEC PKT_ROL_PERSONA.CREAR_ROL_PERSONA('Tester', 'Testers de sistemas', 'Pruebas de software y reportes de errores', 'Creacion del rol', 'Limitado');
 
-
-SELECT * FROM ROL_PERSONA;
-SELECT * FROM CANTON;
-SELECT * FROM DISTRITO;
-SELECT * FROM PROVINCIA;
-
 --Creacion de personas
 EXEC PKT_PERSONAS.CREAR_PERSONA(1184401, 'Johannes', 'Sequeira', '123-456','Gerente', 1, 1, 1, 'js@playacacao.com', 'johannes@gmail.com','Password1234','Agregando personas');
 EXEC PKT_PERSONAS.CREAR_PERSONA(1345667, 'Steven', 'Guerra Fernandez', '222-356','Empleado', 1, 1, 1, 'steven@playacacao.com', 'steven@gmail.com','Password1234','Agregando personas');

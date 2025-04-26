@@ -94,6 +94,7 @@
                                     <a class="dropdown-item" href="mostrarDepartamentos.php">Manejar Departamentos</a>
                                     <a class="dropdown-item" href="mostrarEmpleados.php">Manejar Empleados</a>
                                     <a class="dropdown-item" href="mostrarEstados_Inactivos.php">Reactivar entradas</a>
+                                    <a class="dropdown-item" href="MostrarReporte.php">Reporte PowerBI</a>
                                 </div>
                             </li>';
                         }
@@ -133,96 +134,110 @@
     </div>
 
     <!--Registro Modal -->
-    <div class="modal fade" id="RegistroModal" tabindex="-1" role="dialog" aria-labelledby="RegistroModallLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="RegistroModallLabel">Registrarse en Playa Cacao</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formulario_registro">
+    <?php 
+        if (!isset($_COOKIE["email"]) || $_COOKIE["email"] == "") {
 
+        echo '
+        <div class="modal fade" id="RegistroModal" tabindex="-1" role="dialog" aria-labelledby="RegistroModallLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="RegistroModallLabel">Registrarse en Playa Cacao</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formulario_registro">
 
-                    </br>
-                    <h6 class="modal-title">Informacion personal</h6>
-                    <hr class="my-3">
-
-                    <div class="form-group">
-                            <label for="cedula">Cedula de identidad</label>
-                            <input type="text" class="form-control" id="cedula" placeholder="Ingrese su cedula de identidad." required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="nombre_persona">Nombre</label>
-                            <input type="text" class="form-control" id="nombre_persona" placeholder="Ingrese su nombre." required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="apellidos_persona">Apellidos</label>
-                            <input type="text" class="form-control" id="apellidos_persona" placeholder="Ingrese sus apellidos." required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="numero_telefono">Numero de telefono</label>
-                            <input type="text" class="form-control" id="numero_telefono" placeholder="Ingrese su numero de telefono." required>
-                        </div>
 
                         </br>
-                        <h6>Direccion</h6>
+                        <h6 class="modal-title">Informacion personal</h6>
                         <hr class="my-3">
 
                         <div class="form-group">
-                            <label for="provincia">Provincia</label>
-                            <select class="form-control" id="provincia">
-                            <?php include '../PHP/Personas/listado_provincia.php' ?>
-                            </select>
-                        </div>
+                                <label for="cedula">Cedula de identidad</label>
+                                <input type="text" class="form-control" id="cedula" placeholder="Ingrese su cedula de identidad." required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="canton">Canton</label>
-                            <select class="form-control" id="canton">
-                            <?php include '../PHP/Personas/listado_canton.php' ?>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="nombre_persona">Nombre</label>
+                                <input type="text" class="form-control" id="nombre_persona" placeholder="Ingrese su nombre." required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="distrito">Distrito</label>
-                            <select class="form-control" id="distrito">
-                            <?php include '../PHP/Personas/listado_distrito.php' ?>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="apellidos_persona">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidos_persona" placeholder="Ingrese sus apellidos." required>
+                            </div>
 
-                        </br>
-                        <h6>Mi Cuenta</h6>
-                        <hr class="my-3">
+                            <div class="form-group">
+                                <label for="numero_telefono">Numero de telefono</label>
+                                <input type="text" class="form-control" id="numero_telefono" placeholder="Ingrese su numero de telefono." required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="correo">Correo electronico</label>
-                            <input type="email" class="form-control" id="correo" placeholder="Ingrese su direccion de correo electronico." required>
-                        </div>
+                            </br>
+                            <h6>Direccion</h6>
+                            <hr class="my-3">
 
-                        <div class="form-group">
-                            <label for="correo_respaldo">Correo de respaldo</label>
-                            <input type="email" class="form-control" id="correo_respaldo" placeholder="Ingrese su direccion correo de respaldo de la persona." required>
-                        </div>
+                            <div class="form-group">
+                                <label for="provincia">Provincia</label>
+                                <select class="form-control" id="provincia">';
+                                include '../PHP/Personas/listado_provincia.php';
+                                echo '
+                                </select>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="password_persona">Contraseña</label>
-                            <input type="password" class="form-control" id="password_persona" placeholder="Ingrese su contraseña">
-                        </div>
+                            <div class="form-group">
+                                <label for="canton">Canton</label>
+                                <select class="form-control" id="canton">';
 
-                        </br>
+                                include "../PHP/Personas/listado_canton.php";
+
+                                echo '
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="distrito">Distrito</label>
+                                <select class="form-control" id="distrito">';
+                                include '../PHP/Personas/listado_distrito.php';
+                                
+                                echo '
+                                </select>
+                            </div>
+
+                            </br>
+                            <h6>Mi Cuenta</h6>
+                            <hr class="my-3">
+
+                            <div class="form-group">
+                                <label for="correo">Correo electronico</label>
+                                <input type="email" class="form-control" id="correo" placeholder="Ingrese su direccion de correo electronico." required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="correo_respaldo">Correo de respaldo</label>
+                                <input type="email" class="form-control" id="correo_respaldo" placeholder="Ingrese su direccion correo de respaldo de la persona." required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password_persona">Contraseña</label>
+                                <input type="password" class="form-control" id="password_persona" placeholder="Ingrese su contraseña">
+                            </div>
+
+                            </br>
 
 
-                        <button type="submit" class="btn btn-primary">Registrarme!</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Registrarme!</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>';
+
+    }
+        ?>
+
 
 
 </body>
